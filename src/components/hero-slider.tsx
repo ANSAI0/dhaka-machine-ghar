@@ -116,7 +116,7 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
               key={b.id}
               onClick={() => go(idx)}
               aria-label={`Banner ${idx + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-300 ${idx === dot ? "w-5 bg-brand-700 lux:bg-gold-400" : "w-1.5 bg-gray-300 lux:bg-white/25"}`}
+              className={`h-1.5 w-1.5 rounded-full transition-[transform,background-color] duration-300 ${idx === dot ? "mx-1.5 scale-x-[3] bg-brand-700 lux:bg-gold-400" : "bg-gray-300 lux:bg-white/25"}`}
             />
           ))}
         </div>
