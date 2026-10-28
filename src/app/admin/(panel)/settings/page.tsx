@@ -36,9 +36,9 @@ export default async function SettingsPage() {
           <>
             <Card title="Business info (shown across the website)"><SiteSettingsForm v={site} /></Card>
             {email && (
-              <Card title="Weekly product-update email">
+              <Card title="Email — account, order emails & weekly update">
                 <EmailForm
-                  v={{ enabled: email.enabled, host: email.host, port: email.port, secure: email.secure, user: email.user, hasPass: !!email.pass, fromEmail: email.fromEmail, fromName: email.fromName, weekday: email.weekday, weeklyNote: email.weeklyNote }}
+                  v={{ enabled: email.enabled, host: email.host, port: email.port, secure: email.secure, user: email.user, hasPass: !!email.pass, fromEmail: email.fromEmail, fromName: email.fromName, weekday: email.weekday, weeklyNote: email.weeklyNote, onOrder: email.onOrder, onPayment: email.onPayment, onStep: email.onStep, onDelivery: email.onDelivery, alertTo: email.alertTo }}
                   audience={audience.length}
                 />
                 {runs.length > 0 && (

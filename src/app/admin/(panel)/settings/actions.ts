@@ -183,9 +183,15 @@ export async function saveEmail(_: FormState, fd: FormData): Promise<FormState> 
     fromName: s(fd, "fromName") || "Dhaka Machine Ghar",
     weekday: Math.min(6, Math.max(0, Number(s(fd, "weekday")) || 0)),
     weeklyNote: s(fd, "weeklyNote").slice(0, 1000),
+    onOrder: fd.get("onOrder") === "on",
+    onPayment: fd.get("onPayment") === "on",
+    onStep: fd.get("onStep") === "on",
+    onDelivery: fd.get("onDelivery") === "on",
+    alertTo: s(fd, "alertTo").toLowerCase(),
   };
   if (v.host && !/^[a-z0-9.-]+$/i.test(v.host)) return { error: "SMTP host looks wrong (e.g. smtp.gmail.com)" };
   if (v.fromEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.fromEmail)) return { error: "From email is not valid" };
+  if (v.alertTo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.alertTo)) return { error: "New-order alert email is not valid" };
   if (v.enabled && !mailerReady(v)) return { error: "Fill SMTP host, user, password and from-email before turning the weekly email on" };
   await put("email", v);
   return { ok: "Saved." };

@@ -41,6 +41,7 @@ export function OrderForm({ lines, source, qtySlot, onPlaced }: Props) {
     const input: OrderInput = {
       name: String(fd.get("name") ?? ""),
       phone: String(fd.get("phone") ?? ""),
+      email: String(fd.get("email") ?? "").trim(),
       address: String(fd.get("address") ?? ""),
       district: String(fd.get("district") ?? ""),
       note: String(fd.get("note") ?? ""),
@@ -89,6 +90,13 @@ export function OrderForm({ lines, source, qtySlot, onPlaced }: Props) {
           <input id="of-phone" name="phone" defaultValue={me?.phone} type="tel" inputMode="tel" autoComplete="tel" placeholder="01XXXXXXXXX" className={`${fieldClass} ${border("phone")}`} />
           {err("phone")}
         </div>
+      </div>
+      <div>
+        <label htmlFor="of-email" className="mb-1 block text-sm font-semibold text-gray-700">
+          ইমেইল <span className="font-normal text-gray-400">(ঐচ্ছিক — অর্ডার কনফার্মেশন, পেমেন্ট রসিদ ও ডেলিভারি চালান পাবেন)</span>
+        </label>
+        <input id="of-email" name="email" type="email" inputMode="email" defaultValue={me?.email ?? ""} autoComplete="email" placeholder="you@example.com" className={`${fieldClass} ${border("email")}`} />
+        {err("email")}
       </div>
       <div>
         <label htmlFor="of-address" className="mb-1 block text-sm font-semibold text-gray-700">ডেলিভারি ঠিকানা *</label>

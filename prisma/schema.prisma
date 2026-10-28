@@ -106,6 +106,7 @@ model Order {
   status     FactoryStep  @default(registered)
   name       String
   phone      String
+  email      String? // for order / payment / delivery emails (optional at checkout)
   address    String
   district   String
   note       String?

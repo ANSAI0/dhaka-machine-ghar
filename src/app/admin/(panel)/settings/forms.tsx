@@ -245,7 +245,10 @@ export function SmsForm({ v }: { v: SmsView }) {
 }
 
 const weekdays = ["রবিবার (Sun)", "সোমবার (Mon)", "মঙ্গলবার (Tue)", "বুধবার (Wed)", "বৃহস্পতিবার (Thu)", "শুক্রবার (Fri)", "শনিবার (Sat)"];
-type EmailView = { enabled: boolean; host: string; port: number; secure: boolean; user: string; hasPass: boolean; fromEmail: string; fromName: string; weekday: number; weeklyNote: string };
+type EmailView = {
+  enabled: boolean; host: string; port: number; secure: boolean; user: string; hasPass: boolean; fromEmail: string; fromName: string; weekday: number; weeklyNote: string;
+  onOrder: boolean; onPayment: boolean; onStep: boolean; onDelivery: boolean; alertTo: string;
+};
 
 export function EmailForm({ v, audience }: { v: EmailView; audience: number }) {
   const f = useForm(saveEmail);
@@ -254,6 +257,43 @@ export function EmailForm({ v, audience }: { v: EmailView; audience: number }) {
   return (
     <div className="space-y-6">
       <form onSubmit={f.onSubmit} className="grid gap-4 sm:grid-cols-2">
+        <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-500 sm:col-span-2">
+          1 · Email account (SMTP) — the address emails are sent from
+          <span className={`rounded-full px-2 py-0.5 text-[10px] normal-case tracking-normal ${v.host && v.user && v.hasPass && v.fromEmail ? "bg-brand-50 text-brand-700" : "bg-amber-50 text-amber-700"}`}>
+            {v.host && v.user && v.hasPass && v.fromEmail ? "Connected" : "Not set up — no emails are sent"}
+          </span>
+        </p>
+        <p className="-mt-2 text-xs text-gray-500 sm:col-span-2">Gmail: smtp.gmail.com · port 587 · your Gmail address · an App Password (Google Account → Security → 2-Step Verification → App passwords). Zoho, Brevo or your hosting mail also work.</p>
+        <Row label="SMTP host" hint="e.g. smtp.gmail.com"><input name="host" defaultValue={v.host} className={input} /></Row>
+        <Row label="Port" hint="587 (STARTTLS) or 465 (SSL)"><input name="port" type="number" defaultValue={v.port} className={input} /></Row>
+        <Row label="Username" hint="Usually your full email address"><input name="user" defaultValue={v.user} autoComplete="off" className={input} /></Row>
+        <Row label="Password / app password" hint={v.hasPass ? "Saved. Leave blank to keep, or type clear to remove." : "For Gmail use an App Password, not your normal password."}>
+          <input name="pass" type="password" autoComplete="off" placeholder={v.hasPass ? "••••••••  (saved)" : ""} className={input} />
+        </Row>
+        <Row label="From email" hint="Usually the same as the username"><input name="fromEmail" type="email" defaultValue={v.fromEmail} className={input} /></Row>
+        <Row label="From name"><input name="fromName" defaultValue={v.fromName} className={input} /></Row>
+        <label className="flex items-center gap-2 text-sm text-gray-700 sm:col-span-2"><input type="checkbox" name="secure" defaultChecked={v.secure} className="h-4 w-4 accent-brand-600" /> SSL on connect (port 465)</label>
+
+        <p className="mt-2 border-t border-gray-100 pt-4 text-xs font-bold uppercase tracking-wider text-gray-500 sm:col-span-2">2 · Order emails to customers (sent when the customer gives an email at checkout)</p>
+        <div className="grid gap-2 sm:col-span-2 sm:grid-cols-2">
+          {[
+            { name: "onOrder", on: v.onOrder, label: "Order confirmation", hint: "Invoice no., items, amount, track & pay-online buttons" },
+            { name: "onPayment", on: v.onPayment, label: "Payment receipt", hint: "After an online (SSLCommerz) payment is confirmed" },
+            { name: "onDelivery", on: v.onDelivery, label: "Delivery / handover", hint: "When moved to Handover — challan, invoice & warranty links" },
+            { name: "onStep", on: v.onStep, label: "Every factory step", hint: "Fabrication, motor & panel, load test, painting" },
+          ].map((o) => (
+            <label key={o.name} className="flex items-start gap-2.5 rounded-lg border border-gray-200 p-3 text-sm hover:bg-gray-50">
+              <input type="checkbox" name={o.name} defaultChecked={o.on} className="mt-0.5 h-4 w-4 accent-brand-600" />
+              <span><span className="block font-semibold text-gray-800">{o.label}</span><span className="text-xs text-gray-500">{o.hint}</span></span>
+            </label>
+          ))}
+        </div>
+        <Row label="New-order alert to (owner)" hint="Get an email for every new order and online payment. Leave empty for none.">
+          <input name="alertTo" type="email" defaultValue={v.alertTo} placeholder="owner@example.com" className={input} />
+        </Row>
+        <div />
+
+        <p className="mt-2 border-t border-gray-100 pt-4 text-xs font-bold uppercase tracking-wider text-gray-500 sm:col-span-2">3 · Weekly product-update email</p>
         <div className="sm:col-span-2">
           <label className="flex items-center gap-2 text-sm font-semibold text-gray-700"><input type="checkbox" name="enabled" defaultChecked={v.enabled} className="h-4 w-4 accent-brand-600" /> Send the weekly product-update email automatically</label>
           <p className="mt-1 text-xs text-gray-500">Goes to registered customers who ticked “weekly update” and confirmed their email — currently <strong>{audience}</strong>.</p>
@@ -261,20 +301,9 @@ export function EmailForm({ v, audience }: { v: EmailView; audience: number }) {
         <Row label="Send every" hint="From 10:00 AM Dhaka time">
           <select name="weekday" defaultValue={v.weekday} className={input}>{weekdays.map((d, i) => <option key={d} value={i}>{d}</option>)}</select>
         </Row>
-        <Row label="From name"><input name="fromName" defaultValue={v.fromName} className={input} /></Row>
         <Row label="This week’s note / offer" hint="Shown at the top of the email. Leave empty for none.">
           <textarea name="weeklyNote" rows={3} defaultValue={v.weeklyNote} maxLength={1000} className={input} />
         </Row>
-        <div />
-        <p className="text-xs font-bold uppercase tracking-wider text-gray-500 sm:col-span-2">SMTP (Gmail app password, Zoho, Brevo, your hosting mail…)</p>
-        <Row label="SMTP host" hint="e.g. smtp.gmail.com"><input name="host" defaultValue={v.host} className={input} /></Row>
-        <Row label="Port" hint="587 (STARTTLS) or 465 (SSL)"><input name="port" type="number" defaultValue={v.port} className={input} /></Row>
-        <Row label="Username"><input name="user" defaultValue={v.user} autoComplete="off" className={input} /></Row>
-        <Row label="Password / app password" hint={v.hasPass ? "Saved. Leave blank to keep, or type clear to remove." : "For Gmail use an App Password, not your normal password."}>
-          <input name="pass" type="password" autoComplete="off" placeholder={v.hasPass ? "••••••••  (saved)" : ""} className={input} />
-        </Row>
-        <Row label="From email" hint="Usually the same as the username"><input name="fromEmail" type="email" defaultValue={v.fromEmail} className={input} /></Row>
-        <label className="flex items-center gap-2 self-end pb-2 text-sm text-gray-700"><input type="checkbox" name="secure" defaultChecked={v.secure} className="h-4 w-4 accent-brand-600" /> SSL on connect (port 465)</label>
         <Footer {...f} label="Save email settings" />
       </form>
 

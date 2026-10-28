@@ -55,6 +55,7 @@ export default async function OrderDetail({ params }: Params) {
               <div><dt className="text-gray-500">Phone</dt><dd className="flex items-center gap-3 font-semibold">{o.phone}
                 <a href={`tel:${o.phone}`} aria-label="Call" className="text-brand-700"><Phone className="h-4 w-4" /></a>
                 <a href={wa} target="_blank" rel="noopener" aria-label="WhatsApp" className="text-[#1fa855]"><WhatsappIcon className="h-4 w-4" /></a></dd></div>
+              <div className="sm:col-span-2"><dt className="text-gray-500">Email</dt><dd className="font-semibold">{o.email ? <a href={`mailto:${o.email}`} className="text-brand-700 hover:underline">{o.email}</a> : <span className="font-normal text-gray-400">Not given — no order emails</span>}</dd></div>
               <div className="sm:col-span-2"><dt className="text-gray-500">Address</dt><dd className="font-semibold">{o.address}, {o.district}</dd></div>
               {o.note && <div className="sm:col-span-2"><dt className="text-gray-500">Customer note</dt><dd className="rounded-lg bg-amber-50 p-2 text-amber-900">{o.note}</dd></div>}
             </dl>

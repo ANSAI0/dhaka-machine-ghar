@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { getSite } from "@/lib/settings";
+import { mailOrderStep } from "@/lib/order-mail";
 import { notifyOrderStep } from "@/lib/sms";
 import { factorySteps, type StepKey } from "@/lib/tracking";
 
@@ -48,6 +49,7 @@ export async function setOrderStep(orderId: string, _: StepState, fd: FormData):
   });
 
   after(() => notifyOrderStep(order, step, note));
+  after(() => mailOrderStep(orderId, step, note));
   revalidatePath(`/admin/orders/${orderId}`);
   revalidatePath("/admin/orders");
   revalidatePath("/admin");

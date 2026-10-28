@@ -2,6 +2,7 @@ import { after, NextResponse } from "next/server";
 import { sendCapiEvent } from "@/lib/capi";
 import { getCustomer } from "@/lib/customer-auth";
 import { effectivePrice, liveOfferInclude } from "@/lib/offers";
+import { mailOrderPlaced } from "@/lib/order-mail";
 import { notifyOrderPlaced } from "@/lib/sms";
 import { db, withUniqueId } from "@/lib/db";
 import { makeId } from "@/lib/ids";
@@ -39,6 +40,7 @@ export async function POST(req: Request) {
           id,
           name: input.name.trim(),
           phone: normalizePhone(input.phone),
+          email: input.email?.trim().toLowerCase() || customer?.email || null,
           address: input.address.trim(),
           district: input.district,
           note: input.note?.trim() || null,
@@ -55,5 +57,6 @@ export async function POST(req: Request) {
 
   after(() => sendCapiEvent({ name: "Purchase", eventId: order.id, phone: order.phone, value: total }));
   after(() => notifyOrderPlaced(order));
+  after(() => mailOrderPlaced(order.id));
   return NextResponse.json({ id: order.id, total, payNow, payOnline: onlinePaymentEnabled() && payNow > 0 }, { status: 201 });
 }

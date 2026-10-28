@@ -2,6 +2,7 @@ import "server-only";
 import { randomBytes } from "node:crypto";
 import type { Order } from "@prisma/client";
 import { db } from "./db";
+import { mailPaymentReceived } from "./order-mail";
 import { siteUrl } from "./url";
 
 // SSLCommerz hosted checkout (bKash, Nagad, Rocket, cards, net banking).
@@ -83,6 +84,7 @@ export async function confirmPayment(valId: string): Promise<{ orderId: string |
       ? { paymentStatus: "paid", paidAmount: order.paidAmount + amount, paidAt: new Date(), payMethod: v.card_type ?? null }
       : { paymentStatus: "failed" },
   });
+  if (ok) await mailPaymentReceived(order.id);
   return { orderId: order.id, paid: ok };
 }
 

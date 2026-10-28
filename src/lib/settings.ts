@@ -33,8 +33,14 @@ export type EmailSettings = {
   fromName: string;
   weekday: number; // 0 = Sunday … 6 = Saturday, sent from 10:00 Dhaka time
   weeklyNote: string; // owner's message / offer shown at the top of the email
+  // Order emails to the customer (when they gave an email) and a new-order alert to the owner.
+  onOrder: boolean;
+  onPayment: boolean;
+  onStep: boolean;
+  onDelivery: boolean;
+  alertTo: string;
 };
-const emailDefaults: EmailSettings = { enabled: false, host: "", port: 587, secure: false, user: "", pass: "", fromEmail: "", fromName: "Dhaka Machine Ghar", weekday: 6, weeklyNote: "" };
+const emailDefaults: EmailSettings = { enabled: false, host: "", port: 587, secure: false, user: "", pass: "", fromEmail: "", fromName: "Dhaka Machine Ghar", weekday: 6, weeklyNote: "", onOrder: true, onPayment: true, onStep: false, onDelivery: true, alertTo: "" };
 
 const smsDefaults: SmsSettings = { provider: "none", apiKey: "", senderId: "", customUrl: "", onOrder: true, onStep: true, language: "bn" };
 
