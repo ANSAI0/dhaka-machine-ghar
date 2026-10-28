@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, FileText, Phone, ShieldCheck, Truck, Wallet } from "lucide-react";
+import { ArrowRight, BadgeCheck, Factory, FileText, LayoutGrid, PencilRuler, Phone, ShieldCheck, Store, Truck, Wallet } from "lucide-react";
 import { productsIn, type Product } from "@/lib/catalog";
 import { getCatalog } from "@/lib/catalog-server";
 import { heroImages } from "@/lib/hero-images";
-import { getSite } from "@/lib/settings";
+import { getBanners, getSite } from "@/lib/settings";
 import type { SiteInfo } from "@/lib/site";
 import { CategoryIcon } from "@/components/category-icon";
 import { HeroSlider } from "@/components/hero-slider";
@@ -20,6 +20,18 @@ const offers = (site: SiteInfo) => [
   { title: "Track Order", sub: "Live updates", href: "/track", Icon: Truck, tint: "bg-brand-50 text-brand-600 ring-brand-100" },
 ];
 
+// Phone shortcut slots (two rows of four, like an app home screen).
+const slots = (site: SiteInfo) => [
+  { label: "Call", href: `tel:${site.phoneIntl}`, Icon: Phone, color: "bg-gradient-to-br from-accent-500 to-accent-700" },
+  { label: "WhatsApp", href: `https://wa.me/${site.whatsappIntl}`, Icon: WhatsappIcon, color: "bg-gradient-to-br from-[#25d366] to-[#128c4a]" },
+  { label: "Custom", href: "/quotation", Icon: PencilRuler, color: "bg-gradient-to-br from-steel-500 to-steel-700" },
+  { label: "Track", href: "/track", Icon: Truck, color: "bg-gradient-to-br from-brand-500 to-brand-800" },
+  { label: "All Machines", href: "/shop", Icon: LayoutGrid, color: "bg-gradient-to-br from-gray-700 to-ink" },
+  { label: "Power Press", href: "/category/power-press", Icon: Factory, color: "bg-gradient-to-br from-accent-600 to-accent-700" },
+  { label: "Warranty", href: "/warranty", Icon: ShieldCheck, color: "bg-gradient-to-br from-brand-600 to-brand-900" },
+  { label: "Showroom", href: "/contact", Icon: Store, color: "bg-gradient-to-br from-steel-600 to-steel-700" },
+];
+
 const trust = (site: SiteInfo) => [
   { Icon: BadgeCheck, title: "Own Factory", text: "Made in Keraniganj" },
   { Icon: ShieldCheck, title: "Warranty & Service", text: "Serial-based warranty" },
@@ -28,7 +40,7 @@ const trust = (site: SiteInfo) => [
 ];
 
 export default async function Home() {
-  const [catalog, site] = await Promise.all([getCatalog(), getSite()]);
+  const [catalog, site, banners] = await Promise.all([getCatalog(), getSite(), getBanners()]);
   const { categories, products } = catalog;
   // Ribbon: featured first, then the rest — photographed machines only, one per photo.
   const seen = new Set<string>();
@@ -41,10 +53,22 @@ export default async function Home() {
       <HomeSidebar catalog={catalog} />
 
       <div className="min-w-0 flex-1 space-y-6 sm:space-y-8">
-        <HeroSlider />
+        <HeroSlider banners={banners} />
+
+        {/* Phones: app-style shortcut slots */}
+        <section className="grid grid-cols-4 gap-x-2 gap-y-4 rounded-md border border-gray-200 bg-white px-2 py-4 shadow-[0_2px_0_rgba(16,24,40,0.06)] md:hidden lux:border-white/[0.08] lux:bg-lux-800">
+          {slots(site).map(({ label, href, Icon, color }) => (
+            <a key={label} href={href} className="flex flex-col items-center gap-1.5 text-center active:scale-95">
+              <span className={`flex h-[52px] w-[52px] items-center justify-center rounded-lg text-white shadow-[0_6px_14px_-8px_rgba(0,0,0,0.6)] ${color} lux:bg-none lux:bg-gold-gradient lux:text-lux-950`}>
+                <Icon className="h-6 w-6" strokeWidth={2} />
+              </span>
+              <span className="text-[11px] font-bold leading-tight text-gray-800 lux:text-white/85">{label}</span>
+            </a>
+          ))}
+        </section>
 
         {/* Quick actions */}
-        <section className="grid grid-cols-2 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm xl:grid-cols-4 lux:border-white/[0.07] lux:bg-lux-800/80 lux:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)]">
+        <section className="grid grid-cols-2 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm max-md:hidden xl:grid-cols-4 lux:border-white/[0.07] lux:bg-lux-800/80 lux:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)]">
           {offers(site).map(({ title, sub, href, Icon, tint }, idx) => (
             <a
               key={title}
@@ -162,7 +186,7 @@ function SectionHeading({ eyebrow, title, center }: { eyebrow: string; title: st
         {eyebrow}
         <span className="h-px w-8 bg-gradient-to-l from-transparent to-brand-600/60 md:hidden lux:to-gold-400" />
       </p>
-      <h2 className="mt-1 text-xl font-bold text-gray-900 sm:text-2xl lux:text-white">{title}</h2>
+      <h2 className="mt-1 text-xl font-bold text-gray-900 sm:text-2xl max-md:font-extrabold max-md:uppercase max-md:tracking-tight lux:text-white">{title}</h2>
       {center && <span className="mx-auto mt-2 block h-1 w-12 rounded-full bg-gradient-to-r from-brand-600 to-steel-600 lux:bg-gold-gradient" />}
     </div>
   );
@@ -177,7 +201,7 @@ function ProductSection({ title, subtitle, items, total, href }: { title: string
           <span className="w-1 rounded-full bg-gradient-to-b from-accent-600 to-brand-600 lux:bg-gold-gradient" />
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-400 lux:text-gold-400/80">{subtitle}</p>
-            <h2 className="text-lg font-bold text-gray-900 sm:text-xl lux:text-white">{title}</h2>
+            <h2 className="text-lg font-bold text-gray-900 sm:text-xl max-md:text-base max-md:font-extrabold max-md:uppercase max-md:tracking-tight lux:text-white">{title}</h2>
           </div>
         </div>
         <Link href={href} className="flex shrink-0 items-center gap-1 rounded-full border border-brand-100 bg-white px-3.5 py-1.5 text-xs font-bold text-brand-700 shadow-sm hover:border-brand-600 hover:bg-brand-600 hover:text-white lux:border-gold-400/30 lux:bg-white/[0.04] lux:text-gold-300 lux:shadow-none">

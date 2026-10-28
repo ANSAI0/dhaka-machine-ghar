@@ -42,10 +42,13 @@ export type EmailSettings = {
 };
 const emailDefaults: EmailSettings = { enabled: false, host: "", port: 587, secure: false, user: "", pass: "", fromEmail: "", fromName: "Dhaka Machine Ghar", weekday: 6, weeklyNote: "", onOrder: true, onPayment: true, onStep: false, onDelivery: true, alertTo: "" };
 
+// Home hero banners uploaded in Admin → Hero Banners (shown in this order).
+export type Banner = { id: string; image: string; link: string };
+
 const smsDefaults: SmsSettings = { provider: "none", apiKey: "", senderId: "", customUrl: "", onOrder: true, onStep: true, language: "bn" };
 
 async function readFromDb() {
-  const rows = await db.setting.findMany({ where: { key: { in: ["site", "marketing", "theme", "bot", "sms", "email"] } } });
+  const rows = await db.setting.findMany({ where: { key: { in: ["site", "marketing", "theme", "bot", "sms", "email", "banners"] } } });
   const get = (k: string) => (rows.find((r) => r.key === k)?.value ?? {}) as Record<string, unknown>;
   return {
     site: { ...siteDefaults, ...get("site") } as EditableSite,
@@ -54,6 +57,7 @@ async function readFromDb() {
     bot: { ...botDefaults, ...get("bot") } as BotSettings,
     sms: { ...smsDefaults, ...get("sms") } as SmsSettings,
     email: { ...emailDefaults, ...get("email") } as EmailSettings,
+    banners: (Array.isArray(get("banners").items) ? get("banners").items : []) as Banner[],
   };
 }
 
@@ -77,6 +81,7 @@ async function read() {
 export const getSite = async () => buildSite((await read()).site);
 export const getEditableSite = async () => (await read()).site;
 export const getTheme = async () => (await read()).theme;
+export const getBanners = async () => (await read()).banners;
 export const getBotSettings = async () => (await read()).bot;
 // Includes the SMS API key — server only.
 export const getSmsSettings = async () => (await read()).sms;

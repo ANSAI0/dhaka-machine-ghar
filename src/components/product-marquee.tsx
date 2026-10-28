@@ -101,7 +101,7 @@ export function ProductMarquee({ title, subtitle, items, href }: { title: string
           <span className="w-1 rounded-full bg-gradient-to-b from-accent-600 to-brand-600 lux:bg-gold-gradient" />
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-400 lux:text-gold-400/80">{subtitle}</p>
-            <h2 className="text-lg font-bold text-gray-900 sm:text-2xl lux:text-white">{title}</h2>
+            <h2 className="text-lg font-bold text-gray-900 sm:text-2xl max-md:text-base max-md:font-extrabold max-md:uppercase max-md:tracking-tight lux:text-white">{title}</h2>
           </div>
         </div>
         <Link href={href} className="flex shrink-0 items-center gap-1 rounded-full border border-brand-100 bg-white px-3.5 py-1.5 text-xs font-bold text-brand-700 shadow-sm hover:border-brand-600 hover:bg-brand-600 hover:text-white lux:border-gold-400/30 lux:bg-white/[0.04] lux:text-gold-300 lux:shadow-none">
@@ -116,7 +116,7 @@ export function ProductMarquee({ title, subtitle, items, href }: { title: string
           {[0, 1].map((copy) =>
             items.map((p) => (
               <li key={`${copy}-${p.slug}`} aria-hidden={copy === 1} className="w-40 shrink-0">
-                <Link href={`/product/${p.slug}`} tabIndex={copy === 1 ? -1 : undefined} className="relative block overflow-hidden rounded-[20px] bg-white shadow-[0_12px_28px_-14px_rgba(16,24,40,0.35)] ring-1 ring-black/5 lux:bg-lux-800 lux:shadow-[0_16px_30px_-14px_rgba(0,0,0,0.9)] lux:ring-white/[0.08]">
+                <Link href={`/product/${p.slug}`} tabIndex={copy === 1 ? -1 : undefined} className="relative block overflow-hidden rounded-lg bg-white shadow-[0_12px_28px_-14px_rgba(16,24,40,0.35)] ring-1 ring-black/5 lux:bg-lux-800 lux:shadow-[0_16px_30px_-14px_rgba(0,0,0,0.9)] lux:ring-white/[0.08]">
                   <span aria-hidden className="pointer-events-none absolute inset-x-4 top-0 z-20 hidden h-px bg-gradient-to-r from-transparent via-gold-300/70 to-transparent lux:block" />
                   <div className="relative aspect-[4/5] overflow-hidden bg-gray-50">
                     {p.image ? <Image src={p.image} alt={p.name} fill sizes="160px" className="object-cover" /> : <ProductImage product={p} sizes="160px" />}

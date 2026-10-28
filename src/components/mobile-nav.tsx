@@ -36,7 +36,7 @@ export function MobileNav() {
 
   return (
     <nav className="fixed inset-x-3 bottom-3 z-40 pb-[env(safe-area-inset-bottom)] md:hidden" aria-label="Quick">
-      <div className="relative flex items-end rounded-[26px] border border-gray-200/80 bg-white px-2 shadow-[0_18px_40px_-14px_rgba(16,24,40,0.28)] lux:border-gold-400/15 lux:bg-lux-900 lux:shadow-[0_18px_40px_-12px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.05)]">
+      <div className="relative flex items-end rounded-xl border border-gray-200/80 bg-white px-2 shadow-[0_18px_40px_-14px_rgba(16,24,40,0.28)] lux:border-gold-400/15 lux:bg-lux-900 lux:shadow-[0_18px_40px_-12px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.05)]">
         {side[0].map(tab)}
         <div className="flex flex-1 justify-center">
           <Link

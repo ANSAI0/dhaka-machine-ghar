@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { BadgePercent, ExternalLink, FileText, LayoutDashboard, LogOut, Menu, MessagesSquare, Package, Settings, ShoppingBag, Users, Wrench, X } from "lucide-react";
+import { BadgePercent, ExternalLink, FileText, Images, LayoutDashboard, LogOut, Menu, MessagesSquare, Package, Settings, ShoppingBag, Users, Wrench, X } from "lucide-react";
 import { logout } from "../auth-actions";
 
 const links = [
@@ -12,6 +12,7 @@ const links = [
   { href: "/admin/orders", label: "Orders & Factory", Icon: ShoppingBag },
   { href: "/admin/products", label: "Products", Icon: Package },
   { href: "/admin/offers", label: "Offers", Icon: BadgePercent },
+  { href: "/admin/banners", label: "Hero Banners", Icon: Images },
   { href: "/admin/quotes", label: "Quotations", Icon: FileText },
   { href: "/admin/leads", label: "Leads (CRM)", Icon: MessagesSquare },
   { href: "/admin/customers", label: "Customers", Icon: Users },
