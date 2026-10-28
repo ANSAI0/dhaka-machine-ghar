@@ -116,7 +116,8 @@ export function ProductMarquee({ title, subtitle, items, href }: { title: string
           {[0, 1].map((copy) =>
             items.map((p) => (
               <li key={`${copy}-${p.slug}`} aria-hidden={copy === 1} className="w-40 shrink-0">
-                <Link href={`/product/${p.slug}`} tabIndex={copy === 1 ? -1 : undefined} className="block overflow-hidden rounded-2xl bg-lux-800 shadow-[0_16px_30px_-14px_rgba(0,0,0,0.9)] ring-1 ring-white/[0.08]">
+                <Link href={`/product/${p.slug}`} tabIndex={copy === 1 ? -1 : undefined} className="relative block overflow-hidden rounded-[20px] bg-lux-800 shadow-[0_16px_30px_-14px_rgba(0,0,0,0.9)] ring-1 ring-white/[0.08]">
+                  <span aria-hidden className="pointer-events-none absolute inset-x-4 top-0 z-20 h-px bg-gradient-to-r from-transparent via-gold-300/70 to-transparent" />
                   <div className="relative aspect-[4/5] overflow-hidden bg-gray-50">
                     {p.image ? <Image src={p.image} alt={p.name} fill sizes="160px" className="object-cover" /> : <ProductImage product={p} sizes="160px" />}
                     {p.capacity && <span className="absolute left-2 top-2 z-10 rounded-full bg-lux-950/80 px-2 py-0.5 text-[10px] font-bold text-gold-300 ring-1 ring-gold-400/30">{p.capacity}</span>}

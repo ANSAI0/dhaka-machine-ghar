@@ -11,8 +11,6 @@ import { useSite } from "./site-provider";
 
 type Msg = { role: "user" | "assistant"; text: string };
 const KEY = "dmg-chat";
-const GREET_SHOW_MS = 9000;
-const GREET_EVERY_MS = 5 * 60 * 1000;
 const suggestions = ["২৫ টন পাওয়ার প্রেসের দাম কত?", "রিকন্ডিশন্ড লেদ মেশিন আছে?", "অগ্রিম কত দিতে হবে?", "আমাকে কল করুন"];
 
 // Turns site paths (/product/…) and phone numbers in bot replies into links.
@@ -42,23 +40,6 @@ export function ChatWidget() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const end = useRef<HTMLDivElement>(null);
-  const [greet, setGreet] = useState(false);
-
-  // A small greeting pops up beside the button while the chat is closed: a few seconds after
-  // the page opens, then every 5 minutes (shown ~9 s each time).
-  useEffect(() => {
-    if (open) {
-      setGreet(false);
-      return;
-    }
-    let t: ReturnType<typeof setTimeout>;
-    const cycle = (show: boolean) => {
-      setGreet(show);
-      t = setTimeout(() => cycle(!show), show ? GREET_SHOW_MS : GREET_EVERY_MS - GREET_SHOW_MS);
-    };
-    t = setTimeout(() => cycle(true), 3500);
-    return () => clearTimeout(t);
-  }, [open]);
 
   useEffect(() => {
     try {
@@ -102,7 +83,7 @@ export function ChatWidget() {
   return (
     <>
       {open && (
-        <section role="dialog" aria-label="DMG সহকারী chat" className="fixed inset-x-2 bottom-20 z-50 flex origin-bottom-right animate-pop-in max-h-[75vh] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl sm:inset-x-auto sm:right-5 sm:w-[380px] md:bottom-24">
+        <section role="dialog" aria-label="DMG সহকারী chat" className="fixed inset-x-2 bottom-[100px] z-50 flex origin-bottom-right animate-pop-in max-h-[75vh] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl sm:inset-x-auto sm:right-5 sm:w-[380px] md:bottom-24">
           <header className="flex items-center gap-3 bg-brand-700 px-4 py-3 text-white">
             <span className="relative h-10 w-10 shrink-0">
               <SupportAvatar className="h-10 w-10 rounded-full ring-2 ring-white/40" />
@@ -148,24 +129,6 @@ export function ChatWidget() {
         </section>
       )}
       <div className="relative">
-        {greet && !open && (
-          <div className="absolute bottom-2 right-full mr-3 w-max max-w-[230px] origin-bottom-right animate-pop-in">
-            <button
-              onClick={() => setOpen(true)}
-              className="rounded-2xl rounded-br-sm bg-white px-4 py-2.5 text-left text-[13px] leading-snug text-gray-800 shadow-xl ring-1 ring-black/5 hover:ring-brand-200 max-md:bg-lux-800 max-md:text-white/80 max-md:shadow-black/60 max-md:ring-gold-400/30"
-            >
-              <span className="block font-bold text-gray-900 max-md:text-gold-300">আসসালামু আলাইকুম! 👋</span>
-              কোন মেশিন খুঁজছেন? আমাকে জিজ্ঞেস করুন।
-            </button>
-            <button
-              onClick={() => setGreet(false)}
-              aria-label="Dismiss"
-              className="absolute -left-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-gray-800 text-white shadow ring-2 ring-white hover:bg-black"
-            >
-              <X className="h-3 w-3" />
-            </button>
-          </div>
-        )}
         <button
           onClick={() => setOpen((o) => !o)}
           aria-label={open ? "Close chat" : "Open chat"}

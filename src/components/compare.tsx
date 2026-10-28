@@ -60,7 +60,7 @@ export function CompareBar() {
   const { getProduct } = useCatalog();
   if (!slugs.length) return null;
   return (
-    <div className="fixed inset-x-3 bottom-[68px] z-40 mx-auto max-w-3xl rounded-2xl border border-brand-100 bg-white p-3 shadow-2xl md:bottom-5">
+    <div className="fixed inset-x-3 bottom-[96px] z-40 md:bottom-[68px] mx-auto max-w-3xl rounded-2xl border border-brand-100 bg-white p-3 shadow-2xl md:bottom-5">
       <div className="flex items-center gap-3">
         <GitCompareArrows className="hidden h-6 w-6 shrink-0 text-brand-600 sm:block" />
         <div className="no-scrollbar flex min-w-0 flex-1 gap-2 overflow-x-auto">

@@ -51,7 +51,7 @@ export default async function Home() {
               href={href}
               className={`group flex items-center gap-3 p-3.5 transition-colors hover:bg-gray-50 sm:p-5 ${idx % 2 === 0 ? "border-r" : "xl:border-r"} ${idx < 2 ? "border-b xl:border-b-0" : ""} border-gray-100 last:border-r-0 max-md:border-white/[0.06] max-md:active:bg-white/[0.04]`}
             >
-              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1 transition-transform duration-300 group-hover:scale-110 sm:h-12 sm:w-12 ${tint} max-md:bg-gold-400/10 max-md:text-gold-300 max-md:ring-gold-400/25`}>
+              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1 transition-transform duration-300 group-hover:scale-110 sm:h-12 sm:w-12 ${tint} max-md:bg-gold-gradient max-md:text-lux-950 max-md:ring-0 max-md:shadow-[0_6px_16px_-6px_rgba(214,174,85,0.55)]`}>
                 <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
               </span>
               <span className="min-w-0 flex-1">
@@ -69,7 +69,21 @@ export default async function Home() {
         {/* Shop by category */}
         <section className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-7 max-md:border-white/[0.07] max-md:bg-gradient-to-b max-md:from-lux-800 max-md:to-lux-900">
           <SectionHeading eyebrow="Browse" title="Shop by Category" center />
-          <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-5 sm:gap-4">
+          {/* Phones: swipeable story-style circles with a gold ring */}
+          <div className="no-scrollbar -mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-1 md:hidden">
+            {categories.map((c) => (
+              <Link key={c.slug} href={`/category/${c.slug}`} className="flex w-[76px] shrink-0 snap-start flex-col items-center gap-2 text-center">
+                <span className="block rounded-full bg-gold-gradient p-[2px] shadow-[0_8px_20px_-8px_rgba(214,174,85,0.5)]">
+                  <span className="flex h-[68px] w-[68px] items-center justify-center rounded-full border-[3px] border-lux-900 bg-gradient-to-b from-lux-700 to-lux-900 text-gold-300">
+                    <CategoryIcon name={c.icon} className="h-7 w-7" strokeWidth={1.5} />
+                  </span>
+                </span>
+                <span className="line-clamp-2 text-[11px] font-semibold leading-tight text-white/85">{c.name}</span>
+                <span className="-mt-1.5 text-[10px] font-semibold text-gold-400/70">{productsIn(catalog, c.slug).length}</span>
+              </Link>
+            ))}
+          </div>
+          <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-5 sm:gap-4 max-md:hidden">
             {categories.map((c) => (
               <Link
                 key={c.slug}
@@ -89,9 +103,9 @@ export default async function Home() {
         {/* Trust band */}
         <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-900 via-brand-800 to-steel-700 p-4 shadow-lg sm:rounded-3xl sm:p-6 max-md:border max-md:border-gold-400/20 max-md:from-lux-800 max-md:via-lux-900 max-md:to-brand-900">
           <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full border-[30px] border-white/5" />
-          <div className="relative grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="no-scrollbar relative grid grid-cols-2 gap-3 lg:grid-cols-4 max-md:-mx-4 max-md:flex max-md:snap-x max-md:overflow-x-auto max-md:px-4">
             {trust(site).map(({ Icon, title, text }) => (
-              <div key={title} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 md:backdrop-blur sm:p-4">
+              <div key={title} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 md:backdrop-blur sm:p-4 max-md:w-[200px] max-md:shrink-0 max-md:snap-start max-md:border-gold-400/15 max-md:bg-lux-950/50">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white ring-1 ring-white/15 sm:h-12 sm:w-12 max-md:bg-gold-400/10 max-md:text-gold-300 max-md:ring-gold-400/25">
                   <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </span>
@@ -143,7 +157,11 @@ export default async function Home() {
 function SectionHeading({ eyebrow, title, center }: { eyebrow: string; title: string; center?: boolean }) {
   return (
     <div className={`mb-5 sm:mb-6 ${center ? "text-center" : ""}`}>
-      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent-600 max-md:text-gold-400">{eyebrow}</p>
+      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent-600 max-md:flex max-md:items-center max-md:justify-center max-md:gap-3 max-md:text-gold-400">
+        <span className="h-px w-8 bg-gradient-to-r from-transparent to-gold-400 md:hidden" />
+        {eyebrow}
+        <span className="h-px w-8 bg-gradient-to-l from-transparent to-gold-400 md:hidden" />
+      </p>
       <h2 className="mt-1 text-xl font-extrabold text-gray-900 sm:text-2xl max-md:text-white">{title}</h2>
       {center && <span className="mx-auto mt-2 block h-1 w-12 rounded-full bg-gradient-to-r from-brand-600 to-steel-600 max-md:bg-gold-gradient" />}
     </div>

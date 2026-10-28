@@ -6,7 +6,7 @@ import { ChatWidget } from "./chat-widget";
 export async function FloatingContact() {
   const [site, bot] = await Promise.all([getSite(), getBotSettings()]);
   return (
-    <div className="fixed bottom-20 right-3 z-40 flex flex-col items-end gap-3 md:bottom-6 md:right-5">
+    <div className="fixed bottom-[100px] right-3 z-40 flex flex-col items-end gap-3 md:bottom-6 md:right-5">
       <a
         href={`https://wa.me/${site.whatsappIntl}?text=${encodeURIComponent("আসসালামু আলাইকুম, আমি একটি মেশিন সম্পর্কে জানতে চাই।")}`}
         target="_blank"

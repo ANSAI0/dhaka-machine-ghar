@@ -23,7 +23,8 @@ export function ProductCard({ product }: { product: Product }) {
   const off = discountPercent(product);
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-gray-200 hover:shadow-[0_18px_40px_-16px_rgba(16,24,40,0.25)] max-md:border-white/[0.07] max-md:bg-lux-800 max-md:shadow-[0_16px_30px_-16px_rgba(0,0,0,0.9)]">
+    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-gray-200 hover:shadow-[0_18px_40px_-16px_rgba(16,24,40,0.25)] max-md:rounded-[20px] max-md:border-white/[0.07] max-md:bg-gradient-to-b max-md:from-lux-700 max-md:to-lux-800 max-md:shadow-[0_16px_30px_-16px_rgba(0,0,0,0.9)]">
+      <span aria-hidden className="pointer-events-none absolute inset-x-4 top-0 z-30 h-px bg-gradient-to-r from-transparent via-gold-300/70 to-transparent md:hidden" />
       <div className="absolute right-2.5 top-2.5 z-20 flex flex-col gap-1.5 transition-all duration-300 md:translate-x-2 md:opacity-0 md:group-hover:translate-x-0 md:group-hover:opacity-100">
         <button
           type="button"
