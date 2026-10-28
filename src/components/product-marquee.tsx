@@ -11,7 +11,8 @@ const SPEED = 0.32; // cards per second, right to left
 
 // 3D coverflow that drifts endlessly right-to-left: the centre card faces the viewer and the
 // rest turn away and sink back. Transforms are written straight to the DOM each frame (no
-// re-renders). Hover pauses; reduced-motion users get a still row.
+// re-renders). Hover pauses; reduced-motion users get a still row. Desktop/tablet only — phones
+// get the flat ribbon below.
 export function ProductMarquee({ title, subtitle, items, href }: { title: string; subtitle: string; items: Product[]; href: string }) {
   // Enough cards that the edges never run dry.
   const base = Array.from({ length: Math.max(1, Math.ceil(9 / Math.max(items.length, 1))) }, () => items).flat();
@@ -21,41 +22,74 @@ export function ProductMarquee({ title, subtitle, items, href }: { title: string
 
   useEffect(() => {
     const n = base.length;
-    if (!n || !stage.current) return;
+    const el = stage.current;
+    if (!n || !el) return;
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let offset = 0;
-    let last = performance.now();
+    let last = 0;
     let raf = 0;
-
-    const layout = () => {
-      const w = stage.current?.clientWidth ?? 900;
+    let visible = false;
+    // Sizes are measured on resize only — reading them every frame forces a layout per frame.
+    let gap = 150;
+    const measure = () => {
       const card = cards.current[0]?.offsetWidth ?? 240;
-      const gap = Math.min(card * 0.62, w / 6.2);
-      cards.current.forEach((el, i) => {
-        if (!el) return;
+      gap = Math.min(card * 0.62, el.clientWidth / 6.2);
+    };
+
+    // Only transform and opacity change per frame, both cheap for the GPU. The side cards are
+    // dimmed with an overlay's opacity rather than a CSS filter (filters repaint every frame).
+    const layout = () => {
+      cards.current.forEach((card, i) => {
+        if (!card) return;
         // Signed distance from the centre slot, wrapped into [-n/2, n/2).
         let d = (((i - offset) % n) + n) % n;
         if (d >= n / 2) d -= n;
         const a = Math.abs(d);
+        if (a > 4.4) {
+          card.style.visibility = "hidden";
+          return;
+        }
         const rot = Math.max(-55, Math.min(55, -d * 32));
         const z = -Math.min(a, 4) * 140;
-        el.style.transform = `translate(-50%, -50%) translateX(${d * gap}px) translateZ(${z}px) rotateY(${rot}deg)`;
-        el.style.zIndex = String(100 - Math.round(a * 10));
-        el.style.opacity = a > 3.6 ? String(Math.max(0, 4.4 - a)) : "1";
-        el.style.filter = a < 0.5 ? "none" : `brightness(${Math.max(0.72, 1 - a * 0.09)})`;
-        el.style.pointerEvents = a > 3.5 ? "none" : "auto";
+        card.style.visibility = "visible";
+        card.style.transform = `translate(-50%, -50%) translateX(${d * gap}px) translateZ(${z}px) rotateY(${rot}deg)`;
+        card.style.zIndex = String(100 - Math.round(a * 10));
+        card.style.opacity = a > 3.6 ? String(Math.max(0, 4.4 - a)) : "1";
+        card.style.pointerEvents = a > 3.5 ? "none" : "auto";
+        const shade = card.lastElementChild as HTMLElement | null;
+        if (shade) shade.style.opacity = a < 0.5 ? "0" : String(Math.min(0.28, a * 0.09));
       });
     };
 
     const tick = (t: number) => {
-      const dt = Math.min(0.05, (t - last) / 1000);
+      const dt = last ? Math.min(0.05, (t - last) / 1000) : 0;
       last = t;
       if (!paused.current && !still) offset = (offset + SPEED * dt) % n;
       layout();
-      raf = requestAnimationFrame(tick);
+      raf = visible && !still ? requestAnimationFrame(tick) : 0;
     };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+
+    // Animate only while the ribbon is on screen.
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (visible && !raf) {
+        last = 0;
+        raf = requestAnimationFrame(tick);
+      }
+    });
+    io.observe(el);
+    const ro = new ResizeObserver(() => {
+      measure();
+      layout();
+    });
+    ro.observe(el);
+    measure();
+    layout();
+    return () => {
+      io.disconnect();
+      ro.disconnect();
+      cancelAnimationFrame(raf);
+    };
   }, [base.length]);
 
   if (!items.length) return null;
@@ -75,9 +109,32 @@ export function ProductMarquee({ title, subtitle, items, href }: { title: string
         </Link>
       </div>
 
+      {/* Phones: a flat ribbon moved by one CSS transform (GPU only) — the 3D stage is too heavy
+          to animate while the page scrolls. */}
+      <div className="group/ribbon relative -mx-3 overflow-hidden py-3 [mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)] md:hidden">
+        <ul className="flex w-max animate-marquee gap-3 group-active/ribbon:[animation-play-state:paused]" style={{ ["--marquee-duration" as string]: `${items.length * 5}s` }}>
+          {[0, 1].map((copy) =>
+            items.map((p) => (
+              <li key={`${copy}-${p.slug}`} aria-hidden={copy === 1} className="w-40 shrink-0">
+                <Link href={`/product/${p.slug}`} tabIndex={copy === 1 ? -1 : undefined} className="block overflow-hidden rounded-2xl bg-white shadow-[0_10px_24px_-12px_rgba(0,0,0,0.3)] ring-1 ring-black/5">
+                  <div className="relative aspect-[4/5] overflow-hidden bg-gray-50">
+                    {p.image ? <Image src={p.image} alt={p.name} fill sizes="160px" className="object-cover" /> : <ProductImage product={p} sizes="160px" />}
+                    {p.capacity && <span className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-bold text-gray-800 shadow-sm">{p.capacity}</span>}
+                  </div>
+                  <div className="px-3 py-2.5">
+                    <p className="line-clamp-1 text-[13px] font-bold text-gray-900">{p.name}</p>
+                    <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400">{p.condition === "new" ? "Factory Made" : "Reconditioned"}</p>
+                  </div>
+                </Link>
+              </li>
+            )),
+          )}
+        </ul>
+      </div>
+
       <div
         ref={stage}
-        className="relative h-[330px] overflow-hidden [perspective:1100px] sm:h-[400px] lg:h-[430px]"
+        className="relative hidden h-[400px] overflow-hidden [perspective:1100px] md:block lg:h-[430px]"
         onMouseEnter={() => (paused.current = true)}
         onMouseLeave={() => (paused.current = false)}
       >
@@ -93,23 +150,25 @@ export function ProductMarquee({ title, subtitle, items, href }: { title: string
               href={`/product/${p.slug}`}
               aria-hidden={i >= items.length}
               tabIndex={i >= items.length ? -1 : undefined}
-              className="group absolute left-1/2 top-[48%] w-44 overflow-hidden rounded-2xl bg-white shadow-[0_20px_40px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 will-change-transform sm:w-56 lg:w-60"
+              className="group absolute left-1/2 top-[48%] w-56 overflow-hidden rounded-2xl bg-white shadow-[0_20px_40px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 will-change-transform lg:w-60"
               style={{ transform: "translate(-50%, -50%)" }}
             >
               <div className="relative aspect-[4/5] overflow-hidden bg-gray-50">
                 {p.image ? (
-                  <Image src={p.image} alt={p.name} fill sizes="(min-width: 1024px) 240px, (min-width: 640px) 224px, 176px" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <Image src={p.image} alt={p.name} fill sizes="(min-width: 1024px) 240px, 224px" className="object-cover transition-transform duration-700 group-hover:scale-105" />
                 ) : (
                   <ProductImage product={p} sizes="240px" />
                 )}
                 {p.capacity && (
-                  <span className="absolute left-2.5 top-2.5 rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-bold text-gray-800 shadow-sm backdrop-blur sm:text-[11px]">{p.capacity}</span>
+                  <span className="absolute left-2.5 top-2.5 rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-bold text-gray-800 shadow-sm md:backdrop-blur sm:text-[11px]">{p.capacity}</span>
                 )}
               </div>
               <div className="px-3.5 py-3">
                 <p className="line-clamp-1 text-[13px] font-bold text-gray-900 group-hover:text-brand-700 sm:text-sm">{p.name}</p>
                 <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400 sm:text-[11px]">{p.condition === "new" ? "Factory Made" : "Reconditioned"}</p>
               </div>
+              {/* dims the side cards; must stay the last child (see layout()) */}
+              <span aria-hidden className="pointer-events-none absolute inset-0 bg-black opacity-0" />
             </Link>
           ))}
         </div>

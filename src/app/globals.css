@@ -62,9 +62,10 @@
   --font-display: var(--font-anek), var(--font-hind), ui-sans-serif, system-ui, sans-serif;
 }
 
+/* scaleX, not width: animating width re-lays out the page every frame */
 @keyframes hero-progress {
-  from { width: 0; }
-  to { width: 100%; }
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -85,7 +86,7 @@ html {
 body {
   background: #f4f6f5;
   color: #1f2937;
-  overflow-x: hidden;
+  overflow-x: clip; /* not hidden: that breaks momentum scrolling and sticky on iOS */
 }
 
 /* iOS zooms into any field under 16px when it is focused — keep form text at 16px on phones. */

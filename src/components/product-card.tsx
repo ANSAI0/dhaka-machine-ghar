@@ -30,7 +30,7 @@ export function ProductCard({ product }: { product: Product }) {
           onClick={() => setQuick(true)}
           aria-label="Quick view"
           title="Quick view"
-          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-sm ring-1 ring-black/5 backdrop-blur transition hover:bg-ink hover:text-white"
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-sm ring-1 ring-black/5 md:backdrop-blur transition hover:bg-ink hover:text-white"
         >
           <Eye className="h-4 w-4" />
         </button>
@@ -41,7 +41,7 @@ export function ProductCard({ product }: { product: Product }) {
           aria-pressed={comparing}
           aria-label={comparing ? "Remove from compare" : "Add to compare"}
           title={!comparing && compare.full ? "Compare list full (max 4)" : "Compare"}
-          className={`flex h-8 w-8 items-center justify-center rounded-full shadow-sm ring-1 ring-black/5 backdrop-blur transition disabled:opacity-40 ${
+          className={`flex h-8 w-8 items-center justify-center rounded-full shadow-sm ring-1 ring-black/5 md:backdrop-blur transition disabled:opacity-40 ${
             comparing ? "bg-ink text-white" : "bg-white/90 text-gray-700 hover:bg-ink hover:text-white"
           }`}
         >
@@ -53,7 +53,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div ref={imageRef} className="relative aspect-[4/5] overflow-hidden bg-gray-50">
           <div className="absolute left-2 top-2 z-10 flex flex-col items-start gap-1">
             {off > 0 && <span className="rounded-full bg-accent-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">-{off}%</span>}
-            <span className="flex items-center gap-1 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold text-gray-700 shadow-sm ring-1 ring-black/5 backdrop-blur">
+            <span className="flex items-center gap-1 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold text-gray-700 shadow-sm ring-1 ring-black/5 md:backdrop-blur">
               <span className={`h-1.5 w-1.5 rounded-full ${product.condition === "new" ? "bg-emerald-500" : "bg-steel-500"}`} />
               {product.condition === "new" ? "Factory New" : "Reconditioned"}
             </span>

@@ -59,7 +59,7 @@ export default async function AccountPage() {
             { n: active, l: "কারখানায় তৈরি হচ্ছে", Icon: Truck },
             { n: warranties.length, l: "ওয়ারেন্টি", Icon: ShieldCheck },
           ].map(({ n, l, Icon }) => (
-            <div key={l} className="rounded-2xl bg-white/10 p-3 backdrop-blur sm:p-4">
+            <div key={l} className="rounded-2xl bg-white/10 p-3 md:backdrop-blur sm:p-4">
               <Icon className="h-5 w-5 text-white/70" />
               <p className="mt-1 text-2xl font-extrabold">{n}</p>
               <p className="text-xs text-white/75">{l}</p>

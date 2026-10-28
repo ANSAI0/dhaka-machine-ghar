@@ -91,7 +91,7 @@ export default async function Home() {
           <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full border-[30px] border-white/5" />
           <div className="relative grid grid-cols-2 gap-3 lg:grid-cols-4">
             {trust(site).map(({ Icon, title, text }) => (
-              <div key={title} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur sm:p-4">
+              <div key={title} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 md:backdrop-blur sm:p-4">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white ring-1 ring-white/15 sm:h-12 sm:w-12">
                   <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </span>
@@ -122,7 +122,7 @@ export default async function Home() {
               <Link href="/quotation" className="flex items-center justify-center gap-2 rounded-xl bg-accent-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-accent-600/30 hover:bg-accent-500">
                 Get a Quote <ArrowRight className="h-4 w-4" />
               </Link>
-              <a href={`tel:${site.phoneIntl}`} className="flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur hover:bg-white/20">
+              <a href={`tel:${site.phoneIntl}`} className="flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 py-3 text-sm font-bold text-white md:backdrop-blur hover:bg-white/20">
                 <Phone className="h-4 w-4" /> {site.phone}
               </a>
             </div>

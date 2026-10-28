@@ -66,28 +66,49 @@ export function HeroSlider() {
   const [paused, setPaused] = useState(false);
   const touchX = useRef<number | null>(null);
   const video = useRef<HTMLVideoElement>(null);
+  const root = useRef<HTMLElement>(null);
+  const [inView, setInView] = useState(true);
+  // Phones get the poster still instead of the video (and no zoom): lighter to scroll and saves data.
+  const [wide, setWide] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setWide(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
   const go = (n: number) => setI((n + slides.length) % slides.length);
   const media = (slides[i].image ?? slides[i].video) as Media;
 
   useEffect(() => {
-    if (paused) return;
+    if (paused || !inView) return;
     const t = setTimeout(() => setI((x) => (x + 1) % slides.length), durationOf(i));
     return () => clearTimeout(t);
-  }, [i, paused]);
+  }, [i, paused, inView]);
+
+  // Off screen: stop the video, the slide timer and the zoom so scrolling stays smooth on phones.
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   // The clip only plays while its slide is showing, and restarts each time it comes back.
   useEffect(() => {
     const v = video.current;
     if (!v) return;
-    if (slides[i].video) {
+    if (slides[i].video && inView) {
       v.currentTime = 0;
       v.play().catch(() => {});
     } else v.pause();
-  }, [i]);
+  }, [i, inView, wide]);
 
   return (
     <section
-      className="group/hero relative overflow-hidden rounded-2xl bg-ink shadow-xl ring-1 ring-black/5 sm:rounded-3xl"
+      ref={root}
+      className={`group/hero relative overflow-hidden rounded-2xl bg-ink shadow-xl ring-1 ring-black/5 sm:rounded-3xl ${inView ? "" : "[&_*]:[animation-play-state:paused]"}`}
       aria-roledescription="carousel"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -108,7 +129,7 @@ export function HeroSlider() {
               className={`absolute inset-0 transition-opacity duration-700 ${on ? "opacity-100" : "pointer-events-none opacity-0"}`}
               aria-hidden={!on}
             >
-              {s.video ? (
+              {s.video && wide ? (
                 <video
                   ref={video}
                   src={s.video.src}
@@ -122,9 +143,9 @@ export function HeroSlider() {
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               ) : (
-                <div className={`absolute inset-0 ${on ? "animate-kenburns" : ""}`}>
+                <div className={`absolute inset-0 ${on ? "md:animate-kenburns" : ""}`}>
                   <Image
-                    src={s.image!.src}
+                    src={s.image?.src ?? s.video!.poster}
                     alt=""
                     fill
                     priority={idx === 0}
@@ -170,8 +191,12 @@ export function HeroSlider() {
               {idx === i && (
                 <span
                   key={`${i}-${paused}`}
-                  className="absolute inset-y-0 left-0 bg-accent-500"
-                  style={paused ? { width: "100%" } : { animation: `hero-progress ${durationOf(i)}ms linear forwards` }}
+                  className="absolute inset-0 origin-left bg-accent-500"
+                  style={
+                    paused
+                      ? undefined
+                      : { animation: `hero-progress ${durationOf(i)}ms linear forwards`, animationPlayState: inView ? "running" : "paused" }
+                  }
                 />
               )}
             </button>

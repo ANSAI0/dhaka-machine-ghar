@@ -11,6 +11,8 @@ import { useSite } from "./site-provider";
 
 type Msg = { role: "user" | "assistant"; text: string };
 const KEY = "dmg-chat";
+const GREET_SHOW_MS = 9000;
+const GREET_EVERY_MS = 5 * 60 * 1000;
 const suggestions = ["২৫ টন পাওয়ার প্রেসের দাম কত?", "রিকন্ডিশন্ড লেদ মেশিন আছে?", "অগ্রিম কত দিতে হবে?", "আমাকে কল করুন"];
 
 // Turns site paths (/product/…) and phone numbers in bot replies into links.
@@ -42,8 +44,8 @@ export function ChatWidget() {
   const end = useRef<HTMLDivElement>(null);
   const [greet, setGreet] = useState(false);
 
-  // A small greeting keeps popping up beside the button while the chat is closed:
-  // first after a few seconds, then on a loop (shown ~9 s, hidden ~16 s).
+  // A small greeting pops up beside the button while the chat is closed: a few seconds after
+  // the page opens, then every 5 minutes (shown ~9 s each time).
   useEffect(() => {
     if (open) {
       setGreet(false);
@@ -52,7 +54,7 @@ export function ChatWidget() {
     let t: ReturnType<typeof setTimeout>;
     const cycle = (show: boolean) => {
       setGreet(show);
-      t = setTimeout(() => cycle(!show), show ? 9000 : 16000);
+      t = setTimeout(() => cycle(!show), show ? GREET_SHOW_MS : GREET_EVERY_MS - GREET_SHOW_MS);
     };
     t = setTimeout(() => cycle(true), 3500);
     return () => clearTimeout(t);

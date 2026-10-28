@@ -77,7 +77,7 @@ export function Header({ categories, announcement }: { categories: Category[]; a
   const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
 
   return (
-    <header className={`sticky top-0 z-40 bg-white/80 backdrop-blur-xl transition-shadow ${scrolled ? "shadow-md" : "shadow-sm"}`}>
+    <header className={`sticky top-0 z-40 bg-white transition-shadow md:bg-white/80 md:backdrop-blur-xl ${scrolled ? "shadow-md" : "shadow-sm"}`}>
       {/* Main row. Phones: menu | centred logo | call + cart. md+: logo, search, hotline, track, cart. */}
       <div className="border-b border-gray-100">
         <div className={`container mx-auto grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 transition-all duration-300 md:flex md:gap-6 md:px-4 ${scrolled ? "py-1.5" : "py-2 md:py-3"}`}>
