@@ -7,8 +7,9 @@ const SRC = "/hero/dmg-factory.mp4";
 const POSTER = "/hero/dmg-factory-poster.webp";
 
 // Phone hero: only the DMG factory video, playing inside the framed box by itself (self-hosted MP4,
-// so no YouTube player or tap needed). Browsers only autoplay muted video, so the sound turns on at
-// the visitor's first tap anywhere, or with the speaker button. Loops; pauses while off screen.
+// so no YouTube player or tap needed). It tries to start with sound; where the browser blocks that,
+// it starts muted and the sound comes on at the first tap, or with the speaker button. Loops; pauses
+// while off screen.
 export function HeroSlider() {
   const box = useRef<HTMLElement>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -24,6 +25,33 @@ export function HeroSlider() {
     return () => mq.removeEventListener("change", update);
   }, []);
 
+  // Try to start with sound; browsers usually refuse until the visitor has interacted with the page,
+  // in which case it plays muted and the first tap/click/key turns the sound on.
+  useEffect(() => {
+    const v = video.current;
+    if (!phone || !v) return;
+    v.muted = false;
+    v.play()
+      .then(() => setMuted(false))
+      .catch(() => {
+        v.muted = true;
+        setMuted(true);
+        v.play().catch(() => {});
+      });
+    const unmute = () => {
+      v.muted = false;
+      v.play().catch(() => {});
+      setMuted(false);
+      off();
+    };
+    // Gestures that count as a user activation (a touch's pointerdown does not).
+    const events = ["pointerup", "touchend", "click", "keydown"] as const;
+    const off = () => events.forEach((t) => document.removeEventListener(t, unmute, true));
+    events.forEach((t) => document.addEventListener(t, unmute, true));
+    return off;
+  }, [phone]);
+
+  // Pause while scrolled away, resume when back.
   useEffect(() => {
     const el = box.current;
     const v = video.current;
@@ -31,20 +59,6 @@ export function HeroSlider() {
     const io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()));
     io.observe(el);
     return () => io.disconnect();
-  }, [phone]);
-
-  // First tap anywhere on the page turns the sound on.
-  useEffect(() => {
-    if (!phone) return;
-    const on = () => {
-      const v = video.current;
-      if (!v) return;
-      v.muted = false;
-      v.play().catch(() => {});
-      setMuted(false);
-    };
-    document.addEventListener("pointerdown", on, { once: true });
-    return () => document.removeEventListener("pointerdown", on);
   }, [phone]);
 
   return (
