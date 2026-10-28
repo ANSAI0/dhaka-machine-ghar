@@ -7,6 +7,7 @@ import { heroImages } from "@/lib/hero-images";
 import { getHeroBanners, getSite } from "@/lib/settings";
 import type { SiteInfo } from "@/lib/site";
 import { CategoryIcon } from "@/components/category-icon";
+import { DesktopHero } from "@/components/desktop-hero";
 import { HeroSlider } from "@/components/hero-slider";
 import { HomeSidebar } from "@/components/home-sidebar";
 import { ProductCard } from "@/components/product-card";
@@ -41,7 +42,12 @@ export default async function Home() {
       <HomeSidebar catalog={catalog} />
 
       <div className="min-w-0 flex-1 space-y-6 sm:space-y-8">
-        <HeroSlider banners={banners} />
+        <div className="md:hidden">
+          <HeroSlider banners={banners} />
+        </div>
+        <div className="hidden md:block">
+          <DesktopHero />
+        </div>
 
 
         {/* Quick actions */}
