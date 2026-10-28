@@ -30,7 +30,7 @@ export function HomeSidebar({ catalog }: { catalog: Catalog }) {
             <li key={c.slug}>
               <Link href={`/category/${c.slug}`} className="group relative flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-gray-50">
                 <span className="absolute inset-y-3 left-0 w-0.5 scale-y-0 rounded-full bg-gray-900 transition-transform duration-300 group-hover:scale-y-100" />
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-50 text-gray-600 ring-1 ring-gray-200 transition-colors duration-200 group-hover:bg-white group-hover:text-brand-700 group-hover:ring-brand-200">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-50 text-accent-600 ring-1 ring-accent-100 transition-colors duration-200 group-hover:bg-accent-600 group-hover:text-white group-hover:ring-accent-600">
                   <CategoryIcon name={c.icon} className="h-5 w-5" />
                 </span>
                 <span className="min-w-0 flex-1">
