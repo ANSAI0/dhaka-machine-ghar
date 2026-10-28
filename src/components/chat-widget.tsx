@@ -152,9 +152,9 @@ export function ChatWidget() {
           <div className="absolute bottom-2 right-full mr-3 w-max max-w-[230px] origin-bottom-right animate-pop-in">
             <button
               onClick={() => setOpen(true)}
-              className="rounded-2xl rounded-br-sm bg-white px-4 py-2.5 text-left text-[13px] leading-snug text-gray-800 shadow-xl ring-1 ring-black/5 hover:ring-brand-200"
+              className="rounded-2xl rounded-br-sm bg-white px-4 py-2.5 text-left text-[13px] leading-snug text-gray-800 shadow-xl ring-1 ring-black/5 hover:ring-brand-200 max-md:bg-lux-800 max-md:text-white/80 max-md:shadow-black/60 max-md:ring-gold-400/30"
             >
-              <span className="block font-bold text-gray-900">আসসালামু আলাইকুম! 👋</span>
+              <span className="block font-bold text-gray-900 max-md:text-gold-300">আসসালামু আলাইকুম! 👋</span>
               কোন মেশিন খুঁজছেন? আমাকে জিজ্ঞেস করুন।
             </button>
             <button

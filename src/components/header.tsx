@@ -29,21 +29,21 @@ function SearchBox({ onDone }: { onDone?: () => void }) {
         input.current?.blur();
         onDone?.();
       }}
-      className="group/search flex h-11 w-full items-center rounded-full bg-gray-100 pl-4 pr-1 ring-1 ring-black/[0.04] transition-all duration-200 hover:bg-gray-100/70 focus-within:bg-white focus-within:shadow-[0_10px_30px_-12px_rgba(46,94,71,0.45)] focus-within:ring-2 focus-within:ring-brand-600/30"
+      className="group/search flex h-11 w-full items-center rounded-full bg-gray-100 pl-4 pr-1 ring-1 ring-black/[0.04] transition-all duration-200 hover:bg-gray-100/70 focus-within:bg-white focus-within:shadow-[0_10px_30px_-12px_rgba(46,94,71,0.45)] focus-within:ring-2 focus-within:ring-brand-600/30 max-md:bg-white/[0.06] max-md:ring-white/10 max-md:focus-within:bg-white/[0.09] max-md:focus-within:ring-gold-400/50 max-md:focus-within:shadow-[0_10px_30px_-12px_rgba(214,174,85,0.35)]"
     >
-      <Search className="h-[18px] w-[18px] shrink-0 text-gray-400 transition-colors group-focus-within/search:text-brand-600" strokeWidth={2} />
+      <Search className="h-[18px] w-[18px] shrink-0 text-gray-400 transition-colors group-focus-within/search:text-brand-600 max-md:text-white/40 max-md:group-focus-within/search:text-gold-300" strokeWidth={2} />
       <input
         ref={input}
         value={q}
         onChange={(e) => setQ(e.target.value)}
         placeholder="মেশিন খুঁজুন — power press, lathe…"
         aria-label="Search machines"
-        className="h-full min-w-0 flex-1 bg-transparent px-3 text-sm text-gray-900 outline-none placeholder:text-gray-400"
+        className="h-full min-w-0 flex-1 bg-transparent px-3 text-sm text-gray-900 outline-none placeholder:text-gray-400 max-md:text-white max-md:placeholder:text-white/35"
       />
       <button
         type="submit"
         aria-label="Search"
-        className="flex h-9 w-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-brand-600 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-700 sm:w-auto sm:px-5"
+        className="flex h-9 w-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-brand-600 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-700 sm:w-auto sm:px-5 max-md:bg-gold-gradient max-md:text-lux-950 max-md:shadow-[0_4px_14px_-4px_rgba(214,174,85,0.6)]"
       >
         <Search className="h-4 w-4 sm:hidden" strokeWidth={2.25} />
         <span className="hidden sm:inline">Search</span>
@@ -53,8 +53,8 @@ function SearchBox({ onDone }: { onDone?: () => void }) {
 }
 
 // Header action icons: bare line icons that turn brand green on hover / when active.
-const iconBox = "relative flex h-9 w-9 items-center justify-center text-gray-800 transition-colors group-hover:text-brand-700";
-const iconBoxOn = "!text-brand-700";
+const iconBox = "relative flex h-9 w-9 items-center justify-center text-gray-800 transition-colors group-hover:text-brand-700 max-md:text-white/90";
+const iconBoxOn = "!text-brand-700 max-md:!text-gold-300";
 
 export function Header({ categories, announcement }: { categories: Category[]; announcement?: React.ReactNode }) {
   const path = usePathname();
@@ -77,11 +77,11 @@ export function Header({ categories, announcement }: { categories: Category[]; a
   const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
 
   return (
-    <header className={`sticky top-0 z-40 bg-white transition-shadow md:bg-white/80 md:backdrop-blur-xl ${scrolled ? "shadow-md" : "shadow-sm"}`}>
+    <header className={`sticky top-0 z-40 bg-white transition-shadow max-md:bg-lux-950 md:bg-white/80 md:backdrop-blur-xl ${scrolled ? "shadow-md max-md:shadow-black/60" : "shadow-sm max-md:shadow-none"}`}>
       {/* Main row. Phones: menu | centred logo | call + cart. md+: logo, search, hotline, track, cart. */}
-      <div className="border-b border-gray-100">
+      <div className="border-b border-gray-100 max-md:border-white/[0.06]">
         <div className={`container mx-auto grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 transition-all duration-300 md:flex md:gap-6 md:px-4 ${scrolled ? "py-1.5" : "py-2 md:py-3"}`}>
-          <button onClick={() => setDrawer(true)} className="-ml-1 justify-self-start rounded-lg p-1.5 text-gray-700 hover:bg-gray-100 md:hidden" aria-label="Open menu">
+          <button onClick={() => setDrawer(true)} className="-ml-1 justify-self-start rounded-lg p-1.5 text-white/90 active:bg-white/10 md:hidden" aria-label="Open menu">
             <Menu className="h-6 w-6" />
           </button>
           <Logo variant="mark" className={scrolled ? "h-7 md:h-8" : "h-8 md:h-10"} />
@@ -107,7 +107,7 @@ export function Header({ categories, announcement }: { categories: Category[]; a
             <Link href={me ? "/account" : "/account/login"} aria-label={me ? "My account" : "Sign in or register"} className="group flex items-center gap-2 px-1 py-1 lg:px-2">
               <span className={`relative ${iconBox} ${me ? iconBoxOn : ""}`}>
                 <UserRound className="h-6 w-6" strokeWidth={1.6} />
-                {me && <span className="absolute right-1 top-1 h-2 w-2 rounded-full border-2 border-white bg-emerald-500" />}
+                {me && <span className="absolute right-1 top-1 h-2 w-2 rounded-full border-2 border-white bg-emerald-500 max-md:border-lux-950" />}
               </span>
               <span className="hidden max-w-[110px] leading-tight lg:block">
                 <span className="block text-[11px] font-medium text-gray-500">{me ? "Welcome" : "Sign In"}</span>
@@ -119,7 +119,7 @@ export function Header({ categories, announcement }: { categories: Category[]; a
               {/* data-cart-target: where "add to cart" items fly to */}
               <span className={`relative ${iconBox} `} data-cart-target>
                 <ShoppingBag className="h-6 w-6" strokeWidth={1.6} />
-                <span className={`absolute -right-1.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-white px-1 text-[10px] font-bold text-white ${count ? "bg-accent-600" : "bg-gray-400"}`}>{count}</span>
+                <span className={`absolute -right-1.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-white px-1 text-[10px] font-bold text-white max-md:border-lux-950 ${count ? "bg-accent-600" : "bg-gray-400 max-md:bg-white/25"}`}>{count}</span>
               </span>
               <span className="hidden leading-tight lg:block">
                 <span className="block text-[11px] font-medium text-gray-500">My Cart</span>

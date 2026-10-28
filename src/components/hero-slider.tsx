@@ -161,12 +161,12 @@ export function HeroSlider() {
 
               <div className="relative z-10 flex h-full max-w-[640px] flex-col justify-center gap-2.5 px-5 pb-9 sm:gap-4 sm:px-10 lg:px-14">
                 <span className={`flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white backdrop-blur sm:text-xs ${on ? "animate-rise" : ""}`}>
-                  <span className="h-1.5 w-1.5 rounded-full bg-accent-500 shadow-[0_0_0_3px_rgba(179,18,31,0.35)]" /> {s.kicker}
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent-500 shadow-[0_0_0_3px_rgba(179,18,31,0.35)] max-md:bg-gold-400 max-md:shadow-[0_0_0_3px_rgba(214,174,85,0.3)]" /> {s.kicker}
                 </span>
                 <h2 className={`font-display text-balance text-[27px] font-bold leading-[1.2] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)] sm:text-[42px] lg:text-[54px] ${on ? "animate-rise [animation-delay:120ms]" : ""}`}>{s.title}</h2>
                 <p className={`hidden max-w-md text-sm leading-relaxed sm:block text-white/90 drop-shadow sm:text-base ${on ? "animate-rise [animation-delay:240ms]" : ""}`}>{s.text}</p>
                 <div className={`mt-1 flex gap-2 sm:gap-3 ${on ? "animate-rise [animation-delay:360ms]" : ""}`}>
-                  <Link href={s.cta.href} tabIndex={on ? 0 : -1} className="flex items-center gap-1.5 whitespace-nowrap rounded-xl bg-accent-600 px-3.5 py-2 text-[13px] font-bold sm:gap-2 sm:text-sm text-white shadow-lg shadow-accent-600/30 transition hover:bg-accent-500 sm:px-6 sm:py-3">
+                  <Link href={s.cta.href} tabIndex={on ? 0 : -1} className="flex items-center gap-1.5 whitespace-nowrap rounded-xl bg-accent-600 px-3.5 py-2 text-[13px] font-bold sm:gap-2 sm:text-sm text-white shadow-lg shadow-accent-600/30 transition hover:bg-accent-500 sm:px-6 sm:py-3 max-md:bg-gold-gradient max-md:text-lux-950 max-md:shadow-gold-500/40">
                     {s.cta.label} <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link href={s.alt.href} tabIndex={on ? 0 : -1} className="whitespace-nowrap rounded-xl border border-white/30 bg-white/10 px-3.5 py-2 text-[13px] font-bold sm:text-sm text-white backdrop-blur transition hover:bg-white/20 sm:px-6 sm:py-3">
@@ -191,7 +191,7 @@ export function HeroSlider() {
               {idx === i && (
                 <span
                   key={`${i}-${paused}`}
-                  className="absolute inset-0 origin-left bg-accent-500"
+                  className="absolute inset-0 origin-left bg-accent-500 max-md:bg-gold-400"
                   style={
                     paused
                       ? undefined

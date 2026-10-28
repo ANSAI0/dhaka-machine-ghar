@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 // Fixed scale on phones (owner's request): no pinch / double-tap zoom.
-export const viewport: Viewport = { width: "device-width", initialScale: 1, maximumScale: 1, userScalable: false, themeColor: "#2e5e47" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, maximumScale: 1, userScalable: false, themeColor: "#070a09" };
 
 // Shell only. The storefront chrome lives in (site)/layout; ad landing pages in (landing) stay distraction-free.
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

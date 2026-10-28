@@ -15,7 +15,7 @@ const itemsFor = (advance: number) => [
 export async function AnnouncementBar() {
   const items = itemsFor((await getSite()).advancePercent);
   return (
-    <div className="group/ann relative overflow-hidden border-b border-white/5 bg-gradient-to-r from-ink via-brand-900 to-ink text-white">
+    <div className="group/ann relative overflow-hidden border-b border-white/5 bg-gradient-to-r from-ink via-brand-900 to-ink text-white max-md:border-y max-md:border-gold-400/15 max-md:from-lux-950 max-md:via-lux-800 max-md:to-lux-950">
       <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-ink to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-ink to-transparent" />
       <ul className="flex w-max animate-marquee items-center py-1 group-hover/ann:[animation-play-state:paused]" style={{ ["--marquee-duration" as string]: "45s" }}>

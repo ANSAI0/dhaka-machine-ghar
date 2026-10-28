@@ -44,19 +44,19 @@ export default async function Home() {
         <HeroSlider />
 
         {/* Quick actions */}
-        <section className="grid grid-cols-2 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm xl:grid-cols-4">
+        <section className="grid grid-cols-2 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm xl:grid-cols-4 max-md:border-white/[0.07] max-md:bg-lux-800/80 max-md:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)]">
           {offers(site).map(({ title, sub, href, Icon, tint }, idx) => (
             <a
               key={title}
               href={href}
-              className={`group flex items-center gap-3 p-3.5 transition-colors hover:bg-gray-50 sm:p-5 ${idx % 2 === 0 ? "border-r" : "xl:border-r"} ${idx < 2 ? "border-b xl:border-b-0" : ""} border-gray-100 last:border-r-0`}
+              className={`group flex items-center gap-3 p-3.5 transition-colors hover:bg-gray-50 sm:p-5 ${idx % 2 === 0 ? "border-r" : "xl:border-r"} ${idx < 2 ? "border-b xl:border-b-0" : ""} border-gray-100 last:border-r-0 max-md:border-white/[0.06] max-md:active:bg-white/[0.04]`}
             >
-              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1 transition-transform duration-300 group-hover:scale-110 sm:h-12 sm:w-12 ${tint}`}>
+              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1 transition-transform duration-300 group-hover:scale-110 sm:h-12 sm:w-12 ${tint} max-md:bg-gold-400/10 max-md:text-gold-300 max-md:ring-gold-400/25`}>
                 <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block text-sm font-bold text-gray-900 sm:text-[15px]">{title}</span>
-                <span className="block truncate text-xs text-gray-500">{sub}</span>
+                <span className="block text-sm font-bold text-gray-900 sm:text-[15px] max-md:text-white">{title}</span>
+                <span className="block truncate text-xs text-gray-500 max-md:text-white/45">{sub}</span>
               </span>
               <ArrowRight className="hidden h-4 w-4 shrink-0 -translate-x-1 text-gray-300 transition-all group-hover:translate-x-0 group-hover:text-gray-700 2xl:block" />
             </a>
@@ -67,7 +67,7 @@ export default async function Home() {
         <ProductMarquee title="Popular Machines" subtitle="Featured" items={popular} href="/shop" />
 
         {/* Shop by category */}
-        <section className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-7">
+        <section className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-7 max-md:border-white/[0.07] max-md:bg-gradient-to-b max-md:from-lux-800 max-md:to-lux-900">
           <SectionHeading eyebrow="Browse" title="Shop by Category" center />
           <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-5 sm:gap-4">
             {categories.map((c) => (
@@ -76,23 +76,23 @@ export default async function Home() {
                 href={`/category/${c.slug}`}
                 className="group flex flex-col items-center gap-2.5 rounded-2xl border border-transparent px-1 py-3 text-center transition-all hover:border-brand-100 hover:bg-gradient-to-b hover:from-brand-50 hover:to-white hover:shadow-sm sm:py-4"
               >
-                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-50 to-steel-50 text-brand-600 ring-1 ring-brand-100 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:from-brand-600 group-hover:to-brand-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-brand-600/25 sm:h-[72px] sm:w-[72px]">
+                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-50 to-steel-50 text-brand-600 ring-1 ring-brand-100 max-md:from-lux-700 max-md:to-lux-900 max-md:text-gold-300 max-md:ring-gold-400/30 max-md:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_20px_-10px_rgba(0,0,0,0.8)] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:from-brand-600 group-hover:to-brand-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-brand-600/25 sm:h-[72px] sm:w-[72px]">
                   <CategoryIcon name={c.icon} className="h-7 w-7 sm:h-9 sm:w-9" strokeWidth={1.5} />
                 </span>
-                <span className="line-clamp-2 text-xs font-bold leading-tight text-gray-800 sm:text-sm">{c.name}</span>
-                <span className="-mt-1.5 text-[10px] font-semibold text-gray-400 sm:text-[11px]">{productsIn(catalog, c.slug).length} machines</span>
+                <span className="line-clamp-2 text-xs font-bold leading-tight text-gray-800 sm:text-sm max-md:text-white/90">{c.name}</span>
+                <span className="-mt-1.5 text-[10px] font-semibold text-gray-400 sm:text-[11px] max-md:text-gold-400/70">{productsIn(catalog, c.slug).length} machines</span>
               </Link>
             ))}
           </div>
         </section>
 
         {/* Trust band */}
-        <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-900 via-brand-800 to-steel-700 p-4 shadow-lg sm:rounded-3xl sm:p-6">
+        <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-900 via-brand-800 to-steel-700 p-4 shadow-lg sm:rounded-3xl sm:p-6 max-md:border max-md:border-gold-400/20 max-md:from-lux-800 max-md:via-lux-900 max-md:to-brand-900">
           <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full border-[30px] border-white/5" />
           <div className="relative grid grid-cols-2 gap-3 lg:grid-cols-4">
             {trust(site).map(({ Icon, title, text }) => (
               <div key={title} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 md:backdrop-blur sm:p-4">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white ring-1 ring-white/15 sm:h-12 sm:w-12">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white ring-1 ring-white/15 sm:h-12 sm:w-12 max-md:bg-gold-400/10 max-md:text-gold-300 max-md:ring-gold-400/25">
                   <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </span>
                 <div className="min-w-0">
@@ -109,17 +109,17 @@ export default async function Home() {
         ))}
 
         {/* Custom machine banner */}
-        <section className="relative overflow-hidden rounded-2xl shadow-lg sm:rounded-3xl">
+        <section className="relative overflow-hidden rounded-2xl shadow-lg sm:rounded-3xl max-md:ring-1 max-md:ring-gold-400/20">
           <Image src={heroImages.hall.src} alt="" fill sizes="(min-width: 1024px) 75vw, 100vw" className="object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/70 to-ink/30" />
           <div className="relative flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-10">
             <div className="max-w-xl">
-              <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70"><span className="h-1.5 w-1.5 rounded-full bg-accent-500" /> Custom Order</p>
+              <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70 max-md:text-gold-300"><span className="h-1.5 w-1.5 rounded-full bg-accent-500 max-md:bg-gold-400" /> Custom Order</p>
               <h2 className="mt-1 text-2xl font-extrabold leading-tight text-white sm:text-3xl">যে মেশিন দরকার, সেটাই বানিয়ে দেব</h2>
               <p className="mt-2 text-sm text-white/75 sm:text-base">Tell us the tonnage, size and job — we&apos;ll send a quotation, and you can follow every build step online.</p>
             </div>
             <div className="flex flex-wrap gap-2 sm:flex-col">
-              <Link href="/quotation" className="flex items-center justify-center gap-2 rounded-xl bg-accent-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-accent-600/30 hover:bg-accent-500">
+              <Link href="/quotation" className="flex items-center justify-center gap-2 rounded-xl bg-accent-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-accent-600/30 hover:bg-accent-500 max-md:bg-gold-gradient max-md:text-lux-950 max-md:shadow-gold-500/30">
                 Get a Quote <ArrowRight className="h-4 w-4" />
               </Link>
               <a href={`tel:${site.phoneIntl}`} className="flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 py-3 text-sm font-bold text-white md:backdrop-blur hover:bg-white/20">
@@ -143,9 +143,9 @@ export default async function Home() {
 function SectionHeading({ eyebrow, title, center }: { eyebrow: string; title: string; center?: boolean }) {
   return (
     <div className={`mb-5 sm:mb-6 ${center ? "text-center" : ""}`}>
-      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent-600">{eyebrow}</p>
-      <h2 className="mt-1 text-xl font-extrabold text-gray-900 sm:text-2xl">{title}</h2>
-      {center && <span className="mx-auto mt-2 block h-1 w-12 rounded-full bg-gradient-to-r from-brand-600 to-steel-600" />}
+      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent-600 max-md:text-gold-400">{eyebrow}</p>
+      <h2 className="mt-1 text-xl font-extrabold text-gray-900 sm:text-2xl max-md:text-white">{title}</h2>
+      {center && <span className="mx-auto mt-2 block h-1 w-12 rounded-full bg-gradient-to-r from-brand-600 to-steel-600 max-md:bg-gold-gradient" />}
     </div>
   );
 }
@@ -156,13 +156,13 @@ function ProductSection({ title, subtitle, items, total, href }: { title: string
     <section>
       <div className="mb-4 flex items-end justify-between gap-3">
         <div className="flex items-stretch gap-3">
-          <span className="w-1 rounded-full bg-gradient-to-b from-accent-600 to-brand-600" />
+          <span className="w-1 rounded-full bg-gradient-to-b from-accent-600 to-brand-600 max-md:bg-gold-gradient" />
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-400">{subtitle}</p>
-            <h2 className="text-lg font-extrabold text-gray-900 sm:text-xl">{title}</h2>
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-400 max-md:text-gold-400/80">{subtitle}</p>
+            <h2 className="text-lg font-extrabold text-gray-900 sm:text-xl max-md:text-white">{title}</h2>
           </div>
         </div>
-        <Link href={href} className="flex shrink-0 items-center gap-1 rounded-full border border-brand-100 bg-white px-3.5 py-1.5 text-xs font-bold text-brand-700 shadow-sm hover:border-brand-600 hover:bg-brand-600 hover:text-white">
+        <Link href={href} className="flex shrink-0 items-center gap-1 rounded-full border border-brand-100 bg-white px-3.5 py-1.5 text-xs font-bold text-brand-700 shadow-sm hover:border-brand-600 hover:bg-brand-600 hover:text-white max-md:border-gold-400/30 max-md:bg-white/[0.04] max-md:text-gold-300 max-md:shadow-none">
           {total ? `View all ${total}` : "View all"} <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>

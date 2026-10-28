@@ -98,13 +98,13 @@ export function ProductMarquee({ title, subtitle, items, href }: { title: string
     <section className="py-2">
       <div className="mb-2 flex items-end justify-between gap-3">
         <div className="flex items-stretch gap-3">
-          <span className="w-1 rounded-full bg-gradient-to-b from-accent-600 to-brand-600" />
+          <span className="w-1 rounded-full bg-gradient-to-b from-accent-600 to-brand-600 max-md:bg-gold-gradient" />
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-400">{subtitle}</p>
-            <h2 className="text-lg font-extrabold text-gray-900 sm:text-2xl">{title}</h2>
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-400 max-md:text-gold-400/80">{subtitle}</p>
+            <h2 className="text-lg font-extrabold text-gray-900 sm:text-2xl max-md:text-white">{title}</h2>
           </div>
         </div>
-        <Link href={href} className="flex shrink-0 items-center gap-1 rounded-full border border-brand-100 bg-white px-3.5 py-1.5 text-xs font-bold text-brand-700 shadow-sm hover:border-brand-600 hover:bg-brand-600 hover:text-white">
+        <Link href={href} className="flex shrink-0 items-center gap-1 rounded-full border border-brand-100 bg-white px-3.5 py-1.5 text-xs font-bold text-brand-700 shadow-sm hover:border-brand-600 hover:bg-brand-600 hover:text-white max-md:border-gold-400/30 max-md:bg-white/[0.04] max-md:text-gold-300 max-md:shadow-none">
           View all <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>
@@ -116,14 +116,15 @@ export function ProductMarquee({ title, subtitle, items, href }: { title: string
           {[0, 1].map((copy) =>
             items.map((p) => (
               <li key={`${copy}-${p.slug}`} aria-hidden={copy === 1} className="w-40 shrink-0">
-                <Link href={`/product/${p.slug}`} tabIndex={copy === 1 ? -1 : undefined} className="block overflow-hidden rounded-2xl bg-white shadow-[0_10px_24px_-12px_rgba(0,0,0,0.3)] ring-1 ring-black/5">
+                <Link href={`/product/${p.slug}`} tabIndex={copy === 1 ? -1 : undefined} className="block overflow-hidden rounded-2xl bg-lux-800 shadow-[0_16px_30px_-14px_rgba(0,0,0,0.9)] ring-1 ring-white/[0.08]">
                   <div className="relative aspect-[4/5] overflow-hidden bg-gray-50">
                     {p.image ? <Image src={p.image} alt={p.name} fill sizes="160px" className="object-cover" /> : <ProductImage product={p} sizes="160px" />}
-                    {p.capacity && <span className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-bold text-gray-800 shadow-sm">{p.capacity}</span>}
+                    {p.capacity && <span className="absolute left-2 top-2 z-10 rounded-full bg-lux-950/80 px-2 py-0.5 text-[10px] font-bold text-gold-300 ring-1 ring-gold-400/30">{p.capacity}</span>}
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-lux-800 to-transparent" />
                   </div>
                   <div className="px-3 py-2.5">
-                    <p className="line-clamp-1 text-[13px] font-bold text-gray-900">{p.name}</p>
-                    <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400">{p.condition === "new" ? "Factory Made" : "Reconditioned"}</p>
+                    <p className="line-clamp-1 text-[13px] font-bold text-white">{p.name}</p>
+                    <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-gold-400/70">{p.condition === "new" ? "Factory Made" : "Reconditioned"}</p>
                   </div>
                 </Link>
               </li>

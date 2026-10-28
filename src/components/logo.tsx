@@ -8,8 +8,10 @@ export function Logo({ dark = false, variant = "full", className = "h-11 sm:h-14
   if (variant === "mark") {
     return (
       <Link href="/" aria-label={`${site.name} — home`} className="flex shrink-0 flex-col items-center">
-        <Image src="/brand/dmg-logo-transparent.png" alt={`${site.name} (DMG) logo`} width={1057} height={400} priority className={`w-auto transition-all duration-300 ${className}`} />
-        <span className="mt-0.5 whitespace-nowrap text-[7.5px] font-bold uppercase leading-none tracking-[0.22em] text-gray-600 md:text-[8.5px]">{site.name}</span>
+        {/* Phones use the dark header, so they get the light-on-dark logo. */}
+        <Image src="/brand/dmg-logo-transparent.png" alt={`${site.name} (DMG) logo`} width={1057} height={400} priority className={`w-auto transition-all duration-300 max-md:hidden ${className}`} />
+        <Image src="/brand/dmg-logo-on-dark.png" alt={`${site.name} (DMG) logo`} width={1057} height={400} priority className={`w-auto transition-all duration-300 md:hidden ${className}`} />
+        <span className="mt-0.5 whitespace-nowrap text-[7.5px] font-bold uppercase leading-none tracking-[0.22em] text-gray-600 max-md:text-gold-300/90 md:text-[8.5px]">{site.name}</span>
       </Link>
     );
   }
