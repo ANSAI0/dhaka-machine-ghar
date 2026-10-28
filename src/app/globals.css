@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+/* Dhaka Machine Ghar brand palette — taken from the DMG logo */
+@theme {
+  --color-brand-50: #eef6f1;
+  --color-brand-100: #d5e9dd;
+  --color-brand-200: #a9d1ba;
+  --color-brand-500: #3f7a5e;
+  --color-brand-600: #2e5e47; /* logo "D" & "G" green */
+  --color-brand-700: #244b39;
+  --color-brand-800: #1a382a;
+  --color-brand-900: #10251b;
+
+  --color-accent-50: #fdecee;
+  --color-accent-100: #f9d0d4;
+  --color-accent-500: #b3121f;
+  --color-accent-600: #98000f; /* logo "M" crimson */
+  --color-accent-700: #7a000c;
+
+  --color-steel-50: #eaf3fa;
+  --color-steel-100: #cfe3f2;
+  --color-steel-500: #1e7fbc;
+  --color-steel-600: #1570a8; /* logo blue swoosh */
+  --color-steel-700: #105a87;
+
+  --color-ink: #111111; /* logo black swoosh */
+
+  --font-sans: var(--font-hind), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-kenburns: kenburns 6s ease-out forwards;
+  --animate-rise: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
+  --animate-nudge: nudge 5s ease-in-out 2s infinite;
+  --animate-pop-in: pop-in 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.25) both;
+
+  @keyframes kenburns {
+    from { transform: scale(1.12); }
+    to { transform: scale(1); }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes nudge {
+    0%, 80%, 100% { transform: scale(1); }
+    86% { transform: scale(1.12); }
+    92% { transform: scale(0.96); }
+  }
+  @keyframes pop-in {
+    from { opacity: 0; transform: translateY(10px) scale(0.9); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+}
+
+/* Bangla display face for hero headlines. "inline" so the utility reads --font-anek where it's
+   used (next/font sets that variable on <body>, not :root). */
+@theme inline {
+  --font-display: var(--font-anek), var(--font-hind), ui-sans-serif, system-ui, sans-serif;
+}
+
+@keyframes hero-progress {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-kenburns,
+  .animate-rise,
+  .animate-marquee,
+  .animate-nudge,
+  .animate-pop-in {
+    animation: none !important;
+  }
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation; /* no double-tap zoom */
+}
+
+body {
+  background: #f4f6f5;
+  color: #1f2937;
+  overflow-x: hidden;
+}
+
+/* iOS zooms into any field under 16px when it is focused — keep form text at 16px on phones. */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Keep brand colours (table headers, badges) when printing invoices / challans. */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

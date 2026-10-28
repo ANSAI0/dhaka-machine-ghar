@@ -1,0 +1,320 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url       = env("DATABASE_URL")
+  // Direct (non-pooled) connection for migrations; on Neon this is the URL without "-pooler".
+  directUrl = env("DIRECT_URL")
+}
+
+// ── Catalog ─────────────────────────────────────────────────
+
+model Category {
+  id            String        @id @default(cuid())
+  slug          String        @unique
+  name          String
+  nameBn        String
+  icon          String // lucide icon name
+  sortOrder     Int           @default(0)
+  subcategories Subcategory[]
+  products      Product[]
+}
+
+model Subcategory {
+  id         String    @id @default(cuid())
+  slug       String
+  name       String
+  sortOrder  Int       @default(0)
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+  products   Product[]
+
+  @@unique([categoryId, slug])
+}
+
+enum Condition {
+  new
+  reconditioned
+}
+
+model Product {
+  id            String       @id @default(cuid())
+  slug          String       @unique
+  name          String
+  nameBn        String
+  category      Category     @relation(fields: [categoryId], references: [id])
+  categoryId    String
+  subcategory   Subcategory? @relation(fields: [subcategoryId], references: [id], onDelete: SetNull)
+  subcategoryId String?
+  condition     Condition
+  price         Int // BDT
+  oldPrice      Int?
+  image         String?
+  imageCredit   String? // "Author · License · Wikimedia Commons" for stock photos; null for own photos
+  imageSource   String? // link to the photo's source page
+  brand         String
+  capacity      String
+  voltage       String
+  short         String
+  highlights    String[]
+  specs         Json // [label, value][]
+  roi           Json? // { product, unitsPerDay, profitPerUnit, monthlyCost }
+  videoId       String?
+  featured      Boolean      @default(false)
+  landing       Boolean      @default(false)
+  landingCopy   Json? // { headline, sub }
+  active        Boolean      @default(true)
+  sortOrder     Int          @default(0)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  orderItems    OrderItem[]
+  warranties    Warranty[]
+  offers        Offer[]
+
+  @@index([categoryId])
+}
+
+// ── Orders & factory tracking ───────────────────────────────
+
+enum FactoryStep {
+  registered
+  fabrication
+  motor_panel
+  load_test
+  painting
+  handover
+}
+
+enum PaymentPlan {
+  advance
+  full
+  cod_booking
+}
+
+model Order {
+  id         String       @id // invoice, e.g. DMG-261027-4821
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  status     FactoryStep  @default(registered)
+  name       String
+  phone      String
+  address    String
+  district   String
+  note       String?
+  payment    PaymentPlan
+  source     String       @default("web")
+  total      Int
+  payNow     Int
+  items      OrderItem[]
+  events     OrderEvent[]
+  warranties Warranty[]
+  smsLogs    SmsLog[]
+  customer   Customer?    @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  customerId String?
+
+  @@index([phone])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId String?
+  slug      String // snapshot, survives product deletion
+  name      String
+  qty       Int
+  price     Int
+}
+
+model OrderEvent {
+  id      String      @id @default(cuid())
+  order   Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId String
+  step    FactoryStep
+  note    String?
+  at      DateTime    @default(now())
+
+  @@index([orderId])
+}
+
+// ── Quotations, warranty & service ──────────────────────────
+
+model Quote {
+  id          String   @id // QT-…
+  createdAt   DateTime @default(now())
+  status      String   @default("new")
+  name        String
+  phone       String
+  company     String?
+  district    String
+  machineType String
+  capacity    String
+  quantity    Int
+  details     String
+  budget      String?
+  contactBy   String
+  productSlug String?
+  adminNote   String?
+
+  @@index([createdAt])
+}
+
+model Warranty {
+  serial      String           @id // e.g. DMG-PP25-2610-0001
+  product     Product?         @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId   String?
+  slug        String
+  productName String
+  order       Order?           @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  orderId     String?
+  owner       String
+  phone       String
+  purchasedAt DateTime
+  months      Int
+  requests    ServiceRequest[]
+}
+
+model ServiceRequest {
+  id            String   @id // SRV-…
+  createdAt     DateTime @default(now())
+  status        String   @default("open")
+  warranty      Warranty @relation(fields: [serial], references: [serial])
+  serial        String
+  underWarranty Boolean
+  name          String
+  phone         String
+  issue         String
+  details       String
+  visit         String
+  adminNote     String?
+}
+
+// ── Admin ───────────────────────────────────────────────────
+
+enum AdminRole {
+  owner
+  staff
+}
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         AdminRole @default(staff)
+  createdAt    DateTime  @default(now())
+  lastLoginAt  DateTime?
+}
+
+// Key/value store for CMS & marketing settings (business info, advance %, pixel ids…).
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+// ── Chatbot, CRM & SMS ──────────────────────────────────────
+
+model ChatSession {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  messages  Json // [{ role: "user" | "assistant", text, at }]
+  page      String? // page the chat started on
+  ip        String?
+  leads     Lead[]
+}
+
+model Lead {
+  id        String       @id @default(cuid())
+  createdAt DateTime     @default(now())
+  name      String
+  phone     String
+  interest  String // machine / need, in the visitor's words
+  source    String       @default("chatbot") // chatbot | whatsapp | manual
+  status    String       @default("new") // new | contacted | converted | lost
+  adminNote String?
+  chat      ChatSession? @relation(fields: [chatId], references: [id], onDelete: SetNull)
+  chatId    String?
+
+  @@index([createdAt])
+  @@index([phone])
+}
+
+model SmsLog {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  phone     String
+  message   String
+  kind      String // order_placed | order_step | test
+  order     Order?   @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  orderId   String?
+  status    String // sent | failed | skipped
+  response  String?
+
+  @@index([orderId])
+}
+
+// ── Customer accounts ───────────────────────────────────────
+
+model Customer {
+  id             String    @id @default(cuid())
+  createdAt      DateTime  @default(now())
+  name           String
+  phone          String    @unique // 01XXXXXXXXX
+  email          String    @unique
+  passwordHash   String
+  phoneVerified  Boolean   @default(false)
+  emailVerified  Boolean   @default(false)
+  newsletter     Boolean   @default(true) // weekly product update email
+  unsubscribedAt DateTime?
+  address        String?
+  district       String?
+  lastLoginAt    DateTime?
+  orders         Order[]
+}
+
+// One-time codes sent by SMS (phone verification, password reset). Only the hash is stored.
+model OtpCode {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  phone     String
+  purpose   String // verify | reset
+  codeHash  String
+  expiresAt DateTime
+  attempts  Int       @default(0)
+  usedAt    DateTime?
+
+  @@index([phone, purpose])
+}
+
+// One row per weekly product-update email run; weekKey is unique so a week is never sent twice.
+model NewsletterRun {
+  id        String   @id @default(cuid())
+  weekKey   String   @unique // e.g. 2026-W44
+  createdAt DateTime @default(now())
+  trigger   String // schedule | manual
+  sent      Int      @default(0)
+  failed    Int      @default(0)
+  status    String   @default("running") // running | done
+}
+
+// Admin-managed offers. While active (and within its dates) the product sells at offerPrice
+// everywhere — cards, product page, checkout and the order API.
+model Offer {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  product    Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  String
+  title      String? // e.g. "ঈদ অফার"
+  offerPrice Int
+  startsAt   DateTime?
+  endsAt     DateTime?
+  active     Boolean   @default(true)
+
+  @@index([productId])
+}
