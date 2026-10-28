@@ -43,15 +43,15 @@ export type EmailSettings = {
 const emailDefaults: EmailSettings = { enabled: false, host: "", port: 587, secure: false, user: "", pass: "", fromEmail: "", fromName: "Dhaka Machine Ghar", weekday: 6, weeklyNote: "", onOrder: true, onPayment: true, onStep: false, onDelivery: true, alertTo: "" };
 
 // Home hero banners uploaded in Admin → Hero Banners (shown in this order).
-export type Banner = { id: string; image: string; link: string };
+export type Banner = { id: string; image: string; link: string; position?: string }; // position: CSS object-position for the crop
 
 // Shown until banners are uploaded in Admin → Hero Banners.
 export const defaultBanners: Banner[] = [
-  { id: "d1", image: "/banners/hydraulic-press.webp", link: "/category/power-press" },
-  { id: "d2", image: "/banners/channel-press.webp", link: "/category/power-press" },
-  { id: "d3", image: "/banners/ac-stand.webp", link: "/contact" },
-  { id: "d4", image: "/banners/bou-body-press.webp", link: "/category/power-press" },
-  { id: "d5", image: "/banners/workshop-machines.webp", link: "/category/workshop" },
+  { id: "d1", image: "/banners/hydraulic-press-v2.webp", link: "/category/power-press" },
+  { id: "d2", image: "/banners/channel-press-v2.webp", link: "/category/power-press" },
+  { id: "d3", image: "/banners/ac-stand-v2.webp", link: "/contact", position: "center 35%" },
+  { id: "d4", image: "/banners/bou-body-press-v2.webp", link: "/category/power-press" },
+  { id: "d5", image: "/banners/workshop-machines-v2.webp", link: "/category/workshop", position: "center 20%" },
 ];
 
 const smsDefaults: SmsSettings = { provider: "none", apiKey: "", senderId: "", customUrl: "", onOrder: true, onStep: true, language: "bn" };

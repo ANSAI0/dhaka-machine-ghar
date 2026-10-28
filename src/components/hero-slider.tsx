@@ -9,7 +9,7 @@ import { brand } from "@/lib/site";
 const INTERVAL = 3000;
 const SLIDE_MS = 500;
 
-// App-style banner carousel (16:9): admin-uploaded images slide right-to-left every 3 s, loop
+// App-style banner carousel (2:1, image fills and is cropped to fit): admin-uploaded images slide right-to-left every 3 s, loop
 // seamlessly (a copy of the first banner sits at the end), swipe on phones, and stop while off
 // screen. Only `transform` animates, so it stays smooth while the page scrolls.
 export function HeroSlider({ banners }: { banners: Banner[] }) {
@@ -77,7 +77,7 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
         touchX.current = null;
       }}
     >
-      <div className="aspect-video">
+      <div className="aspect-[2/1]">
         <ul
           className="flex h-full"
           style={{ transform: `translateX(-${i * 100}%)`, transition: animate ? `transform ${SLIDE_MS}ms cubic-bezier(0.4, 0, 0.2, 1)` : "none" }}
@@ -91,6 +91,7 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
                 priority={idx === 0}
                 sizes="(min-width: 1024px) 75vw, 100vw"
                 className="object-cover"
+                style={{ objectPosition: b.position ?? "center" }}
               />
             );
             const hidden = idx % n !== dot;
@@ -128,7 +129,7 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
 // Shown until the admin uploads banners.
 function BrandBanner() {
   return (
-    <section className="relative aspect-video overflow-hidden rounded-2xl bg-gradient-to-br from-ink via-brand-900 to-brand-700 shadow-lg max-md:rounded-md">
+    <section className="relative aspect-[2/1] overflow-hidden rounded-2xl bg-gradient-to-br from-ink via-brand-900 to-brand-700 shadow-lg max-md:rounded-md">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:16px_16px]" />
       <div className="relative flex h-full flex-col items-center justify-center gap-2 px-6 text-center text-white">
         <Image src="/brand/dmg-logo-on-dark.png" alt={`${brand.name} logo`} width={1057} height={400} priority className="h-12 w-auto sm:h-20" />

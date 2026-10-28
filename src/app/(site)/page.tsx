@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, Factory, FileText, LayoutGrid, PencilRuler, Phone, ShieldCheck, Store, Truck, Wallet } from "lucide-react";
+import { ArrowRight, BadgeCheck, FileText, Phone, ShieldCheck, Truck, Wallet } from "lucide-react";
 import { productsIn, type Product } from "@/lib/catalog";
 import { getCatalog } from "@/lib/catalog-server";
 import { heroImages } from "@/lib/hero-images";
@@ -18,18 +18,6 @@ const offers = (site: SiteInfo) => [
   { title: "WhatsApp", sub: "Chat with photos", href: `https://wa.me/${site.whatsappIntl}`, Icon: WhatsappIcon, tint: "bg-[#e8f8ee] text-[#128c4a] ring-[#c9eed7]" },
   { title: "Custom Build", sub: "Made to order", href: "/quotation", Icon: FileText, tint: "bg-steel-50 text-steel-600 ring-steel-100" },
   { title: "Track Order", sub: "Live updates", href: "/track", Icon: Truck, tint: "bg-brand-50 text-brand-600 ring-brand-100" },
-];
-
-// Phone shortcut slots (two rows of four, like an app home screen).
-const slots = (site: SiteInfo) => [
-  { label: "Call", href: `tel:${site.phoneIntl}`, Icon: Phone },
-  { label: "WhatsApp", href: `https://wa.me/${site.whatsappIntl}`, Icon: WhatsappIcon },
-  { label: "Custom", href: "/quotation", Icon: PencilRuler },
-  { label: "Track", href: "/track", Icon: Truck },
-  { label: "All Machines", href: "/shop", Icon: LayoutGrid },
-  { label: "Power Press", href: "/category/power-press", Icon: Factory },
-  { label: "Warranty", href: "/warranty", Icon: ShieldCheck },
-  { label: "Showroom", href: "/contact", Icon: Store },
 ];
 
 const trust = (site: SiteInfo) => [
@@ -55,25 +43,14 @@ export default async function Home() {
       <div className="min-w-0 flex-1 space-y-6 sm:space-y-8">
         <HeroSlider banners={banners} />
 
-        {/* Phones: app-style shortcut slots */}
-        <section className="grid grid-cols-4 gap-x-2 gap-y-4 px-1 py-1 md:hidden">
-          {slots(site).map(({ label, href, Icon }) => (
-            <a key={label} href={href} className="flex flex-col items-center gap-1.5 text-center active:scale-95">
-              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-700 text-white shadow-[0_8px_16px_-8px_rgba(26,56,42,0.7)] ring-4 ring-white lux:bg-gold-gradient lux:text-lux-950 lux:ring-lux-900">
-                <Icon className="h-[22px] w-[22px]" strokeWidth={1.8} />
-              </span>
-              <span className="text-[11px] font-semibold leading-tight text-gray-700 lux:text-white/80">{label}</span>
-            </a>
-          ))}
-        </section>
 
         {/* Quick actions */}
-        <section className="grid grid-cols-2 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm max-md:hidden xl:grid-cols-4 lux:border-white/[0.07] lux:bg-lux-800/80 lux:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)]">
+        <section className="grid grid-cols-2 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm xl:grid-cols-4 max-md:gap-2.5 max-md:overflow-visible max-md:border-0 max-md:bg-transparent max-md:shadow-none lux:border-white/[0.07] lux:bg-lux-800/80 lux:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)]">
           {offers(site).map(({ title, sub, href, Icon, tint }, idx) => (
             <a
               key={title}
               href={href}
-              className={`group flex items-center gap-3 p-3.5 transition-colors hover:bg-gray-50 sm:p-5 ${idx % 2 === 0 ? "border-r" : "xl:border-r"} ${idx < 2 ? "border-b xl:border-b-0" : ""} border-gray-100 last:border-r-0 lux:border-white/[0.06] lux:active:bg-white/[0.04]`}
+              className={`group flex items-center gap-3 p-3.5 transition-colors hover:bg-gray-50 sm:p-5 ${idx % 2 === 0 ? "border-r" : "xl:border-r"} ${idx < 2 ? "border-b xl:border-b-0" : ""} border-gray-100 last:border-r-0 max-md:rounded-xl max-md:border max-md:bg-white max-md:p-3 max-md:shadow-[0_6px_16px_-10px_rgba(16,24,40,0.35)] lux:border-white/[0.06] lux:bg-lux-800 lux:active:bg-white/[0.04]`}
             >
               <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1 transition-transform duration-300 group-hover:scale-110 sm:h-12 sm:w-12 ${tint} lux:bg-gold-gradient lux:text-lux-950 lux:ring-0 lux:shadow-[0_6px_16px_-6px_rgba(214,174,85,0.55)]`}>
                 <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
