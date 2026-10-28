@@ -4,7 +4,7 @@ import { ArrowRight, BadgeCheck, Factory, FileText, LayoutGrid, PencilRuler, Pho
 import { productsIn, type Product } from "@/lib/catalog";
 import { getCatalog } from "@/lib/catalog-server";
 import { heroImages } from "@/lib/hero-images";
-import { getBanners, getSite } from "@/lib/settings";
+import { getHeroBanners, getSite } from "@/lib/settings";
 import type { SiteInfo } from "@/lib/site";
 import { CategoryIcon } from "@/components/category-icon";
 import { HeroSlider } from "@/components/hero-slider";
@@ -22,14 +22,14 @@ const offers = (site: SiteInfo) => [
 
 // Phone shortcut slots (two rows of four, like an app home screen).
 const slots = (site: SiteInfo) => [
-  { label: "Call", href: `tel:${site.phoneIntl}`, Icon: Phone, color: "bg-gradient-to-br from-accent-500 to-accent-700" },
-  { label: "WhatsApp", href: `https://wa.me/${site.whatsappIntl}`, Icon: WhatsappIcon, color: "bg-gradient-to-br from-[#25d366] to-[#128c4a]" },
-  { label: "Custom", href: "/quotation", Icon: PencilRuler, color: "bg-gradient-to-br from-steel-500 to-steel-700" },
-  { label: "Track", href: "/track", Icon: Truck, color: "bg-gradient-to-br from-brand-500 to-brand-800" },
-  { label: "All Machines", href: "/shop", Icon: LayoutGrid, color: "bg-gradient-to-br from-gray-700 to-ink" },
-  { label: "Power Press", href: "/category/power-press", Icon: Factory, color: "bg-gradient-to-br from-accent-600 to-accent-700" },
-  { label: "Warranty", href: "/warranty", Icon: ShieldCheck, color: "bg-gradient-to-br from-brand-600 to-brand-900" },
-  { label: "Showroom", href: "/contact", Icon: Store, color: "bg-gradient-to-br from-steel-600 to-steel-700" },
+  { label: "Call", href: `tel:${site.phoneIntl}`, Icon: Phone },
+  { label: "WhatsApp", href: `https://wa.me/${site.whatsappIntl}`, Icon: WhatsappIcon },
+  { label: "Custom", href: "/quotation", Icon: PencilRuler },
+  { label: "Track", href: "/track", Icon: Truck },
+  { label: "All Machines", href: "/shop", Icon: LayoutGrid },
+  { label: "Power Press", href: "/category/power-press", Icon: Factory },
+  { label: "Warranty", href: "/warranty", Icon: ShieldCheck },
+  { label: "Showroom", href: "/contact", Icon: Store },
 ];
 
 const trust = (site: SiteInfo) => [
@@ -40,7 +40,7 @@ const trust = (site: SiteInfo) => [
 ];
 
 export default async function Home() {
-  const [catalog, site, banners] = await Promise.all([getCatalog(), getSite(), getBanners()]);
+  const [catalog, site, banners] = await Promise.all([getCatalog(), getSite(), getHeroBanners()]);
   const { categories, products } = catalog;
   // Ribbon: featured first, then the rest — photographed machines only, one per photo.
   const seen = new Set<string>();
@@ -56,13 +56,13 @@ export default async function Home() {
         <HeroSlider banners={banners} />
 
         {/* Phones: app-style shortcut slots */}
-        <section className="grid grid-cols-4 gap-x-2 gap-y-4 rounded-md border border-gray-200 bg-white px-2 py-4 shadow-[0_2px_0_rgba(16,24,40,0.06)] md:hidden lux:border-white/[0.08] lux:bg-lux-800">
-          {slots(site).map(({ label, href, Icon, color }) => (
+        <section className="grid grid-cols-4 gap-x-2 gap-y-4 px-1 py-1 md:hidden">
+          {slots(site).map(({ label, href, Icon }) => (
             <a key={label} href={href} className="flex flex-col items-center gap-1.5 text-center active:scale-95">
-              <span className={`flex h-[52px] w-[52px] items-center justify-center rounded-lg text-white shadow-[0_6px_14px_-8px_rgba(0,0,0,0.6)] ${color} lux:bg-none lux:bg-gold-gradient lux:text-lux-950`}>
-                <Icon className="h-6 w-6" strokeWidth={2} />
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-700 text-white shadow-[0_8px_16px_-8px_rgba(26,56,42,0.7)] ring-4 ring-white lux:bg-gold-gradient lux:text-lux-950 lux:ring-lux-900">
+                <Icon className="h-[22px] w-[22px]" strokeWidth={1.8} />
               </span>
-              <span className="text-[11px] font-bold leading-tight text-gray-800 lux:text-white/85">{label}</span>
+              <span className="text-[11px] font-semibold leading-tight text-gray-700 lux:text-white/80">{label}</span>
             </a>
           ))}
         </section>

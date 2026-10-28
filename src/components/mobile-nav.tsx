@@ -26,7 +26,7 @@ export function MobileNav() {
   const tab = ({ href, label, Icon }: (typeof side)[number][number]) => {
     const active = isActive(href);
     return (
-      <Link key={href} href={href} className={`flex flex-1 flex-col items-center gap-1 py-2 text-[10px] font-semibold tracking-wide ${active ? "text-brand-700 lux:text-gold-300" : "text-gray-400 lux:text-white/45"}`}>
+      <Link key={href} href={href} className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-[10px] font-semibold tracking-wide ${active ? "text-brand-700 lux:text-gold-300" : "text-gray-400 lux:text-white/45"}`}>
         <Icon className="h-[19px] w-[19px]" strokeWidth={active ? 2.1 : 1.7} />
         {label}
         <span className={`h-1 w-1 rounded-full ${active ? "bg-brand-600 lux:bg-gold-400 lux:shadow-[0_0_8px_rgba(214,174,85,0.9)]" : "bg-transparent"}`} />
@@ -35,8 +35,8 @@ export function MobileNav() {
   };
 
   return (
-    <nav className="fixed inset-x-3 bottom-3 z-40 pb-[env(safe-area-inset-bottom)] md:hidden" aria-label="Quick">
-      <div className="relative flex items-end rounded-xl border border-gray-200/80 bg-white px-2 shadow-[0_18px_40px_-14px_rgba(16,24,40,0.28)] lux:border-gold-400/15 lux:bg-lux-900 lux:shadow-[0_18px_40px_-12px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.05)]">
+    <nav className="fixed inset-x-4 bottom-3 z-40 pb-[env(safe-area-inset-bottom)] md:hidden" aria-label="Quick">
+      <div className="relative flex items-end rounded-full border border-gray-200/80 bg-white px-2 shadow-[0_18px_40px_-14px_rgba(16,24,40,0.28)] lux:border-gold-400/15 lux:bg-lux-900 lux:shadow-[0_18px_40px_-12px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.05)]">
         {side[0].map(tab)}
         <div className="flex flex-1 justify-center">
           <Link

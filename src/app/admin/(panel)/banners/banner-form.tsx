@@ -35,7 +35,7 @@ export function BannerForm({ full }: { full: boolean }) {
           }}
           className={input}
         />
-        <span className="mt-1 block text-xs text-gray-500">Wide image, 2:1 — best 1600 × 800 px (JPG/PNG/WebP, up to 5 MB). Keep text away from the edges.</span>
+        <span className="mt-1 block text-xs text-gray-500">Wide image, 16:9 — best 1600 × 900 px (JPG/PNG/WebP, up to 5 MB). Keep text away from the edges.</span>
       </label>
       <label className="text-sm">
         <span className="mb-1 block font-semibold text-gray-700">Link (optional)</span>
@@ -44,7 +44,7 @@ export function BannerForm({ full }: { full: boolean }) {
       </label>
       {preview && (
         // eslint-disable-next-line @next/next/no-img-element -- local blob preview
-        <img src={preview} alt="" className="aspect-[2/1] w-full max-w-md rounded-md object-cover ring-1 ring-gray-200 sm:col-span-2" />
+        <img src={preview} alt="" className="aspect-video w-full max-w-md rounded-md object-cover ring-1 ring-gray-200 sm:col-span-2" />
       )}
       <div className="flex items-center gap-3 sm:col-span-2">
         <button disabled={pending || full} className="flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700 disabled:opacity-60">

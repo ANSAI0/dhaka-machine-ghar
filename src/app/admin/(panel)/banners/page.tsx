@@ -26,13 +26,13 @@ export default async function BannersPage() {
 
       {banners.length === 0 ? (
         <p className="rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-12 text-center text-sm text-gray-500">
-          No banners yet — the home page shows a plain brand banner until you add some.
+          No banners uploaded — the home page shows the 5 built-in DMG banners until you add your own.
         </p>
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {banners.map((b, i) => (
             <li key={b.id} className="overflow-hidden rounded-xl border border-gray-200 bg-white">
-              <div className="relative aspect-[2/1] bg-gray-100">
+              <div className="relative aspect-video bg-gray-100">
                 <Image src={b.image} alt="" fill sizes="400px" className="object-cover" />
                 <span className="absolute left-2 top-2 rounded-md bg-black/70 px-2 py-0.5 text-xs font-bold text-white">#{i + 1}</span>
               </div>

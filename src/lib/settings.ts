@@ -45,6 +45,15 @@ const emailDefaults: EmailSettings = { enabled: false, host: "", port: 587, secu
 // Home hero banners uploaded in Admin → Hero Banners (shown in this order).
 export type Banner = { id: string; image: string; link: string };
 
+// Shown until banners are uploaded in Admin → Hero Banners.
+export const defaultBanners: Banner[] = [
+  { id: "d1", image: "/banners/hydraulic-press.webp", link: "/category/power-press" },
+  { id: "d2", image: "/banners/channel-press.webp", link: "/category/power-press" },
+  { id: "d3", image: "/banners/ac-stand.webp", link: "/contact" },
+  { id: "d4", image: "/banners/bou-body-press.webp", link: "/category/power-press" },
+  { id: "d5", image: "/banners/workshop-machines.webp", link: "/category/workshop" },
+];
+
 const smsDefaults: SmsSettings = { provider: "none", apiKey: "", senderId: "", customUrl: "", onOrder: true, onStep: true, language: "bn" };
 
 async function readFromDb() {
@@ -82,6 +91,11 @@ export const getSite = async () => buildSite((await read()).site);
 export const getEditableSite = async () => (await read()).site;
 export const getTheme = async () => (await read()).theme;
 export const getBanners = async () => (await read()).banners;
+// What the home hero shows: uploaded banners, or the defaults when none are uploaded.
+export const getHeroBanners = async () => {
+  const b = await getBanners();
+  return b.length ? b : defaultBanners;
+};
 export const getBotSettings = async () => (await read()).bot;
 // Includes the SMS API key — server only.
 export const getSmsSettings = async () => (await read()).sms;

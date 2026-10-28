@@ -9,7 +9,7 @@ import { brand } from "@/lib/site";
 const INTERVAL = 3000;
 const SLIDE_MS = 500;
 
-// App-style banner carousel (2:1): admin-uploaded images slide right-to-left every 3 s, loop
+// App-style banner carousel (16:9): admin-uploaded images slide right-to-left every 3 s, loop
 // seamlessly (a copy of the first banner sits at the end), swipe on phones, and stop while off
 // screen. Only `transform` animates, so it stays smooth while the page scrolls.
 export function HeroSlider({ banners }: { banners: Banner[] }) {
@@ -62,7 +62,7 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
       ref={root}
       aria-roledescription="carousel"
       aria-label="Offers and highlights"
-      className="relative overflow-hidden rounded-2xl bg-gray-200 shadow-lg ring-1 ring-black/5 max-md:rounded-md max-md:shadow-[0_10px_24px_-14px_rgba(0,0,0,0.6)] lux:bg-lux-800"
+      className="relative overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-black/5 max-md:rounded-md max-md:shadow-[0_10px_24px_-14px_rgba(0,0,0,0.6)] lux:bg-lux-800"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onTouchStart={(e) => {
@@ -77,7 +77,7 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
         touchX.current = null;
       }}
     >
-      <div className="aspect-[2/1]">
+      <div className="aspect-video">
         <ul
           className="flex h-full"
           style={{ transform: `translateX(-${i * 100}%)`, transition: animate ? `transform ${SLIDE_MS}ms cubic-bezier(0.4, 0, 0.2, 1)` : "none" }}
@@ -110,13 +110,13 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
       </div>
 
       {n > 1 && (
-        <div className="absolute inset-x-0 bottom-2.5 flex justify-center gap-1.5 sm:bottom-4">
+        <div className="flex justify-center gap-1.5 py-2 sm:py-2.5">
           {banners.map((b, idx) => (
             <button
               key={b.id}
               onClick={() => go(idx)}
               aria-label={`Banner ${idx + 1}`}
-              className={`h-1.5 rounded-full shadow-[0_0_0_1px_rgba(0,0,0,0.15)] transition-all duration-300 ${idx === dot ? "w-5 bg-white" : "w-1.5 bg-white/55"}`}
+              className={`h-1.5 rounded-full transition-all duration-300 ${idx === dot ? "w-5 bg-brand-700 lux:bg-gold-400" : "w-1.5 bg-gray-300 lux:bg-white/25"}`}
             />
           ))}
         </div>
@@ -128,7 +128,7 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
 // Shown until the admin uploads banners.
 function BrandBanner() {
   return (
-    <section className="relative aspect-[2/1] overflow-hidden rounded-2xl bg-gradient-to-br from-ink via-brand-900 to-brand-700 shadow-lg max-md:rounded-md">
+    <section className="relative aspect-video overflow-hidden rounded-2xl bg-gradient-to-br from-ink via-brand-900 to-brand-700 shadow-lg max-md:rounded-md">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:16px_16px]" />
       <div className="relative flex h-full flex-col items-center justify-center gap-2 px-6 text-center text-white">
         <Image src="/brand/dmg-logo-on-dark.png" alt={`${brand.name} logo`} width={1057} height={400} priority className="h-12 w-auto sm:h-20" />
