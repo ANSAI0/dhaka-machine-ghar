@@ -9,7 +9,7 @@ import { brand } from "@/lib/site";
 const INTERVAL = 3000;
 const SLIDE_MS = 500;
 
-// App-style banner carousel (2:1, image fills and is cropped to fit): admin-uploaded images slide right-to-left every 3 s, loop
+// App-style banner carousel: images slide inside a framed box and are shown whole (never cropped): admin-uploaded images slide right-to-left every 3 s, loop
 // seamlessly (a copy of the first banner sits at the end), swipe on phones, and stop while off
 // screen. Only `transform` animates, so it stays smooth while the page scrolls.
 export function HeroSlider({ banners }: { banners: Banner[] }) {
@@ -62,7 +62,7 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
       ref={root}
       aria-roledescription="carousel"
       aria-label="Offers and highlights"
-      className="relative overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-black/5 max-md:rounded-md max-md:shadow-[0_10px_24px_-14px_rgba(0,0,0,0.6)] lux:bg-lux-800"
+      className="relative rounded-2xl bg-white p-1.5 shadow-[0_10px_28px_-14px_rgba(16,24,40,0.45)] ring-1 ring-black/5 lux:bg-lux-800 lux:ring-white/10"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onTouchStart={(e) => {
@@ -77,7 +77,7 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
         touchX.current = null;
       }}
     >
-      <div className="aspect-[2/1]">
+      <div className="aspect-video overflow-hidden rounded-xl bg-[#0e1a33] ring-1 ring-black/10">
         <ul
           className="flex h-full"
           style={{ transform: `translateX(-${i * 100}%)`, transition: animate ? `transform ${SLIDE_MS}ms cubic-bezier(0.4, 0, 0.2, 1)` : "none" }}
@@ -90,8 +90,7 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
                 fill
                 priority={idx === 0}
                 sizes="(min-width: 1024px) 75vw, 100vw"
-                className="object-cover"
-                style={{ objectPosition: b.position ?? "center" }}
+                className="object-contain"
               />
             );
             const hidden = idx % n !== dot;
@@ -111,7 +110,7 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
       </div>
 
       {n > 1 && (
-        <div className="flex justify-center gap-1.5 py-2 sm:py-2.5">
+        <div className="flex justify-center gap-1.5 pb-0.5 pt-2">
           {banners.map((b, idx) => (
             <button
               key={b.id}
