@@ -26,13 +26,13 @@ export default async function UnsubscribePage({ searchParams }: { searchParams: 
         <MailX className="mx-auto h-12 w-12 text-brand-600" />
         {done ? (
           <>
-            <h1 className="mt-3 text-xl font-extrabold text-gray-900">আনসাবস্ক্রাইব হয়েছে</h1>
+            <h1 className="mt-3 text-xl font-bold text-gray-900">আনসাবস্ক্রাইব হয়েছে</h1>
             <p className="mt-2 text-sm text-gray-600">আর সাপ্তাহিক আপডেট ইমেইল যাবে না। চাইলে অ্যাকাউন্ট থেকে আবার চালু করতে পারবেন।</p>
             <Link href="/" className="mt-5 inline-block rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white">হোমে ফিরে যান</Link>
           </>
         ) : valid ? (
           <>
-            <h1 className="mt-3 text-xl font-extrabold text-gray-900">সাপ্তাহিক আপডেট বন্ধ করবেন?</h1>
+            <h1 className="mt-3 text-xl font-bold text-gray-900">সাপ্তাহিক আপডেট বন্ধ করবেন?</h1>
             <p className="mt-2 text-sm text-gray-600">নতুন মেশিন ও অফারের সাপ্তাহিক ইমেইল আর পাবেন না।</p>
             <form action={confirm} className="mt-5">
               <button className="rounded-xl bg-accent-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-accent-700">হ্যাঁ, আনসাবস্ক্রাইব করুন</button>
@@ -40,7 +40,7 @@ export default async function UnsubscribePage({ searchParams }: { searchParams: 
           </>
         ) : (
           <>
-            <h1 className="mt-3 text-xl font-extrabold text-gray-900">লিংকটি সঠিক নয়</h1>
+            <h1 className="mt-3 text-xl font-bold text-gray-900">লিংকটি সঠিক নয়</h1>
             <p className="mt-2 text-sm text-gray-600">ইমেইলের নিচের লিংক থেকে আবার চেষ্টা করুন, অথবা অ্যাকাউন্টে লগইন করে আপডেট বন্ধ করুন।</p>
           </>
         )}

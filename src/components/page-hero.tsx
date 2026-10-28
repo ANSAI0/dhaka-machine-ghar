@@ -33,7 +33,7 @@ export function PageHero({
         <p className={`flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/60 ${center ? "justify-center" : ""}`}>
           <span className="h-1.5 w-1.5 rounded-full bg-accent-500 shadow-[0_0_0_3px_rgba(179,18,31,0.3)] max-md:bg-gold-400 max-md:shadow-[0_0_0_3px_rgba(214,174,85,0.25)]" /> {eyebrow}
         </p>
-        <h1 className="mt-2 text-[26px] font-extrabold leading-tight sm:text-4xl">{title}</h1>
+        <h1 className="mt-2 text-[26px] font-bold leading-tight sm:text-4xl">{title}</h1>
         {text && <p className={`mt-2 max-w-2xl text-sm leading-relaxed text-white/70 sm:text-base ${center ? "mx-auto" : ""}`}>{text}</p>}
         {children && <div className="mt-5">{children}</div>}
       </div>

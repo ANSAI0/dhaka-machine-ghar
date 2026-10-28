@@ -71,7 +71,7 @@ export function ProductCard({ product }: { product: Product }) {
       </Link>
       <div className="mt-auto px-3 pb-3 pt-2 md:px-3.5 md:pb-3.5">
         <div className="flex flex-wrap items-baseline gap-x-1.5">
-          <p className="text-[15px] font-extrabold leading-tight tracking-tight text-gray-900 md:text-[17px] max-md:text-gold-gradient">{formatBDT(product.price)}</p>
+          <p className="text-[15px] font-bold leading-tight tracking-tight text-gray-900 md:text-[17px] max-md:text-gold-gradient">{formatBDT(product.price)}</p>
           {product.oldPrice && <p className="text-[11px] leading-none text-gray-400 line-through max-md:text-white/35">{formatBDT(product.oldPrice)}</p>}
         </div>
         <div className="mt-2.5 flex gap-1.5">

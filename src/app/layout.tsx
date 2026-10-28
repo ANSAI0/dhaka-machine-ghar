@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Anek_Bangla, Hind_Siliguri, Inter } from "next/font/google";
+import { Hind_Siliguri, Inter } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/cart";
 import { CompareProvider } from "@/components/compare";
@@ -8,10 +8,9 @@ import { getSite, getTheme } from "@/lib/settings";
 import { themeCss } from "@/lib/theme";
 import { brand } from "@/lib/site";
 
-const hind = Hind_Siliguri({ variable: "--font-hind", subsets: ["bengali", "latin"], weight: ["400", "500", "600", "700"] });
+// Inter sets English; it has no Bangla glyphs, so Bangla text falls through to Hind Siliguri.
+const hind = Hind_Siliguri({ variable: "--font-hind", subsets: ["bengali"], weight: ["400", "500", "600", "700"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
-// Display face for big Bangla headlines (hero).
-const anek = Anek_Bangla({ variable: "--font-anek", subsets: ["bengali", "latin"], weight: ["600", "700", "800"] });
 
 export const metadata: Metadata = {
   title: { default: `${brand.name} (${brand.nameBn}) — Power Press & Workshop Machinery`, template: `%s | ${brand.name}` },
@@ -28,8 +27,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const [site, theme] = await Promise.all([getSite(), getTheme()]);
   const css = themeCss(theme);
   return (
-    <html lang="bn">
-      <body className={`${hind.variable} ${inter.variable} ${anek.variable} antialiased`}>
+    // Font variables go on <html>: Tailwind sets font-family there, so they must be defined at that level.
+    <html lang="bn" className={`${hind.variable} ${inter.variable}`}>
+      <body className="antialiased">
         {/* Brand colours from Admin → Settings (only when changed from the logo defaults). */}
         {css && <style>{css}</style>}
         <SiteProvider site={site}>

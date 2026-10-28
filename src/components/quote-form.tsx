@@ -68,7 +68,7 @@ export function QuoteForm() {
         <CheckCircle2 className="mx-auto h-14 w-14 text-brand-600" />
         <h3 className="mt-3 text-xl font-bold text-gray-900">কোটেশন অনুরোধ পাঠানো হয়েছে</h3>
         <p className="mt-1 text-sm text-gray-600">রেফারেন্স নম্বর</p>
-        <p className="text-2xl font-extrabold tracking-wider text-accent-600">{doneId}</p>
+        <p className="text-2xl font-bold tracking-wider text-accent-600">{doneId}</p>
         <p className="mt-4 text-sm text-gray-600">
           আমাদের ইঞ্জিনিয়ার আপনার চাহিদা দেখে ২৪ ঘণ্টার মধ্যে {contactBy === "whatsapp" ? "WhatsApp-এ" : "কল করে"} দাম ও ডেলিভারি সময় জানাবেন।
         </p>

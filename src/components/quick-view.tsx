@@ -43,7 +43,7 @@ export function QuickView({ product, onClose }: { product: Product; onClose: () 
               <p className="text-sm text-brand-700">{product.nameBn}</p>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-2xl font-extrabold text-accent-600">{formatBDT(product.price)}</span>
+              <span className="text-2xl font-bold text-accent-600">{formatBDT(product.price)}</span>
               {product.oldPrice && <span className="text-sm text-gray-400 line-through">{formatBDT(product.oldPrice)}</span>}
               {off > 0 && <span className="rounded-full bg-accent-50 px-2 py-0.5 text-xs font-bold text-accent-600">{off}% ছাড়</span>}
             </div>

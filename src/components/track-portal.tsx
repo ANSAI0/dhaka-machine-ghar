@@ -82,7 +82,7 @@ function OrderProgress({ order: o }: { order: PublicOrder }) {
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 bg-gradient-to-r from-brand-50 to-steel-50 p-5">
         <div>
           <p className="text-xs text-gray-500">ইনভয়েস</p>
-          <p className="text-xl font-extrabold tracking-wide text-gray-900">{o.id}</p>
+          <p className="text-xl font-bold tracking-wide text-gray-900">{o.id}</p>
           <p className="text-xs text-gray-500">{o.name} · {o.phone} · {o.district}</p>
         </div>
         <div className="text-right">

@@ -27,7 +27,7 @@ export function AdminNav({ name, role }: { name: string; role: string }) {
     <nav className="flex h-full flex-col">
       <Link href="/admin" className="flex items-center gap-2 border-b border-white/10 px-5 py-4">
         <Image src="/brand/dmg-logo-on-dark.png" alt="" width={1057} height={400} className="h-8 w-auto" />
-        <span className="text-sm font-extrabold leading-tight text-white">Dhaka Machine Ghar<span className="block text-[11px] font-medium text-white/60">Admin Panel</span></span>
+        <span className="text-sm font-bold leading-tight text-white">Dhaka Machine Ghar<span className="block text-[11px] font-medium text-white/60">Admin Panel</span></span>
       </Link>
       <ul className="flex-1 space-y-1 p-3">
         {links.map(({ href, label, Icon }) => {

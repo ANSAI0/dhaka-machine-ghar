@@ -21,13 +21,13 @@ export default async function PaymentResultPage({ searchParams }: { searchParams
     <div className="container mx-auto px-3 py-10 sm:px-4">
       <div className={`mx-auto max-w-md rounded-3xl border-2 bg-white p-7 text-center shadow-sm ${paid ? "border-brand-600" : "border-gray-200"}`}>
         {paid ? <CheckCircle2 className="mx-auto h-14 w-14 text-brand-600" /> : <XCircle className="mx-auto h-14 w-14 text-accent-600" />}
-        <h1 className="mt-3 text-xl font-extrabold text-gray-900">
+        <h1 className="mt-3 text-xl font-bold text-gray-900">
           {paid ? "পেমেন্ট সফল হয়েছে" : status === "cancelled" ? "পেমেন্ট বাতিল করা হয়েছে" : "পেমেন্ট সম্পন্ন হয়নি"}
         </h1>
         {order ? (
           <>
             <p className="mt-1 text-sm text-gray-500">ইনভয়েস নম্বর</p>
-            <p className="text-2xl font-extrabold tracking-wider text-accent-600">{order.id}</p>
+            <p className="text-2xl font-bold tracking-wider text-accent-600">{order.id}</p>
             <div className="mt-4 space-y-1 rounded-xl bg-gray-50 p-4 text-sm">
               <p className="flex justify-between"><span className="text-gray-500">মোট মূল্য</span><strong>{formatBDT(order.total)}</strong></p>
               <p className="flex justify-between"><span className="text-gray-500">পরিশোধিত</span><strong className="text-brand-700">{formatBDT(order.paidAmount)}</strong></p>

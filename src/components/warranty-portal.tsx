@@ -73,7 +73,7 @@ export function WarrantyPortal() {
             <div className={`flex items-center gap-3 p-5 text-white ${result.active ? "bg-brand-600" : "bg-amber-500"}`}>
               {result.active ? <ShieldCheck className="h-10 w-10" /> : <ShieldAlert className="h-10 w-10" />}
               <div>
-                <p className="text-lg font-extrabold">{result.active ? "আসল মেশিন — ওয়ারেন্টি চালু আছে" : "আসল মেশিন — ওয়ারেন্টির মেয়াদ শেষ"}</p>
+                <p className="text-lg font-bold">{result.active ? "আসল মেশিন — ওয়ারেন্টি চালু আছে" : "আসল মেশিন — ওয়ারেন্টির মেয়াদ শেষ"}</p>
                 <p className="font-mono text-sm text-white/85">{result.serial}</p>
               </div>
             </div>
@@ -126,7 +126,7 @@ function ServiceForm({ serial, underWarranty }: { serial: string; underWarranty:
       <div className="mx-auto max-w-2xl rounded-2xl border-2 border-brand-600 bg-brand-50 p-6 text-center">
         <CheckCircle2 className="mx-auto h-12 w-12 text-brand-600" />
         <p className="mt-2 text-lg font-bold text-gray-900">সার্ভিস রিকোয়েস্ট গ্রহণ করা হয়েছে</p>
-        <p className="text-2xl font-extrabold tracking-wider text-accent-600">{doneId}</p>
+        <p className="text-2xl font-bold tracking-wider text-accent-600">{doneId}</p>
         <p className="mt-2 text-sm text-gray-600">আমাদের সার্ভিস টিম শীঘ্রই কল করে সময় নির্ধারণ করবে।</p>
       </div>
     );
@@ -138,7 +138,7 @@ function ServiceForm({ serial, underWarranty }: { serial: string; underWarranty:
   return (
     <form onSubmit={submit} noValidate className="mx-auto max-w-2xl space-y-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-7">
       <div>
-        <h2 className="text-lg font-extrabold text-gray-900">সার্ভিস / ওয়ারেন্টি দাবি</h2>
+        <h2 className="text-lg font-bold text-gray-900">সার্ভিস / ওয়ারেন্টি দাবি</h2>
         <p className="text-sm text-gray-500">{underWarranty ? "ওয়ারেন্টির আওতায় সার্ভিস ফ্রি (পার্টস নীতিমালা অনুযায়ী)।" : "পেইড সার্ভিস — খরচ কলে জানানো হবে।"}</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">

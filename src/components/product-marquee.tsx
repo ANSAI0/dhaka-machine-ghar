@@ -101,7 +101,7 @@ export function ProductMarquee({ title, subtitle, items, href }: { title: string
           <span className="w-1 rounded-full bg-gradient-to-b from-accent-600 to-brand-600 max-md:bg-gold-gradient" />
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-400 max-md:text-gold-400/80">{subtitle}</p>
-            <h2 className="text-lg font-extrabold text-gray-900 sm:text-2xl max-md:text-white">{title}</h2>
+            <h2 className="text-lg font-bold text-gray-900 sm:text-2xl max-md:text-white">{title}</h2>
           </div>
         </div>
         <Link href={href} className="flex shrink-0 items-center gap-1 rounded-full border border-brand-100 bg-white px-3.5 py-1.5 text-xs font-bold text-brand-700 shadow-sm hover:border-brand-600 hover:bg-brand-600 hover:text-white max-md:border-gold-400/30 max-md:bg-white/[0.04] max-md:text-gold-300 max-md:shadow-none">

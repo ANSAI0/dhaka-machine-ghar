@@ -172,7 +172,7 @@ export function OrderSuccess({ order }: { order: Placed }) {
       <CheckCircle2 className="mx-auto h-14 w-14 text-brand-600" />
       <h3 className="mt-3 text-xl font-bold text-gray-900">ধন্যবাদ! আপনার অর্ডার গ্রহণ করা হয়েছে</h3>
       <p className="mt-1 text-sm text-gray-600">ইনভয়েস নম্বর</p>
-      <p className="text-2xl font-extrabold tracking-wider text-accent-600">{order.id}</p>
+      <p className="text-2xl font-bold tracking-wider text-accent-600">{order.id}</p>
       <div className="mx-auto mt-4 max-w-sm space-y-1 rounded-xl bg-white p-4 text-sm">
         <p className="flex justify-between"><span className="text-gray-500">মোট মূল্য</span><strong>{formatBDT(order.total)}</strong></p>
         {order.payNow > 0 && <p className="flex justify-between"><span className="text-gray-500">এখন পরিশোধযোগ্য</span><strong className="text-accent-600">{formatBDT(order.payNow)}</strong></p>}

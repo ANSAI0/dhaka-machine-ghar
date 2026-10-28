@@ -21,7 +21,7 @@ export function HomeSidebar({ catalog }: { catalog: Catalog }) {
             <LayoutGrid className="h-4 w-4" />
           </span>
           <div>
-            <h2 className="text-base font-extrabold leading-tight text-gray-900">Categories</h2>
+            <h2 className="text-base font-bold leading-tight text-gray-900">Categories</h2>
             <p className="text-xs text-gray-500">Machines by type</p>
           </div>
         </div>
@@ -53,7 +53,7 @@ export function HomeSidebar({ catalog }: { catalog: Catalog }) {
 
       {/* Offers — only what the admin has added */}
       <section className="shrink-0 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-        <h2 className="flex items-center gap-3 border-b border-gray-100 px-5 py-4 text-base font-extrabold text-gray-900">
+        <h2 className="flex items-center gap-3 border-b border-gray-100 px-5 py-4 text-base font-bold text-gray-900">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent-50 text-accent-600 ring-1 ring-accent-100">
             <Flame className="h-4 w-4" />
           </span>

@@ -31,14 +31,14 @@ export function OrderDocument({ order: o, site, kind }: { order: Full; site: Sit
           <div className="flex items-center gap-3">
             <Image src="/brand/dmg-logo-transparent.png" alt="DMG" width={1057} height={400} className="h-12 w-auto" />
             <div>
-              <p className="text-lg font-extrabold text-brand-700">{site.name}</p>
+              <p className="text-lg font-bold text-brand-700">{site.name}</p>
               <p className="font-semibold">{site.nameBn}</p>
               <p className="text-xs text-gray-600">{site.address}</p>
               <p className="text-xs text-gray-600">Hotline {site.phone} · {site.email}</p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-extrabold tracking-wide text-accent-600">{t.en}</p>
+            <p className="text-2xl font-bold tracking-wide text-accent-600">{t.en}</p>
             <p className="font-semibold">{t.bn}</p>
             <p className="mt-2 font-mono font-bold">{t.prefix}{o.id}</p>
             <p className="text-xs text-gray-600">Date: {day(kind === "invoice" ? o.createdAt : new Date())}</p>

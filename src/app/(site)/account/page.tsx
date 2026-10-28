@@ -40,10 +40,10 @@ export default async function AccountPage() {
         <div className="pointer-events-none absolute -bottom-32 right-10 h-64 w-64 rounded-full bg-steel-600/20 blur-3xl" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.07)_1px,transparent_1px)] [background-size:18px_18px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
         <div className="relative flex flex-wrap items-center gap-4">
-          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-xl font-extrabold">{initials}</span>
+          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-xl font-bold">{initials}</span>
           <div className="min-w-0 flex-1">
             <p className="text-sm text-white/70">স্বাগতম,</p>
-            <h1 className="truncate text-2xl font-extrabold">{c.name}</h1>
+            <h1 className="truncate text-2xl font-bold">{c.name}</h1>
             <p className="mt-0.5 flex items-center gap-1.5 text-sm text-white/80">
               {c.phone}
               {c.phoneVerified ? <span className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-0.5 text-xs font-semibold"><BadgeCheck className="h-3.5 w-3.5" /> যাচাইকৃত</span> : <span className="rounded-full bg-amber-400/90 px-2 py-0.5 text-xs font-semibold text-amber-950">যাচাই হয়নি</span>}
@@ -61,7 +61,7 @@ export default async function AccountPage() {
           ].map(({ n, l, Icon }) => (
             <div key={l} className="rounded-2xl bg-white/10 p-3 md:backdrop-blur sm:p-4">
               <Icon className="h-5 w-5 text-white/70" />
-              <p className="mt-1 text-2xl font-extrabold">{n}</p>
+              <p className="mt-1 text-2xl font-bold">{n}</p>
               <p className="text-xs text-white/75">{l}</p>
             </div>
           ))}
@@ -83,7 +83,7 @@ export default async function AccountPage() {
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
         {/* Orders */}
         <section className="space-y-3 lg:col-span-2">
-          <h2 className="flex items-center gap-2 text-lg font-extrabold text-gray-900"><Package className="h-5 w-5 text-brand-600" /> আমার অর্ডার</h2>
+          <h2 className="flex items-center gap-2 text-lg font-bold text-gray-900"><Package className="h-5 w-5 text-brand-600" /> আমার অর্ডার</h2>
           {orders.length === 0 && (
             <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center">
               <p className="font-semibold text-gray-700">এখনো কোনো অর্ডার নেই</p>
@@ -117,7 +117,7 @@ export default async function AccountPage() {
             );
           })}
 
-          <h2 className="flex items-center gap-2 pt-4 text-lg font-extrabold text-gray-900"><ShieldCheck className="h-5 w-5 text-brand-600" /> আমার ওয়ারেন্টি</h2>
+          <h2 className="flex items-center gap-2 pt-4 text-lg font-bold text-gray-900"><ShieldCheck className="h-5 w-5 text-brand-600" /> আমার ওয়ারেন্টি</h2>
           {warranties.length === 0 ? (
             <p className="rounded-2xl bg-white p-5 text-sm text-gray-500 shadow-sm">মেশিন ডেলিভারির সময় সিরিয়াল নম্বর এখানে যোগ হবে।</p>
           ) : (
@@ -140,15 +140,15 @@ export default async function AccountPage() {
         {/* Profile */}
         <aside className="space-y-6">
           <section className="rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50 to-white p-5 shadow-sm">
-            <h2 className="mb-3 flex items-center gap-2 font-extrabold text-gray-900"><Mail className="h-5 w-5 text-brand-600" /> সাপ্তাহিক মেশিন আপডেট</h2>
+            <h2 className="mb-3 flex items-center gap-2 font-bold text-gray-900"><Mail className="h-5 w-5 text-brand-600" /> সাপ্তাহিক মেশিন আপডেট</h2>
             <NewsletterBox email={c.email} verified={c.emailVerified} on={c.newsletter} />
           </section>
           <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-            <h2 className="mb-4 flex items-center gap-2 font-extrabold text-gray-900"><UserRound className="h-5 w-5 text-brand-600" /> প্রোফাইল ও ঠিকানা</h2>
+            <h2 className="mb-4 flex items-center gap-2 font-bold text-gray-900"><UserRound className="h-5 w-5 text-brand-600" /> প্রোফাইল ও ঠিকানা</h2>
             <ProfileForm v={{ name: c.name, email: c.email, address: c.address ?? "", district: c.district ?? "" }} />
           </section>
           <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-            <h2 className="mb-4 font-extrabold text-gray-900">পাসওয়ার্ড পরিবর্তন</h2>
+            <h2 className="mb-4 font-bold text-gray-900">পাসওয়ার্ড পরিবর্তন</h2>
             <PasswordForm />
           </section>
         </aside>

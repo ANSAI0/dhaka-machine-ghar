@@ -54,7 +54,7 @@ export function RoiCalculator({ product }: { product: Product }) {
         </table>
         <div className="mt-4 rounded-xl bg-white/10 p-4 text-center">
           <p className="text-xs text-white/70">মেশিনের দাম ফেরত আসবে আনুমানিক</p>
-          <p className="text-2xl font-extrabold">{payback ? `${payback.toFixed(1)} মাসে` : "—"}</p>
+          <p className="text-2xl font-bold">{payback ? `${payback.toFixed(1)} মাসে` : "—"}</p>
         </div>
         <p className="mt-3 text-[11px] leading-snug text-white/60">* এটি একটি আনুমানিক হিসাব। প্রকৃত লাভ কাঁচামাল, বাজারদর ও উৎপাদনের উপর নির্ভর করে।</p>
       </div>

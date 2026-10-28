@@ -81,12 +81,12 @@ export default async function ProductPage({ params }: Params) {
             <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-bold text-gray-600">{p.brand}</span>
           </div>
           <div>
-            <h1 className="text-xl font-extrabold leading-snug text-gray-900 sm:text-2xl">{p.name}</h1>
+            <h1 className="text-xl font-bold leading-snug text-gray-900 sm:text-2xl">{p.name}</h1>
             <p className="mt-1 font-semibold text-brand-700">{p.nameBn}</p>
           </div>
 
           <div className="flex flex-wrap items-end gap-3 border-b border-gray-100 pb-4">
-            <span className="text-3xl font-extrabold text-accent-600">{formatBDT(p.price)}</span>
+            <span className="text-3xl font-bold text-accent-600">{formatBDT(p.price)}</span>
             {p.oldPrice && <span className="pb-1 text-lg text-gray-400 line-through">{formatBDT(p.oldPrice)}</span>}
             {p.offer && (
               <span className="mb-1 rounded-full bg-accent-600 px-3 py-1 text-xs font-bold text-white">
@@ -158,7 +158,7 @@ export default async function ProductPage({ params }: Params) {
               label: "স্পেসিফিকেশন",
               content: (
                 <div>
-                  <h2 className="mb-1 text-lg font-extrabold text-gray-900 sm:text-xl">Technical Specifications</h2>
+                  <h2 className="mb-1 text-lg font-bold text-gray-900 sm:text-xl">Technical Specifications</h2>
                   <p className="mb-5 text-sm text-gray-500">{p.name}</p>
                   <table className="w-full overflow-hidden rounded-xl text-sm">
                     <tbody>
@@ -221,7 +221,7 @@ export default async function ProductPage({ params }: Params) {
 
       {/* One-step order */}
       <section id="order" className="mt-10 scroll-mt-40 rounded-2xl border-2 border-accent-100 bg-white p-5 shadow-sm sm:p-8">
-        <h2 className="text-xl font-extrabold text-gray-900 sm:text-2xl">এক ধাপে অর্ডার করুন</h2>
+        <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">এক ধাপে অর্ডার করুন</h2>
         <p className="mb-5 text-sm text-gray-500">নিচের ফর্ম পূরণ করুন — আমাদের প্রতিনিধি কল করে অর্ডার নিশ্চিত করবেন।</p>
         <ProductOrderForm product={p} />
       </section>

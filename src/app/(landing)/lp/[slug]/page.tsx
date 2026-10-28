@@ -68,7 +68,7 @@ export default async function LandingPage({ params }: Params) {
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-2">
           <Link href="/" className="flex items-center gap-2">
             <Image src="/brand/dmg-logo-transparent.png" alt="DMG logo" width={1057} height={400} className="h-9 w-auto" />
-            <span className="text-sm font-extrabold text-brand-700 sm:text-base">{site.nameBn}</span>
+            <span className="text-sm font-bold text-brand-700 sm:text-base">{site.nameBn}</span>
           </Link>
           <a href={`tel:${site.phoneIntl}`} className="flex items-center gap-2 rounded-full bg-accent-600 px-4 py-2 text-sm font-bold text-white hover:bg-accent-700">
             <Phone className="h-4 w-4" /> <span className="hidden sm:inline">কল করুন:</span> {site.phone}
@@ -81,10 +81,10 @@ export default async function LandingPage({ params }: Params) {
         <div className="mx-auto grid max-w-5xl items-center gap-6 px-4 py-8 md:grid-cols-2 md:py-12">
           <div className="space-y-4">
             <ConditionBadge condition={p.condition} />
-            <h1 className="text-2xl font-extrabold leading-snug sm:text-4xl">{headline}</h1>
+            <h1 className="text-2xl font-bold leading-snug sm:text-4xl">{headline}</h1>
             <p className="text-white/85">{sub}</p>
             <div className="flex flex-wrap items-end gap-3">
-              <span className="text-4xl font-extrabold">{formatBDT(p.price)}</span>
+              <span className="text-4xl font-bold">{formatBDT(p.price)}</span>
               {p.oldPrice && <span className="pb-1 text-lg text-white/60 line-through">{formatBDT(p.oldPrice)}</span>}
               {off > 0 && <span className="mb-1 rounded-full bg-accent-600 px-3 py-1 text-sm font-bold">{off}% ছাড়</span>}
             </div>
@@ -198,7 +198,7 @@ export default async function LandingPage({ params }: Params) {
         {/* Order form */}
         <section id="order" className="scroll-mt-20 rounded-3xl border-2 border-accent-600 bg-white p-5 shadow-xl sm:p-8">
           <div className="mb-6 text-center">
-            <h2 className="text-2xl font-extrabold text-gray-900 sm:text-3xl">অর্ডার করতে নিচের ফর্মটি পূরণ করুন</h2>
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">অর্ডার করতে নিচের ফর্মটি পূরণ করুন</h2>
             <p className="mt-1 text-gray-600">{p.nameBn} — <strong className="text-accent-600">{formatBDT(p.price)}</strong></p>
           </div>
           <ProductOrderForm product={p} source={`landing:${p.slug}`} />
@@ -246,5 +246,5 @@ export default async function LandingPage({ params }: Params) {
 }
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <h2 className="mb-4 border-l-4 border-accent-600 pl-3 text-xl font-extrabold text-gray-900 sm:text-2xl">{children}</h2>;
+  return <h2 className="mb-4 border-l-4 border-accent-600 pl-3 text-xl font-bold text-gray-900 sm:text-2xl">{children}</h2>;
 }

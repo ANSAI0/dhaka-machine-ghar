@@ -37,7 +37,7 @@
   --color-gold-500: #b98f37;
   --color-gold-600: #94712a;
 
-  --font-sans: var(--font-hind), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), var(--font-hind), ui-sans-serif, system-ui, sans-serif;
 
   --animate-kenburns: kenburns 6s ease-out forwards;
   --animate-rise: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
@@ -68,10 +68,10 @@
   }
 }
 
-/* Bangla display face for hero headlines. "inline" so the utility reads --font-anek where it's
-   used (next/font sets that variable on <body>, not :root). */
+/* Headline face: same pair as the body (Inter for English, Hind Siliguri for Bangla). "inline" so
+   the utility reads the next/font variables set on <body>. */
 @theme inline {
-  --font-display: var(--font-anek), var(--font-hind), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-inter), var(--font-hind), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* scaleX, not width: animating width re-lays out the page every frame */

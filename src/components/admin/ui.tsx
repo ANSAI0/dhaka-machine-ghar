@@ -6,7 +6,7 @@ export function PageHeader({ title, sub, actions }: { title: string; sub?: strin
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
       <div>
-        <h1 className="text-2xl font-extrabold text-gray-900">{title}</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
         {sub && <p className="text-sm text-gray-500">{sub}</p>}
       </div>
       {actions}

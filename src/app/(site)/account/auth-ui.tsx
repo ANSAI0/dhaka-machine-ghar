@@ -21,7 +21,7 @@ export function AuthShell({ title, sub, children }: { title: string; sub: string
           <div className="absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-white/5" />
           <div className="relative">
             <Image src="/brand/dmg-logo-on-dark.png" alt="DMG" width={1057} height={400} className="h-10 w-auto" />
-            <h2 className="mt-6 text-2xl font-extrabold leading-snug">আমার DMG অ্যাকাউন্ট</h2>
+            <h2 className="mt-6 text-2xl font-bold leading-snug">আমার DMG অ্যাকাউন্ট</h2>
             <p className="mt-1 text-sm text-white/75">অর্ডার, ওয়ারেন্টি ও সার্ভিস — সব এক জায়গায়।</p>
             <ul className="mt-8 space-y-4">
               {perks.map(({ Icon, t }) => (
@@ -35,7 +35,7 @@ export function AuthShell({ title, sub, children }: { title: string; sub: string
           </div>
         </aside>
         <section className="p-6 sm:p-10">
-          <h1 className="text-2xl font-extrabold text-gray-900">{title}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
           <p className="mb-6 mt-1 text-sm text-gray-500">{sub}</p>
           {children}
         </section>

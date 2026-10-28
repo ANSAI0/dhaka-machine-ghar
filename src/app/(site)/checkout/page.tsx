@@ -78,7 +78,7 @@ export default function CheckoutPage() {
 
           {/* Form */}
           <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-7 lg:col-span-3">
-            <h2 className="mb-1 text-lg font-extrabold text-gray-900">ডেলিভারি ও পেমেন্ট তথ্য</h2>
+            <h2 className="mb-1 text-lg font-bold text-gray-900">ডেলিভারি ও পেমেন্ট তথ্য</h2>
             <p className="mb-5 text-sm text-gray-500">অর্ডার দেওয়ার পর আমাদের প্রতিনিধি কল করে কনফার্ম করবেন।</p>
             <OrderForm
               lines={lines}

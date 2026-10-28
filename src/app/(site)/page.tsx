@@ -129,7 +129,7 @@ export default async function Home() {
           <div className="relative flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-10">
             <div className="max-w-xl">
               <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70 max-md:text-gold-300"><span className="h-1.5 w-1.5 rounded-full bg-accent-500 max-md:bg-gold-400" /> Custom Order</p>
-              <h2 className="mt-1 text-2xl font-extrabold leading-tight text-white sm:text-3xl">যে মেশিন দরকার, সেটাই বানিয়ে দেব</h2>
+              <h2 className="mt-1 text-2xl font-bold leading-tight text-white sm:text-3xl">যে মেশিন দরকার, সেটাই বানিয়ে দেব</h2>
               <p className="mt-2 text-sm text-white/75 sm:text-base">Tell us the tonnage, size and job — we&apos;ll send a quotation, and you can follow every build step online.</p>
             </div>
             <div className="flex flex-wrap gap-2 sm:flex-col">
@@ -162,7 +162,7 @@ function SectionHeading({ eyebrow, title, center }: { eyebrow: string; title: st
         {eyebrow}
         <span className="h-px w-8 bg-gradient-to-l from-transparent to-gold-400 md:hidden" />
       </p>
-      <h2 className="mt-1 text-xl font-extrabold text-gray-900 sm:text-2xl max-md:text-white">{title}</h2>
+      <h2 className="mt-1 text-xl font-bold text-gray-900 sm:text-2xl max-md:text-white">{title}</h2>
       {center && <span className="mx-auto mt-2 block h-1 w-12 rounded-full bg-gradient-to-r from-brand-600 to-steel-600 max-md:bg-gold-gradient" />}
     </div>
   );
@@ -177,7 +177,7 @@ function ProductSection({ title, subtitle, items, total, href }: { title: string
           <span className="w-1 rounded-full bg-gradient-to-b from-accent-600 to-brand-600 max-md:bg-gold-gradient" />
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-400 max-md:text-gold-400/80">{subtitle}</p>
-            <h2 className="text-lg font-extrabold text-gray-900 sm:text-xl max-md:text-white">{title}</h2>
+            <h2 className="text-lg font-bold text-gray-900 sm:text-xl max-md:text-white">{title}</h2>
           </div>
         </div>
         <Link href={href} className="flex shrink-0 items-center gap-1 rounded-full border border-brand-100 bg-white px-3.5 py-1.5 text-xs font-bold text-brand-700 shadow-sm hover:border-brand-600 hover:bg-brand-600 hover:text-white max-md:border-gold-400/30 max-md:bg-white/[0.04] max-md:text-gold-300 max-md:shadow-none">

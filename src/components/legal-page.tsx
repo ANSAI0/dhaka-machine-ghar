@@ -16,7 +16,7 @@ export function LegalPage({ title, eyebrow, intro, updated, sections, site }: { 
         <div className="space-y-7">
           {sections.map((s, i) => (
             <section key={s.h}>
-              <h2 className="text-lg font-extrabold text-gray-900">
+              <h2 className="text-lg font-bold text-gray-900">
                 {i + 1}. {s.h}
               </h2>
               {s.p.map((block, k) =>
@@ -35,7 +35,7 @@ export function LegalPage({ title, eyebrow, intro, updated, sections, site }: { 
             </section>
           ))}
           <section className="rounded-xl bg-gray-50 p-5 text-sm text-gray-700">
-            <h2 className="font-extrabold text-gray-900">Contact</h2>
+            <h2 className="font-bold text-gray-900">Contact</h2>
             <p className="mt-1">
               {site.name} ({site.nameBn}) · Factory: {site.address} · Showroom: {site.showroom}
             </p>
