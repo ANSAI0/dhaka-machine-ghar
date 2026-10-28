@@ -60,27 +60,28 @@ export function MobileDrawer({ open, onClose, categories, me }: { open: boolean;
         role="dialog"
         aria-modal="true"
         aria-label="Menu"
-        className={`absolute inset-y-0 left-0 flex w-[86vw] max-w-[340px] flex-col bg-lux-900 text-white shadow-2xl shadow-black ring-1 ring-white/5 transition-transform duration-300 ease-out ${open ? "translate-x-0" : "-translate-x-full"}`}
+        className={`absolute inset-y-0 left-0 flex w-[86vw] max-w-[340px] flex-col bg-white shadow-2xl lux:bg-lux-900 lux:text-white lux:shadow-black lux:ring-1 lux:ring-white/5 transition-transform duration-300 ease-out ${open ? "translate-x-0" : "-translate-x-full"}`}
       >
         {/* Brand header — logo with the Bangla/English name */}
-        <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3.5">
-          <Logo dark />
-          <button onClick={onClose} aria-label="Close menu" className="rounded-full bg-white/[0.06] p-2 text-white/70 ring-1 ring-white/10 hover:bg-white/10">
+        <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3.5 lux:border-white/[0.06]">
+          <span className="lux:hidden"><Logo /></span>
+          <span className="hidden lux:block"><Logo dark /></span>
+          <button onClick={onClose} aria-label="Close menu" className="rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200 lux:bg-white/[0.06] lux:text-white/70 lux:ring-1 lux:ring-white/10 lux:hover:bg-white/10">
             <X className="h-5 w-5" />
           </button>
         </div>
 
         <div className="flex-1 overflow-y-auto overscroll-contain">
           {/* Account */}
-          <Link href={me ? "/account" : "/account/login"} className="mx-4 mt-4 flex items-center gap-3 rounded-2xl border border-gold-400/25 bg-gradient-to-br from-lux-700 to-lux-800 p-3.5 text-white shadow-lg shadow-black/40">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold-gradient text-lg font-bold text-lux-950">
+          <Link href={me ? "/account" : "/account/login"} className="mx-4 mt-4 flex items-center gap-3 rounded-2xl bg-gradient-to-br from-brand-700 to-brand-900 p-3.5 text-white shadow-lg shadow-brand-900/20 lux:border lux:border-gold-400/25 lux:from-lux-700 lux:to-lux-800 lux:shadow-black/40">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/15 text-lg font-bold lux:bg-gold-gradient lux:text-lux-950">
               {me ? me.name.trim()[0]?.toUpperCase() : <UserRound className="h-5 w-5" />}
             </span>
             <span className="min-w-0 flex-1 leading-tight">
               <span className="block truncate font-bold">{me ? me.name : "লগইন / রেজিস্টার"}</span>
-              <span className="block text-xs text-gold-300/80">{me ? "আমার অ্যাকাউন্ট ও অর্ডার" : "সাপ্তাহিক মেশিন আপডেট পান"}</span>
+              <span className="block text-xs text-white/75 lux:text-gold-300/80">{me ? "আমার অ্যাকাউন্ট ও অর্ডার" : "সাপ্তাহিক মেশিন আপডেট পান"}</span>
             </span>
-            <ChevronRight className="h-5 w-5 text-gold-300" />
+            <ChevronRight className="h-5 w-5 text-white/70 lux:text-gold-300" />
           </Link>
 
           {/* Main links */}
@@ -90,9 +91,9 @@ export function MobileDrawer({ open, onClose, categories, me }: { open: boolean;
                 key={href}
                 href={href}
                 aria-current={isActive(href) ? "page" : undefined}
-                className={`flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-semibold ${isActive(href) ? "bg-gold-400/10 text-gold-300" : "text-white/85 active:bg-white/5"}`}
+                className={`flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-semibold ${isActive(href) ? "bg-brand-50 text-brand-700 lux:bg-gold-400/10 lux:text-gold-300" : "text-gray-800 active:bg-gray-50 lux:text-white/85 lux:active:bg-white/5"}`}
               >
-                <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${isActive(href) ? "bg-gold-gradient text-lux-950" : "bg-white/[0.06] text-white/60 ring-1 ring-white/10"}`}>
+                <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${isActive(href) ? "bg-brand-600 text-white lux:bg-gold-gradient lux:text-lux-950" : "bg-gray-100 text-gray-600 lux:bg-white/[0.06] lux:text-white/60 lux:ring-1 lux:ring-white/10"}`}>
                   <Icon className="h-[18px] w-[18px]" />
                 </span>
                 {label}
@@ -101,22 +102,22 @@ export function MobileDrawer({ open, onClose, categories, me }: { open: boolean;
           </nav>
 
           {/* Categories accordion */}
-          <p className="mt-5 px-5 text-[11px] font-bold uppercase tracking-[0.2em] text-gold-400/80">ক্যাটাগরি</p>
+          <p className="mt-5 px-5 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 lux:text-gold-400/80">ক্যাটাগরি</p>
           <div className="mt-1 px-2 pb-4">
             {categories.map((c) => {
               const expanded = openCat === c.slug;
               return (
-                <div key={c.slug} className="border-b border-white/[0.05] last:border-0">
+                <div key={c.slug} className="border-b border-gray-50 last:border-0 lux:border-white/[0.05]">
                   <div className="flex items-center">
-                    <Link href={`/category/${c.slug}`} className="flex min-w-0 flex-1 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/80 active:bg-white/5">
-                      <CategoryIcon name={c.icon} className="h-5 w-5 shrink-0 text-gold-400" />
+                    <Link href={`/category/${c.slug}`} className="flex min-w-0 flex-1 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 active:bg-gray-50 lux:text-white/80 lux:active:bg-white/5">
+                      <CategoryIcon name={c.icon} className="h-5 w-5 shrink-0 text-brand-600 lux:text-gold-400" />
                       <span className="truncate">{c.nameBn}</span>
                     </Link>
                     <button
                       onClick={() => setOpenCat(expanded ? null : c.slug)}
                       aria-expanded={expanded}
                       aria-label={`${c.name} types`}
-                      className="rounded-lg p-2.5 text-white/40 active:bg-white/5"
+                      className="rounded-lg p-2.5 text-gray-400 active:bg-gray-100 lux:text-white/40 lux:active:bg-white/5"
                     >
                       <ChevronDown className={`h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`} />
                     </button>
@@ -125,7 +126,7 @@ export function MobileDrawer({ open, onClose, categories, me }: { open: boolean;
                     <ul className="overflow-hidden pl-11 pr-3">
                       {c.subcategories.map((s) => (
                         <li key={s.slug}>
-                          <Link href={`/category/${c.slug}?sub=${s.slug}`} className="block py-2 text-[13px] text-white/55 active:text-gold-300">
+                          <Link href={`/category/${c.slug}?sub=${s.slug}`} className="block py-2 text-[13px] text-gray-600 active:text-brand-700 lux:text-white/55 lux:active:text-gold-300">
                             {s.name}
                           </Link>
                         </li>
@@ -139,13 +140,13 @@ export function MobileDrawer({ open, onClose, categories, me }: { open: boolean;
         </div>
 
         {/* Contact footer */}
-        <div className="border-t border-white/[0.06] bg-lux-950/60 p-4">
-          <p className="mb-2 flex items-center gap-1.5 text-xs text-white/45"><MapPin className="h-3.5 w-3.5" /> {site.showroom}</p>
+        <div className="border-t border-gray-100 bg-gray-50 p-4 lux:border-white/[0.06] lux:bg-lux-950/60">
+          <p className="mb-2 flex items-center gap-1.5 text-xs text-gray-500 lux:text-white/45"><MapPin className="h-3.5 w-3.5" /> {site.showroom}</p>
           <div className="grid grid-cols-2 gap-2">
-            <a href={`tel:${site.phoneIntl}`} className="flex items-center justify-center gap-1.5 rounded-xl bg-gold-gradient py-2.5 text-sm font-bold text-lux-950"><Phone className="h-4 w-4" /> কল করুন</a>
+            <a href={`tel:${site.phoneIntl}`} className="flex items-center justify-center gap-1.5 rounded-xl bg-ink py-2.5 text-sm font-bold text-white lux:bg-gold-gradient lux:text-lux-950"><Phone className="h-4 w-4" /> কল করুন</a>
             <a href={`https://wa.me/${site.whatsappIntl}`} target="_blank" rel="noopener" className="flex items-center justify-center gap-1.5 rounded-xl bg-[#25d366] py-2.5 text-sm font-bold text-white"><WhatsappIcon className="h-4 w-4" /> WhatsApp</a>
           </div>
-          <div className="mt-3 flex items-center justify-center gap-4 text-white/40">
+          <div className="mt-3 flex items-center justify-center gap-4 text-gray-400 lux:text-white/40">
             <a href={site.facebook} target="_blank" rel="noopener" aria-label="Facebook" className="hover:text-[#1877f2]"><FacebookIcon className="h-5 w-5" /></a>
             <a href={site.youtube} target="_blank" rel="noopener" aria-label="YouTube" className="hover:text-[#ff0000]"><YoutubeIcon className="h-5 w-5" /></a>
             <span className="text-xs">{site.phone}</span>

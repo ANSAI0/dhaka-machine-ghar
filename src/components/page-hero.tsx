@@ -21,7 +21,7 @@ export function PageHero({
   children?: React.ReactNode;
 }) {
   return (
-    <section className="relative mb-6 overflow-hidden rounded-2xl bg-ink text-white shadow-lg ring-1 ring-black/5 sm:rounded-3xl max-md:ring-gold-400/20">
+    <section className="relative mb-6 overflow-hidden rounded-2xl bg-ink text-white shadow-lg ring-1 ring-black/5 sm:rounded-3xl lux:ring-gold-400/20">
       {image && <Image src={image} alt="" fill sizes="100vw" className="object-cover opacity-30 grayscale-[35%]" />}
       <div className={`absolute inset-0 ${center ? "bg-ink/75" : "bg-gradient-to-r from-ink via-ink/85 to-ink/40"}`} />
       <div className="pointer-events-none absolute -left-24 -top-28 h-72 w-72 rounded-full bg-brand-600/35 blur-3xl" />
@@ -31,7 +31,7 @@ export function PageHero({
 
       <div className={`relative px-5 py-7 sm:px-10 sm:py-10 ${center ? "text-center" : ""}`}>
         <p className={`flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/60 ${center ? "justify-center" : ""}`}>
-          <span className="h-1.5 w-1.5 rounded-full bg-accent-500 shadow-[0_0_0_3px_rgba(179,18,31,0.3)] max-md:bg-gold-400 max-md:shadow-[0_0_0_3px_rgba(214,174,85,0.25)]" /> {eyebrow}
+          <span className="h-1.5 w-1.5 rounded-full bg-accent-500 shadow-[0_0_0_3px_rgba(179,18,31,0.3)] lux:bg-gold-400 lux:shadow-[0_0_0_3px_rgba(214,174,85,0.25)]" /> {eyebrow}
         </p>
         <h1 className="mt-2 text-[26px] font-bold leading-tight sm:text-4xl">{title}</h1>
         {text && <p className={`mt-2 max-w-2xl text-sm leading-relaxed text-white/70 sm:text-base ${center ? "mx-auto" : ""}`}>{text}</p>}

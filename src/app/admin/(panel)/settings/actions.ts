@@ -77,13 +77,14 @@ export async function saveMarketing(_: FormState, fd: FormData): Promise<FormSta
 
 export async function saveTheme(_: FormState, fd: FormData): Promise<FormState> {
   await requireAdmin("owner");
+  const mobile = s(fd, "mobile") === "light" ? "light" : "dark";
   if (fd.get("reset") === "1") {
-    await put("theme", themeDefaults);
+    await put("theme", { ...themeDefaults, mobile });
     return { ok: "Back to the logo colours." };
   }
-  const t: Theme = { brand: s(fd, "brand").toLowerCase(), accent: s(fd, "accent").toLowerCase(), steel: s(fd, "steel").toLowerCase() };
+  const t: Theme = { brand: s(fd, "brand").toLowerCase(), accent: s(fd, "accent").toLowerCase(), steel: s(fd, "steel").toLowerCase(), mobile };
   const names = { brand: "Primary", accent: "Accent", steel: "Secondary" } as const;
-  for (const k of Object.keys(names) as (keyof Theme)[]) {
+  for (const k of Object.keys(names) as (keyof typeof names)[]) {
     if (!isHex(t[k])) return { error: `${names[k]} must be a colour like #2e5e47` };
     // White text sits on these colours (buttons, nav, badges) — keep it readable.
     const min = k === "steel" ? 3 : 4.5;

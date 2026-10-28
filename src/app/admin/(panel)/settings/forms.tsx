@@ -137,6 +137,23 @@ export function ThemeForm({ theme }: { theme: Theme }) {
         ))}
       </div>
 
+      <div className="sm:col-span-2">
+        <span className="mb-2 block text-sm font-semibold text-gray-700">Mobile style</span>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {[
+            { v: "dark", label: "Dark luxury", hint: "Near-black with gold accents", sw: "bg-[#070a09] ring-[#d6ae55]" },
+            { v: "light", label: "Clean light", hint: "White, soft shadows, brand colours", sw: "bg-white ring-gray-300" },
+          ].map((o) => (
+            <label key={o.v} className={`flex cursor-pointer items-center gap-3 rounded-xl border-2 p-3 text-sm ${t.mobile === o.v ? "border-brand-600 bg-brand-50" : "border-gray-200"}`}>
+              <input type="radio" name="mobile" value={o.v} checked={t.mobile === o.v} onChange={() => setT((x) => ({ ...x, mobile: o.v as Theme["mobile"] }))} className="h-4 w-4 accent-brand-600" />
+              <span className={`h-8 w-8 shrink-0 rounded-lg ring-2 ${o.sw}`} />
+              <span><span className="block font-semibold text-gray-800">{o.label}</span><span className="text-xs text-gray-500">{o.hint}</span></span>
+            </label>
+          ))}
+        </div>
+        <span className="mt-1 block text-xs text-gray-400">Phones only — the desktop site always uses the light design.</span>
+      </div>
+
       {/* Live preview — uses the picked colours directly, before saving. */}
       <div className="overflow-hidden rounded-xl border border-gray-200 text-sm" aria-label="Preview">
         <div className="px-4 py-2.5 font-semibold text-white" style={{ background: t.brand }}>Home · Shop · Order Tracking</div>

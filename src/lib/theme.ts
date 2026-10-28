@@ -1,10 +1,13 @@
 // Brand colours editable in Admin → Settings. Each is the "600" shade; lighter/darker shades are
 // derived with CSS color-mix so the whole Tailwind palette (bg-brand-50 … text-brand-900) follows.
 
-export type Theme = { brand: string; accent: string; steel: string };
+// Phones: "dark" = dark luxury (near-black + gold), "light" = clean white. Desktop is always light.
+export type MobileStyle = "dark" | "light";
+export type Theme = { brand: string; accent: string; steel: string; mobile: MobileStyle };
+const colorKeys = ["brand", "accent", "steel"] as const;
 
 // From the DMG logo — also the values hard-coded in globals.css.
-export const themeDefaults: Theme = { brand: "#2e5e47", accent: "#98000f", steel: "#1570a8" };
+export const themeDefaults: Theme = { brand: "#2e5e47", accent: "#98000f", steel: "#1570a8", mobile: "dark" };
 
 export const isHex = (s: string) => /^#[0-9a-f]{6}$/i.test(s);
 
@@ -31,7 +34,7 @@ const shades: Record<string, [number, "white" | "black"]> = {
 };
 
 export function themeCss(t: Theme): string {
-  const changed = (Object.keys(themeDefaults) as (keyof Theme)[]).filter((k) => isHex(t[k]) && t[k].toLowerCase() !== themeDefaults[k]);
+  const changed = colorKeys.filter((k) => isHex(t[k]) && t[k].toLowerCase() !== themeDefaults[k]);
   if (!changed.length) return "";
   const vars = changed.flatMap((k) => [
     `--color-${k}-600:${t[k]}`,

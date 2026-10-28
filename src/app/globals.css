@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* lux: = phone screens with the "dark luxury" mobile style switched on (<html class="mobile-lux">). */
+@custom-variant lux {
+  @media (width < 48rem) {
+    :where(.mobile-lux) & {
+      @slot;
+    }
+  }
+}
+
 /* Dhaka Machine Ghar brand palette — taken from the DMG logo */
 @theme {
   --color-brand-50: #eef6f1;
@@ -125,9 +134,9 @@ body {
   }
 }
 
-/* Phones get the dark luxury look (desktop keeps the light theme). */
+/* Phones get the dark luxury look when it's the chosen mobile style (Admin → Settings → Theme). */
 @media (max-width: 767px) {
-  body {
+  .mobile-lux body {
     background: var(--color-lux-950);
     background-image: radial-gradient(120% 900px at 50% 0, rgba(46, 94, 71, 0.2), transparent 70%);
     background-repeat: no-repeat;
