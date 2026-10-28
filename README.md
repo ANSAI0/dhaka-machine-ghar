@@ -68,3 +68,10 @@ Defined in `src/app/globals.css` (`@theme`).
 - Baileigh scrape contained only images, so specs in `catalog.ts` are reference values from model numbers — verify before launch. Prices are placeholders in ৳.
 - Products without a photo show a branded placeholder until real images are uploaded.
 - Blueprint email `www.dhakamachineghar@yahoo.com` is used as `dhakamachineghar@yahoo.com` (an email address can't start with `www.`).
+
+## Deploying (Vercel + Neon)
+- Database: a Neon Postgres project. `DATABASE_URL` = pooled connection string, `DIRECT_URL` = direct (non-pooler) string, used by `prisma migrate deploy`.
+- Vercel runs `npm run vercel-build` (migrations, then `next build`).
+- Environment variables: `DATABASE_URL`, `DIRECT_URL`, `AUTH_SECRET`, `CRON_SECRET`, `SITE_URL`, optional `ANTHROPIC_API_KEY`.
+- Admin photo uploads: connect a Vercel Blob store to the project (adds `BLOB_READ_WRITE_TOKEN`). Without it, uploads are saved to `./uploads` (local/VPS only).
+- Weekly email: `vercel.json` runs `/api/cron/newsletter` daily at 04:30 UTC (10:30 Dhaka); Vercel sends `CRON_SECRET` automatically. The in-process scheduler is off on Vercel.
