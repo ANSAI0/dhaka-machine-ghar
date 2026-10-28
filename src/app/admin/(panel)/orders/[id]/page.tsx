@@ -74,6 +74,12 @@ export default async function OrderDetail({ params }: Params) {
               <tfoot className="border-t-2 border-gray-200">
                 <tr><td className="pt-3 font-bold" colSpan={2}>Total</td><td className="pt-3 text-right font-bold">{formatBDT(o.total)}</td></tr>
                 <tr><td className="text-gray-500" colSpan={2}>{paymentLabels[o.payment]}</td><td className="text-right font-semibold text-accent-600">{o.payNow ? `${formatBDT(o.payNow)} now` : "after call"}</td></tr>
+                <tr>
+                  <td className="text-gray-500" colSpan={2}>Online payment{o.payMethod ? ` · ${o.payMethod}` : ""}</td>
+                  <td className={`text-right font-semibold ${o.paymentStatus === "paid" ? "text-brand-700" : o.paymentStatus === "failed" ? "text-accent-600" : "text-gray-500"}`}>
+                    {o.paymentStatus === "paid" ? `Paid ${formatBDT(o.paidAmount)}` : o.paymentStatus === "failed" ? "Last attempt failed" : "Not paid online"}
+                  </td>
+                </tr>
               </tfoot>
             </table>
           </Card>

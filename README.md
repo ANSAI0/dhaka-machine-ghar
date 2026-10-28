@@ -72,6 +72,12 @@ Defined in `src/app/globals.css` (`@theme`).
 ## Deploying (Vercel + Neon)
 - Database: a Neon Postgres project. `DATABASE_URL` = pooled connection string, `DIRECT_URL` = direct (non-pooler) string, used by `prisma migrate deploy`.
 - Vercel runs `npm run vercel-build` (migrations, then `next build`).
-- Environment variables: `DATABASE_URL`, `DIRECT_URL`, `AUTH_SECRET`, `CRON_SECRET`, `SITE_URL`, optional `ANTHROPIC_API_KEY`.
+- Environment variables: `DATABASE_URL`, `DIRECT_URL`, `AUTH_SECRET`, `CRON_SECRET`, `SITE_URL`, `SSLCZ_STORE_ID`, `SSLCZ_STORE_PASSWORD`, optional `SSLCZ_LIVE=true` (live gateway) and `ANTHROPIC_API_KEY`.
 - Admin photo uploads: connect a Vercel Blob store to the project (adds `BLOB_READ_WRITE_TOKEN`). Without it, uploads are saved to `./uploads` (local/VPS only).
 - Weekly email: `vercel.json` runs `/api/cron/newsletter` daily at 04:30 UTC (10:30 Dhaka); Vercel sends `CRON_SECRET` automatically. The in-process scheduler is off on Vercel.
+
+## Online payment (SSLCommerz)
+- After an order with an advance/full payment, the customer sees "pay online"; `/api/payments/sslcommerz/start` opens the SSLCommerz page for the amount still due.
+- SSLCommerz returns to `/api/payments/sslcommerz/return` and calls `/api/payments/sslcommerz/ipn`; both confirm with SSLCommerz's validation API before marking the order paid (amount and currency checked). Result page: `/payment`.
+- Without `SSLCZ_STORE_ID`/`SSLCZ_STORE_PASSWORD` the online option is hidden. Sandbox test store: `testbox` / `qwerty`. Set `SSLCZ_LIVE=true` with the live credentials.
+- Policy pages required by SSLCommerz: `/terms`, `/privacy`, `/refund` (linked in the footer).

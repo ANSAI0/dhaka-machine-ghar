@@ -73,7 +73,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: SP })
                 <td className="px-4 py-3"><Link href={`/admin/orders/${o.id}`} className="font-semibold text-brand-700 hover:underline">{o.id}</Link><span className="block text-xs text-gray-400">{shortDate(o.createdAt)}</span></td>
                 <td className="px-3 py-3">{o.name}<span className="block text-xs text-gray-400">{o.phone} · {o.district}</span></td>
                 <td className="max-w-[240px] px-3 py-3 text-gray-600"><span className="line-clamp-2">{o.items.map((i) => `${i.name} ×${i.qty}`).join(", ")}</span></td>
-                <td className="px-3 py-3 text-right font-semibold">{compactBDT(o.total)}<span className="block text-xs font-normal text-gray-400">now {compactBDT(o.payNow)}</span></td>
+                <td className="px-3 py-3 text-right font-semibold">{compactBDT(o.total)}<span className="block text-xs font-normal text-gray-400">now {compactBDT(o.payNow)}</span>{o.paymentStatus === "paid" && <span className="block text-xs font-bold text-brand-700">Paid online</span>}</td>
                 <td className="px-3 py-3 text-xs text-gray-600">{paymentLabels[o.payment].split(" (")[0]}</td>
                 <td className="px-3 py-3 text-xs text-gray-500">{o.source}</td>
                 <td className="px-4 py-3"><StepBadge step={o.status} /></td>

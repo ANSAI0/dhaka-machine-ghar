@@ -93,6 +93,12 @@ enum PaymentPlan {
   cod_booking
 }
 
+enum PaymentStatus {
+  unpaid
+  paid
+  failed
+}
+
 model Order {
   id         String       @id // invoice, e.g. DMG-261027-4821
   createdAt  DateTime     @default(now())
@@ -107,6 +113,12 @@ model Order {
   source     String       @default("web")
   total      Int
   payNow     Int
+  // Online payment (SSLCommerz). tranId is the latest gateway attempt.
+  paymentStatus PaymentStatus @default(unpaid)
+  paidAmount    Int           @default(0)
+  paidAt        DateTime?
+  payMethod     String?
+  tranId        String?       @unique
   items      OrderItem[]
   events     OrderEvent[]
   warranties Warranty[]

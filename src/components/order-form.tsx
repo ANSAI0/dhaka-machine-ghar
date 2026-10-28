@@ -9,10 +9,11 @@ import { formatBDT } from "@/lib/site";
 import { useSite } from "./site-provider";
 import { trackConversion } from "@/lib/analytics";
 import { useCustomer } from "./customer-provider";
+import { PayOnlineButton } from "./pay-online-button";
 
 type Errors = Partial<Record<keyof OrderInput | "form", string>>;
 export type OrderLine = { product: Product; qty: number };
-type Placed = { id: string; total: number; payNow: number };
+type Placed = { id: string; total: number; payNow: number; payOnline?: boolean };
 
 export const fieldClass = "w-full rounded-xl border bg-white px-4 py-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100";
 
@@ -168,10 +169,17 @@ export function OrderSuccess({ order }: { order: Placed }) {
         <p className="flex justify-between"><span className="text-gray-500">মোট মূল্য</span><strong>{formatBDT(order.total)}</strong></p>
         {order.payNow > 0 && <p className="flex justify-between"><span className="text-gray-500">এখন পরিশোধযোগ্য</span><strong className="text-accent-600">{formatBDT(order.payNow)}</strong></p>}
       </div>
-      <p className="mt-4 text-sm text-gray-600">
-        আমাদের প্রতিনিধি শীঘ্রই <strong>{site.phone}</strong> থেকে কল করে পেমেন্ট ও ডেলিভারি নিশ্চিত করবেন।
-      </p>
-      <Link href={`/track?q=${order.id}`} className="mt-4 inline-block rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-brand-700">
+      {order.payOnline ? (
+        <div className="mx-auto mt-4 max-w-sm">
+          <PayOnlineButton orderId={order.id} amount={order.payNow} />
+          <p className="mt-2 text-xs text-gray-500">bKash, Nagad, Rocket বা কার্ড — অথবা পরে আমাদের প্রতিনিধির সাথে কথা বলে পেমেন্ট করুন।</p>
+        </div>
+      ) : (
+        <p className="mt-4 text-sm text-gray-600">
+          আমাদের প্রতিনিধি শীঘ্রই <strong>{site.phone}</strong> থেকে কল করে পেমেন্ট ও ডেলিভারি নিশ্চিত করবেন।
+        </p>
+      )}
+      <Link href={`/track?q=${order.id}`} className="mt-4 inline-block rounded-xl border border-brand-600 px-5 py-2.5 text-sm font-bold text-brand-700 hover:bg-brand-600 hover:text-white">
         অর্ডার ট্র্যাক করুন
       </Link>
     </div>

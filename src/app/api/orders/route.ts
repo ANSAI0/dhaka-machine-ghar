@@ -7,6 +7,7 @@ import { db, withUniqueId } from "@/lib/db";
 import { makeId } from "@/lib/ids";
 import { normalizePhone, validateOrder, type OrderInput } from "@/lib/orders";
 import { getSite } from "@/lib/settings";
+import { onlinePaymentEnabled } from "@/lib/sslcommerz";
 
 export async function POST(req: Request) {
   let body: Partial<OrderInput>;
@@ -54,5 +55,5 @@ export async function POST(req: Request) {
 
   after(() => sendCapiEvent({ name: "Purchase", eventId: order.id, phone: order.phone, value: total }));
   after(() => notifyOrderPlaced(order));
-  return NextResponse.json({ id: order.id, total, payNow }, { status: 201 });
+  return NextResponse.json({ id: order.id, total, payNow, payOnline: onlinePaymentEnabled() && payNow > 0 }, { status: 201 });
 }

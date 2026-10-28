@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, MapPin, Phone, Store } from "lucide-react";
+import { Mail, MapPin, Phone, ShieldCheck, Store } from "lucide-react";
 import type { Category } from "@/lib/catalog";
 import { getSite } from "@/lib/settings";
 import { FacebookIcon, WhatsappIcon, YoutubeIcon } from "./brand-icons";
@@ -65,9 +65,22 @@ export async function Footer({ categories }: { categories: Category[] }) {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-2 border-t border-white/10 pt-5 text-xs text-gray-400 sm:flex-row">
-          <p>
-            © {new Date().getFullYear()} <strong className="font-semibold text-white">{site.name}</strong>. All rights reserved.
+        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-5 text-xs text-gray-400 sm:flex-row">
+          <div className="flex flex-col items-center gap-1.5 sm:items-start">
+            <p>
+              © {new Date().getFullYear()} <strong className="font-semibold text-white">{site.name}</strong>. All rights reserved.
+            </p>
+            <nav aria-label="Legal" className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+              <Link href="/terms" className="hover:text-white">Terms &amp; Conditions</Link>
+              <Link href="/privacy" className="hover:text-white">Privacy Policy</Link>
+              <Link href="/refund" className="hover:text-white">Return &amp; Refund</Link>
+            </nav>
+          </div>
+          <p className="flex flex-wrap items-center justify-center gap-1.5 text-[11px] text-gray-400">
+            <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" /> Secure payment by SSLCommerz
+            {["bKash", "Nagad", "Rocket", "VISA", "Mastercard"].map((m) => (
+              <span key={m} className="rounded border border-white/15 px-1.5 py-px font-semibold text-gray-300">{m}</span>
+            ))}
           </p>
           <p className="text-[11px] tracking-wide text-gray-500">
             Designed &amp; Developed by <span className="font-semibold text-gray-300">An Nasmu Sakib</span>
