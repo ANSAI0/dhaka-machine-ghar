@@ -3,9 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ChevronLeft, ChevronRight, Play } from "lucide-react";
-import { dmgVideo, heroImages } from "@/lib/hero-images";
-import { YouTubeBackground, YouTubeModal } from "./youtube";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { heroImages, heroVideo } from "@/lib/hero-images";
 
 type Media = { src: string; credit: string; source: string };
 
@@ -16,20 +15,19 @@ type Slide = {
   cta: { href: string; label: string };
   alt: { href: string; label: string };
   image?: Media;
-  youtube?: string; // video id: plays muted behind the slide; the second button opens it with sound
+  video?: Media & { poster: string };
   position?: string; // object-position, keeps the subject clear of the text
   duration?: number; // ms on screen
 };
 
 const slides: Slide[] = [
   {
-    kicker: "Our Factory",
-    title: "নিজস্ব কারখানায় তৈরি পাওয়ার প্রেস",
-    text: "See our machines being built and tested in Keraniganj — then visit the showroom.",
-    cta: { href: "/category/power-press", label: "Shop Power Press" },
-    alt: { href: "/contact", label: "Watch Video" },
-    youtube: dmgVideo.id,
-    image: { src: dmgVideo.thumb, credit: "Dhaka Machine Ghar · YouTube", source: dmgVideo.url },
+    kicker: "Workshop Machines",
+    title: "লেদ, শেপার, মিলিং ও ড্রিল মেশিন",
+    text: "Foreign & reconditioned workshop machines — serviced, tested and covered by warranty.",
+    cta: { href: "/category/workshop", label: "Workshop Machines" },
+    alt: { href: "/contact", label: "Visit Showroom" },
+    video: heroVideo,
     duration: 9000,
   },
   {
@@ -68,7 +66,7 @@ export function DesktopHero() {
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
   const touchX = useRef<number | null>(null);
-  const [watch, setWatch] = useState(false);
+  const video = useRef<HTMLVideoElement>(null);
   const root = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(true);
   // Phones get the poster still instead of the video (and no zoom): lighter to scroll and saves data.
@@ -81,13 +79,13 @@ export function DesktopHero() {
     return () => mq.removeEventListener("change", update);
   }, []);
   const go = (n: number) => setI((n + slides.length) % slides.length);
-  const media = slides[i].image as Media;
+  const media = (slides[i].image ?? slides[i].video) as Media;
 
   useEffect(() => {
-    if (paused || !inView || watch) return;
+    if (paused || !inView) return;
     const t = setTimeout(() => setI((x) => (x + 1) % slides.length), durationOf(i));
     return () => clearTimeout(t);
-  }, [i, paused, inView, watch]);
+  }, [i, paused, inView]);
 
   // Off screen: stop the video, the slide timer and the zoom so scrolling stays smooth on phones.
   useEffect(() => {
@@ -97,6 +95,16 @@ export function DesktopHero() {
     io.observe(el);
     return () => io.disconnect();
   }, []);
+
+  // The clip only plays while its slide is showing, and restarts each time it comes back.
+  useEffect(() => {
+    const v = video.current;
+    if (!v) return;
+    if (slides[i].video && inView) {
+      v.currentTime = 0;
+      v.play().catch(() => {});
+    } else v.pause();
+  }, [i, inView, wide]);
 
   return (
     <section
@@ -122,18 +130,32 @@ export function DesktopHero() {
               className={`absolute inset-0 transition-opacity duration-700 ${on ? "opacity-100" : "pointer-events-none opacity-0"}`}
               aria-hidden={!on}
             >
-              <div className={`absolute inset-0 ${on && !s.youtube ? "md:animate-kenburns" : ""}`}>
-                <Image
-                  src={s.image!.src}
-                  alt=""
-                  fill
-                  priority={idx === 0}
-                  sizes="(min-width: 1024px) 75vw, 100vw"
-                  className="object-cover"
-                  style={{ objectPosition: s.position ?? "center" }}
+              {s.video && wide ? (
+                <video
+                  ref={video}
+                  src={s.video.src}
+                  poster={s.video.poster}
+                  muted
+                  loop
+                  playsInline
+                  autoPlay
+                  preload="auto"
+                  aria-hidden
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
-              </div>
-              {s.youtube && wide && <YouTubeBackground id={s.youtube} active={on && inView && !watch} />}
+              ) : (
+                <div className={`absolute inset-0 ${on ? "md:animate-kenburns" : ""}`}>
+                  <Image
+                    src={s.image?.src ?? s.video!.poster}
+                    alt=""
+                    fill
+                    priority={idx === 0}
+                    sizes="(min-width: 1024px) 75vw, 100vw"
+                    className="object-cover"
+                    style={{ objectPosition: s.position ?? "center" }}
+                  />
+                </div>
+              )}
               <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/30 to-transparent" />
               <div className="absolute inset-0 bg-black/20 sm:hidden" />
               <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/45 to-transparent" />
@@ -148,15 +170,9 @@ export function DesktopHero() {
                   <Link href={s.cta.href} tabIndex={on ? 0 : -1} className="flex items-center gap-1.5 whitespace-nowrap rounded-xl bg-accent-600 px-3.5 py-2 text-[13px] font-bold sm:gap-2 sm:text-sm text-white shadow-lg shadow-accent-600/30 transition hover:bg-accent-500 sm:px-6 sm:py-3 lux:bg-gold-gradient lux:text-lux-950 lux:shadow-gold-500/40">
                     {s.cta.label} <ArrowRight className="h-4 w-4" />
                   </Link>
-                  {s.youtube ? (
-                    <button type="button" onClick={() => setWatch(true)} tabIndex={on ? 0 : -1} className="flex items-center gap-2 whitespace-nowrap rounded-xl border border-white/30 bg-white/10 px-3.5 py-2 text-[13px] font-bold text-white backdrop-blur transition hover:bg-white/20 sm:px-6 sm:py-3 sm:text-sm">
-                      <Play className="h-4 w-4 fill-current" /> {s.alt.label}
-                    </button>
-                  ) : (
-                    <Link href={s.alt.href} tabIndex={on ? 0 : -1} className="whitespace-nowrap rounded-xl border border-white/30 bg-white/10 px-3.5 py-2 text-[13px] font-bold sm:text-sm text-white backdrop-blur transition hover:bg-white/20 sm:px-6 sm:py-3">
-                      {s.alt.label}
-                    </Link>
-                  )}
+                  <Link href={s.alt.href} tabIndex={on ? 0 : -1} className="whitespace-nowrap rounded-xl border border-white/30 bg-white/10 px-3.5 py-2 text-[13px] font-bold sm:text-sm text-white backdrop-blur transition hover:bg-white/20 sm:px-6 sm:py-3">
+                    {s.alt.label}
+                  </Link>
                 </div>
               </div>
             </div>
@@ -199,9 +215,8 @@ export function DesktopHero() {
       </div>
 
       <a href={media.source} target="_blank" rel="noopener nofollow" className="absolute right-3 top-2 z-20 hidden text-[9px] text-white/45 hover:text-white/80 sm:right-5 sm:block">
-        {slides[i].youtube ? "Video" : "Photo"}: {media.credit}
+        {slides[i].video ? "Video" : "Photo"}: {media.credit}
       </a>
-      {watch && <YouTubeModal id={dmgVideo.id} onClose={() => setWatch(false)} />}
     </section>
   );
 }

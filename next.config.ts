@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   // Product image uploads go through server actions (images capped at 5 MB in lib/uploads.ts).
   experimental: { serverActions: { bodySizeLimit: "6mb" } },
   // Admin-uploaded photos on Vercel Blob.
-  images: { remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }, { protocol: "https", hostname: "i.ytimg.com" }] },
+  images: { remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }] },
 };
 
 export default nextConfig;

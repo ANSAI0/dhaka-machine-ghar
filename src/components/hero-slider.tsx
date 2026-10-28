@@ -3,29 +3,42 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import type { Banner } from "@/lib/settings";
-import { Play } from "lucide-react";
+import { Volume2, VolumeX } from "lucide-react";
 import { dmgVideo } from "@/lib/hero-images";
+import type { Banner } from "@/lib/settings";
 import { brand } from "@/lib/site";
-import { YouTubeModal } from "./youtube";
 
 const INTERVAL = 3000;
 const SLIDE_MS = 500;
+const YT_ORIGIN = "https://www.youtube-nocookie.com";
 
-// App-style banner carousel: images slide inside a framed box and are shown whole (never cropped): admin-uploaded images slide right-to-left every 3 s, loop
-// seamlessly (a copy of the first banner sits at the end), swipe on phones, and stop while off
-// screen. Only `transform` animates, so it stays smooth while the page scrolls.
-export function HeroSlider({ banners: uploaded }: { banners: Banner[] }) {
-  // The factory video rides along as the last slide; tapping it opens the player.
-  const banners: Banner[] = [...uploaded, { id: "video", image: dmgVideo.thumb, link: "#video" }];
-  const n = banners.length;
-  const [watch, setWatch] = useState(false);
-  const [i, setI] = useState(0); // 0…n, where n is the copy of the first banner
+// Phone hero, no text: the DMG factory video plays first, then the banners slide every 3 s inside a
+// framed box (shown whole, never cropped), looping through the banners. Browsers only autoplay
+// muted video, so sound turns on at the visitor's first tap anywhere (or with the speaker button).
+// Only `transform` animates, and everything stops while the hero is off screen.
+export function HeroSlider({ banners }: { banners: Banner[] }) {
+  const n = banners.length; // slides: 0 = video, 1…n = banners, n+1 = copy of banner 1 (seamless loop)
+  const [i, setI] = useState(0);
   const [animate, setAnimate] = useState(true);
   const [paused, setPaused] = useState(false);
   const [inView, setInView] = useState(true);
+  const [phone, setPhone] = useState(false);
+  const [muted, setMuted] = useState(true);
   const root = useRef<HTMLElement>(null);
+  const frame = useRef<HTMLIFrameElement>(null);
   const touchX = useRef<number | null>(null);
+
+  const yt = (func: string, args: unknown[] = []) =>
+    frame.current?.contentWindow?.postMessage(JSON.stringify({ event: "command", func, args }), YT_ORIGIN);
+
+  // The video player only exists on phones (this component is hidden, not unmounted, on desktop).
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const update = () => setPhone(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     const el = root.current;
@@ -35,42 +48,75 @@ export function HeroSlider({ banners: uploaded }: { banners: Banner[] }) {
     return () => io.disconnect();
   }, []);
 
+  // First tap anywhere on the page turns the sound on.
   useEffect(() => {
-    if (n < 2 || paused || !inView || watch) return;
+    if (!phone) return;
+    const on = () => {
+      yt("unMute");
+      yt("setVolume", [100]);
+      setMuted(false);
+    };
+    document.addEventListener("pointerdown", on, { once: true });
+    return () => document.removeEventListener("pointerdown", on);
+  }, [phone]);
+
+  // When the video ends, move on to the banners.
+  useEffect(() => {
+    const onMsg = (e: MessageEvent) => {
+      if (e.origin !== YT_ORIGIN || typeof e.data !== "string") return;
+      try {
+        const d = JSON.parse(e.data);
+        const state = d.event === "onStateChange" ? d.info : d.info?.playerState;
+        if (state === 0) {
+          setAnimate(true);
+          setI((x) => (x === 0 ? 1 : x));
+        }
+      } catch {}
+    };
+    window.addEventListener("message", onMsg);
+    return () => window.removeEventListener("message", onMsg);
+  }, []);
+
+  // Play only while the video slide is showing and the hero is on screen.
+  useEffect(() => {
+    if (!phone) return;
+    yt(i === 0 && inView ? "playVideo" : "pauseVideo");
+  }, [i, inView, phone]);
+
+  // Banners advance every 3 s; the video slide waits for the video to end (or a swipe).
+  useEffect(() => {
+    if (i === 0 || n < 1 || paused || !inView) return;
     const t = setTimeout(() => {
       setAnimate(true);
       setI((x) => x + 1);
     }, INTERVAL);
     return () => clearTimeout(t);
-  }, [i, n, paused, inView, watch]);
+  }, [i, n, paused, inView]);
 
-  // After sliding onto the copy of the first banner, jump back to the real one without animating.
+  // After sliding onto the copy of banner 1, jump back to the real one without animating.
   useEffect(() => {
-    if (i !== n || n < 2) return;
+    if (i !== n + 1) return;
     const t = setTimeout(() => {
       setAnimate(false);
-      setI(0);
+      setI(1);
     }, SLIDE_MS);
     return () => clearTimeout(t);
   }, [i, n]);
 
+  const count = n + 1;
+  const dot = i > n ? 1 : i;
   const go = (to: number) => {
     setAnimate(true);
-    setI(((to % n) + n) % n);
+    setI(((to % count) + count) % count);
   };
-
-  if (!uploaded.length) return <BrandBanner />;
-  const slides = n > 1 ? [...banners, banners[0]] : banners;
-  const dot = i % n;
+  const slides: (Banner | null)[] = [null, ...banners, ...(n ? [banners[0]] : [])];
 
   return (
     <section
       ref={root}
       aria-roledescription="carousel"
-      aria-label="Offers and highlights"
+      aria-label="Dhaka Machine Ghar video and offers"
       className="relative rounded-2xl bg-white p-1.5 shadow-[0_10px_28px_-14px_rgba(16,24,40,0.45)] ring-1 ring-black/5 lux:bg-lux-800 lux:ring-white/10"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
       onTouchStart={(e) => {
         touchX.current = e.touches[0].clientX;
         setPaused(true);
@@ -83,74 +129,85 @@ export function HeroSlider({ banners: uploaded }: { banners: Banner[] }) {
         touchX.current = null;
       }}
     >
-      <div className="aspect-video overflow-hidden rounded-xl bg-[#0e1a33] ring-1 ring-black/10">
+      <div className="relative aspect-video overflow-hidden rounded-xl bg-[#0e1a33] ring-1 ring-black/10">
         <ul
           className="flex h-full"
           style={{ transform: `translateX(-${i * 100}%)`, transition: animate ? `transform ${SLIDE_MS}ms cubic-bezier(0.4, 0, 0.2, 1)` : "none" }}
         >
           {slides.map((b, idx) => {
-            const img = (
-              <Image
-                src={b.image}
-                alt={idx === 0 ? `${brand.name} banner` : ""}
-                fill
-                priority={idx === 0}
-                sizes="(min-width: 1024px) 75vw, 100vw"
-                className="object-contain"
-              />
-            );
-            const hidden = idx % n !== dot;
+            const hidden = idx !== i;
             return (
-              <li key={`${b.id}-${idx}`} className="relative h-full w-full shrink-0" aria-hidden={hidden || idx === n}>
-                {b.id === "video" ? (
-                  <button type="button" onClick={() => setWatch(true)} tabIndex={hidden ? -1 : undefined} aria-label="Play the Dhaka Machine Ghar video" className="absolute inset-0">
-                    <Image src={b.image} alt="" fill sizes="100vw" className="scale-[1.34] object-cover" />
-                    <span className="absolute inset-0 bg-black/25" />
-                    <span className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#ff0033] text-white shadow-lg ring-4 ring-white/30">
-                      <Play className="ml-0.5 h-6 w-6 fill-current" />
-                    </span>
-                    <span className="absolute bottom-2 left-3 rounded bg-black/60 px-2 py-0.5 text-[11px] font-bold text-white">Factory Video</span>
-                  </button>
-                ) : b.link ? (
-                  <Link href={b.link} tabIndex={hidden ? -1 : undefined} className="absolute inset-0">
-                    {img}
-                  </Link>
+              <li key={b ? `${b.id}-${idx}` : "video"} className="relative h-full w-full shrink-0 overflow-hidden bg-black" aria-hidden={hidden}>
+                {!b ? (
+                  phone && (
+                    // Oversized so YouTube's title/controls fall outside the box; taps pass through.
+                    <iframe
+                      ref={frame}
+                      src={`${YT_ORIGIN}/embed/${dmgVideo.id}?${new URLSearchParams({
+                        autoplay: "1",
+                        mute: "1",
+                        playsinline: "1",
+                        controls: "0",
+                        rel: "0",
+                        modestbranding: "1",
+                        iv_load_policy: "3",
+                        disablekb: "1",
+                        enablejsapi: "1",
+                      })}`}
+                      title="Dhaka Machine Ghar video"
+                      allow="autoplay; encrypted-media"
+                      tabIndex={-1}
+                      onLoad={() => frame.current?.contentWindow?.postMessage(JSON.stringify({ event: "listening" }), YT_ORIGIN)}
+                      className="pointer-events-none absolute left-1/2 top-1/2 h-[125%] w-[125%] -translate-x-1/2 -translate-y-1/2 border-0"
+                    />
+                  )
                 ) : (
-                  img
+                  <BannerImage b={b} first={idx === 1} hidden={hidden} />
                 )}
               </li>
             );
           })}
         </ul>
+
+        {i === 0 && phone && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              const next = !muted;
+              yt(next ? "mute" : "unMute");
+              if (!next) yt("setVolume", [100]);
+              setMuted(next);
+            }}
+            aria-label={muted ? "Turn sound on" : "Mute"}
+            className="absolute bottom-2 right-2 flex h-9 w-9 items-center justify-center rounded-full bg-black/55 text-white ring-1 ring-white/25"
+          >
+            {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+          </button>
+        )}
       </div>
 
-      {n > 1 && (
-        <div className="flex justify-center gap-1.5 pb-0.5 pt-2">
-          {banners.map((b, idx) => (
-            <button
-              key={b.id}
-              onClick={() => go(idx)}
-              aria-label={`Banner ${idx + 1}`}
-              className={`h-1.5 w-1.5 rounded-full transition-[transform,background-color] duration-300 ${idx === dot ? "mx-1.5 scale-x-[3] bg-brand-700 lux:bg-gold-400" : "bg-gray-300 lux:bg-white/25"}`}
-            />
-          ))}
-        </div>
-      )}
-      {watch && <YouTubeModal id={dmgVideo.id} onClose={() => setWatch(false)} />}
+      <div className="flex justify-center gap-1.5 pb-0.5 pt-2">
+        {Array.from({ length: count }, (_, idx) => (
+          <button
+            key={idx}
+            onClick={() => go(idx)}
+            aria-label={idx === 0 ? "Video" : `Banner ${idx}`}
+            className={`h-1.5 w-1.5 rounded-full transition-[transform,background-color] duration-300 ${idx === dot ? "mx-1.5 scale-x-[3] bg-brand-700 lux:bg-gold-400" : "bg-gray-300 lux:bg-white/25"}`}
+          />
+        ))}
+      </div>
     </section>
   );
 }
 
-// Shown until the admin uploads banners.
-function BrandBanner() {
-  return (
-    <section className="relative aspect-[2/1] overflow-hidden rounded-2xl bg-gradient-to-br from-ink via-brand-900 to-brand-700 shadow-lg max-md:rounded-md">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:16px_16px]" />
-      <div className="relative flex h-full flex-col items-center justify-center gap-2 px-6 text-center text-white">
-        <Image src="/brand/dmg-logo-on-dark.png" alt={`${brand.name} logo`} width={1057} height={400} priority className="h-12 w-auto sm:h-20" />
-        <p className="text-sm font-bold uppercase tracking-[0.25em] text-white/80 sm:text-base">{brand.name}</p>
-        <p className="text-xs text-white/60 sm:text-sm">Power Press &amp; Workshop Machinery · Keraniganj, Dhaka</p>
-      </div>
-    </section>
+function BannerImage({ b, first, hidden }: { b: Banner; first: boolean; hidden: boolean }) {
+  const img = <Image src={b.image} alt={first ? `${brand.name} banner` : ""} fill sizes="100vw" className="object-contain" />;
+  return b.link ? (
+    <Link href={b.link} tabIndex={hidden ? -1 : undefined} className="absolute inset-0">
+      {img}
+    </Link>
+  ) : (
+    img
   );
 }
