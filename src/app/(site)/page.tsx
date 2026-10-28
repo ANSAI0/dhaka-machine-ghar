@@ -4,7 +4,7 @@ import { ArrowRight, BadgeCheck, FileText, Phone, ShieldCheck, Truck, Wallet } f
 import { productsIn, type Product } from "@/lib/catalog";
 import { getCatalog } from "@/lib/catalog-server";
 import { heroImages } from "@/lib/hero-images";
-import { getHeroBanners, getSite } from "@/lib/settings";
+import { getSite } from "@/lib/settings";
 import type { SiteInfo } from "@/lib/site";
 import { CategoryIcon } from "@/components/category-icon";
 import { DesktopHero } from "@/components/desktop-hero";
@@ -29,7 +29,7 @@ const trust = (site: SiteInfo) => [
 ];
 
 export default async function Home() {
-  const [catalog, site, banners] = await Promise.all([getCatalog(), getSite(), getHeroBanners()]);
+  const [catalog, site] = await Promise.all([getCatalog(), getSite()]);
   const { categories, products } = catalog;
   // Ribbon: featured first, then the rest — photographed machines only, one per photo.
   const seen = new Set<string>();
@@ -43,7 +43,7 @@ export default async function Home() {
 
       <div className="min-w-0 flex-1 space-y-6 sm:space-y-8">
         <div className="md:hidden">
-          <HeroSlider banners={banners} />
+          <HeroSlider />
         </div>
         <div className="hidden md:block">
           <DesktopHero />

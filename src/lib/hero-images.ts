@@ -15,5 +15,3 @@ export const heroVideo = {
   source: "https://commons.wikimedia.org/wiki/File:Drilling_a_gear_wheel_on_a_turning_machine.WebM",
 };
 
-// The DMG factory video on the company YouTube channel (phone hero).
-export const dmgVideo = { id: "LCpMgWpwfMI", url: "https://www.youtube.com/watch?v=LCpMgWpwfMI" };
