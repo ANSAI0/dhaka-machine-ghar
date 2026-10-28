@@ -4,7 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { Banner } from "@/lib/settings";
+import { Play } from "lucide-react";
+import { dmgVideo } from "@/lib/hero-images";
 import { brand } from "@/lib/site";
+import { YouTubeModal } from "./youtube";
 
 const INTERVAL = 3000;
 const SLIDE_MS = 500;
@@ -12,8 +15,11 @@ const SLIDE_MS = 500;
 // App-style banner carousel: images slide inside a framed box and are shown whole (never cropped): admin-uploaded images slide right-to-left every 3 s, loop
 // seamlessly (a copy of the first banner sits at the end), swipe on phones, and stop while off
 // screen. Only `transform` animates, so it stays smooth while the page scrolls.
-export function HeroSlider({ banners }: { banners: Banner[] }) {
+export function HeroSlider({ banners: uploaded }: { banners: Banner[] }) {
+  // The factory video rides along as the last slide; tapping it opens the player.
+  const banners: Banner[] = [...uploaded, { id: "video", image: dmgVideo.thumb, link: "#video" }];
   const n = banners.length;
+  const [watch, setWatch] = useState(false);
   const [i, setI] = useState(0); // 0…n, where n is the copy of the first banner
   const [animate, setAnimate] = useState(true);
   const [paused, setPaused] = useState(false);
@@ -30,13 +36,13 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
   }, []);
 
   useEffect(() => {
-    if (n < 2 || paused || !inView) return;
+    if (n < 2 || paused || !inView || watch) return;
     const t = setTimeout(() => {
       setAnimate(true);
       setI((x) => x + 1);
     }, INTERVAL);
     return () => clearTimeout(t);
-  }, [i, n, paused, inView]);
+  }, [i, n, paused, inView, watch]);
 
   // After sliding onto the copy of the first banner, jump back to the real one without animating.
   useEffect(() => {
@@ -53,7 +59,7 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
     setI(((to % n) + n) % n);
   };
 
-  if (!n) return <BrandBanner />;
+  if (!uploaded.length) return <BrandBanner />;
   const slides = n > 1 ? [...banners, banners[0]] : banners;
   const dot = i % n;
 
@@ -96,7 +102,16 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
             const hidden = idx % n !== dot;
             return (
               <li key={`${b.id}-${idx}`} className="relative h-full w-full shrink-0" aria-hidden={hidden || idx === n}>
-                {b.link ? (
+                {b.id === "video" ? (
+                  <button type="button" onClick={() => setWatch(true)} tabIndex={hidden ? -1 : undefined} aria-label="Play the Dhaka Machine Ghar video" className="absolute inset-0">
+                    <Image src={b.image} alt="" fill sizes="100vw" className="scale-[1.34] object-cover" />
+                    <span className="absolute inset-0 bg-black/25" />
+                    <span className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#ff0033] text-white shadow-lg ring-4 ring-white/30">
+                      <Play className="ml-0.5 h-6 w-6 fill-current" />
+                    </span>
+                    <span className="absolute bottom-2 left-3 rounded bg-black/60 px-2 py-0.5 text-[11px] font-bold text-white">Factory Video</span>
+                  </button>
+                ) : b.link ? (
                   <Link href={b.link} tabIndex={hidden ? -1 : undefined} className="absolute inset-0">
                     {img}
                   </Link>
@@ -121,6 +136,7 @@ export function HeroSlider({ banners }: { banners: Banner[] }) {
           ))}
         </div>
       )}
+      {watch && <YouTubeModal id={dmgVideo.id} onClose={() => setWatch(false)} />}
     </section>
   );
 }

@@ -7,10 +7,9 @@ export const heroImages = {
   hall: { src: "/hero/lathe-hall.webp", credit: "Hilda Raphael · CC0 · Wikimedia Commons", source: "https://commons.wikimedia.org/wiki/File:Mechanical_engineering_workshop_at_Arusha_Technical_College,_Tanzania.jpg" },
 } as const;
 
-// Looping hero clip (12 s, muted) cut from a CC0 Commons video.
-export const heroVideo = {
-  src: "/hero/lathe-drill.mp4",
-  poster: "/hero/lathe-drill-poster.webp",
-  credit: "Musicaloris · CC0 · Wikimedia Commons",
-  source: "https://commons.wikimedia.org/wiki/File:Drilling_a_gear_wheel_on_a_turning_machine.WebM",
+// The DMG factory video on the company YouTube channel.
+export const dmgVideo = {
+  id: "LCpMgWpwfMI",
+  thumb: "https://i.ytimg.com/vi/LCpMgWpwfMI/hqdefault.jpg",
+  url: "https://www.youtube.com/watch?v=LCpMgWpwfMI",
 };
