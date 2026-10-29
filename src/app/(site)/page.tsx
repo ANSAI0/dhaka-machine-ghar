@@ -15,10 +15,10 @@ import { ProductMarquee } from "@/components/product-marquee";
 import { WhatsappIcon } from "@/components/brand-icons";
 
 const offers = (site: SiteInfo) => [
-  { title: "Call Us", sub: site.phone, href: `tel:${site.phoneIntl}`, Icon: Phone, tint: "bg-accent-50 text-accent-600 ring-accent-100" },
-  { title: "WhatsApp", sub: "Chat with photos", href: `https://wa.me/${site.whatsappIntl}`, Icon: WhatsappIcon, tint: "bg-[#e8f8ee] text-[#128c4a] ring-[#c9eed7]" },
-  { title: "Custom Build", sub: "Made to order", href: "/quotation", Icon: FileText, tint: "bg-steel-50 text-steel-600 ring-steel-100" },
-  { title: "Track Order", sub: "Live updates", href: "/track", Icon: Truck, tint: "bg-brand-50 text-brand-600 ring-brand-100" },
+  { title: "Call Us", short: "Call", sub: site.phone, href: `tel:${site.phoneIntl}`, Icon: Phone, tint: "bg-accent-50 text-accent-600 ring-accent-100", grad: "from-accent-500 to-accent-700" },
+  { title: "WhatsApp", short: "WhatsApp", sub: "Chat with photos", href: `https://wa.me/${site.whatsappIntl}`, Icon: WhatsappIcon, tint: "bg-[#e8f8ee] text-[#128c4a] ring-[#c9eed7]", grad: "from-[#2fd96b] to-[#128c4a]" },
+  { title: "Custom Build", short: "Custom", sub: "Made to order", href: "/quotation", Icon: FileText, tint: "bg-steel-50 text-steel-600 ring-steel-100", grad: "from-steel-500 to-steel-700" },
+  { title: "Track Order", short: "Track", sub: "Live updates", href: "/track", Icon: Truck, tint: "bg-brand-50 text-brand-600 ring-brand-100", grad: "from-brand-500 to-brand-800" },
 ];
 
 const trust = (site: SiteInfo) => [
@@ -50,13 +50,25 @@ export default async function Home() {
         </div>
 
 
-        {/* Quick actions */}
-        <section className="grid grid-cols-2 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm xl:grid-cols-4 max-md:gap-2.5 max-md:overflow-visible max-md:border-0 max-md:bg-transparent max-md:shadow-none lux:border-white/[0.07] lux:bg-lux-800/80 lux:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)]">
+        {/* Phones: one row of four premium icons, short labels only */}
+        <section className="grid grid-cols-4 gap-1 rounded-2xl border border-gray-100 bg-white px-2 py-3.5 shadow-[0_12px_28px_-16px_rgba(16,24,40,0.35)] md:hidden lux:border-white/[0.08] lux:bg-lux-800">
+          {offers(site).map(({ title, short, href, Icon, grad }) => (
+            <a key={title} href={href} aria-label={title} className="flex flex-col items-center gap-2 active:scale-95">
+              <span className={`relative flex h-[52px] w-[52px] items-center justify-center rounded-2xl bg-gradient-to-br ${grad} text-white shadow-[0_8px_18px_-8px_rgba(16,24,40,0.55),inset_0_1px_0_rgba(255,255,255,0.35)] lux:bg-none lux:bg-gold-gradient lux:text-lux-950`}>
+                <Icon className="h-[22px] w-[22px]" strokeWidth={2} />
+              </span>
+              <span className="text-[11px] font-semibold tracking-wide text-gray-700 lux:text-white/80">{short}</span>
+            </a>
+          ))}
+        </section>
+
+        {/* Quick actions (tablet / desktop) */}
+        <section className="grid grid-cols-2 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm max-md:hidden xl:grid-cols-4 lux:border-white/[0.07] lux:bg-lux-800/80 lux:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)]">
           {offers(site).map(({ title, sub, href, Icon, tint }, idx) => (
             <a
               key={title}
               href={href}
-              className={`group flex items-center gap-3 p-3.5 transition-colors hover:bg-gray-50 sm:p-5 ${idx % 2 === 0 ? "border-r" : "xl:border-r"} ${idx < 2 ? "border-b xl:border-b-0" : ""} border-gray-100 last:border-r-0 max-md:rounded-xl max-md:border max-md:bg-white max-md:p-3 max-md:shadow-[0_6px_16px_-10px_rgba(16,24,40,0.35)] lux:border-white/[0.06] lux:bg-lux-800 lux:active:bg-white/[0.04]`}
+              className={`group flex items-center gap-3 p-3.5 transition-colors hover:bg-gray-50 sm:p-5 ${idx % 2 === 0 ? "border-r" : "xl:border-r"} ${idx < 2 ? "border-b xl:border-b-0" : ""} border-gray-100 last:border-r-0 lux:border-white/[0.06] lux:bg-lux-800 lux:active:bg-white/[0.04]`}
             >
               <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1 transition-transform duration-300 group-hover:scale-110 sm:h-12 sm:w-12 ${tint} lux:bg-gold-gradient lux:text-lux-950 lux:ring-0 lux:shadow-[0_6px_16px_-6px_rgba(214,174,85,0.55)]`}>
                 <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
