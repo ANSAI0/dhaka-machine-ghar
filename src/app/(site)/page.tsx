@@ -80,7 +80,7 @@ export default async function Home() {
                 <Link key={c.slug} href={`/category/${c.slug}`} className="group flex w-[27%] shrink-0 snap-start flex-col items-center gap-2 text-center sm:w-auto">
                   <span className="relative block aspect-square w-full overflow-hidden rounded-2xl border border-gray-100 bg-studio shadow-sm transition-shadow group-hover:shadow-md lux:border-white/10 lux:bg-lux-700 lux:bg-none">
                     {img ? (
-                      <Image src={img} alt="" fill sizes="(min-width: 640px) 160px, 30vw" className="object-contain p-1.5 drop-shadow-[0_8px_8px_rgba(15,23,42,0.16)] transition-transform duration-300 group-hover:scale-105" />
+                      <Image src={img} alt="" fill sizes="(min-width: 640px) 160px, 30vw" className="object-contain p-1 drop-shadow-[0_8px_8px_rgba(15,23,42,0.16)] transition-transform duration-300 group-hover:scale-105" />
                     ) : (
                       <span className="flex h-full w-full items-center justify-center text-brand-600 lux:text-gold-300">
                         <CategoryIcon name={c.icon} className="h-9 w-9" strokeWidth={1.5} />

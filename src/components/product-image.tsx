@@ -13,7 +13,7 @@ export function ProductImage({ product, sizes, priority, cover = false }: { prod
         fill
         sizes={sizes}
         priority={priority}
-        className={`transition-transform duration-500 group-hover:scale-105 ${cover ? "object-cover" : "object-contain p-3 drop-shadow-[0_12px_14px_rgba(15,23,42,0.18)]"}`}
+        className={`transition-transform duration-500 group-hover:scale-105 ${cover ? "object-cover" : "object-contain p-1.5 drop-shadow-[0_12px_14px_rgba(15,23,42,0.18)]"}`}
       />
     );
   }
