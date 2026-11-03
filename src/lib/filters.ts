@@ -88,6 +88,9 @@ export function applyFilters(items: Product[], f: Filters): Product[] {
 // Counts per option, so the sidebar can show "(3)" next to each choice.
 export function facetCounts<K extends keyof Product>(items: Product[], key: K) {
   const m = new Map<string, number>();
-  for (const p of items) m.set(String(p[key]), (m.get(String(p[key])) ?? 0) + 1);
+  for (const p of items) {
+    const v = String(p[key] ?? "");
+    if (v) m.set(v, (m.get(v) ?? 0) + 1);
+  }
   return m;
 }

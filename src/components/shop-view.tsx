@@ -197,14 +197,19 @@ function FilterPanel({ items, category, f, toggle, update }: PanelProps) {
             <Check key={c} label={conditionLabels[c]} count={condCounts.get(c)} checked={f.condition.includes(c)} onChange={() => toggle("condition", c)} />
           ))}
       </Group>
+      {voltCounts.size > 0 && (
       <Group title="Voltage / Power">
         {[...voltCounts].map(([v, count]) => (
           <Check key={v} label={v} count={count} checked={f.voltage.includes(v)} onChange={() => toggle("voltage", v)} />
         ))}
       </Group>
+      )}
+      {items.some((p) => p.price > 0) && (
       <Group title="Price (৳)">
         <PriceRange key={`${f.min}-${f.max}`} min={f.min} max={f.max} onApply={(min, max) => update({ min, max })} />
       </Group>
+      )}
+      {capCounts.size > 0 && (
       <Group title="Capacity">
         <div className="max-h-56 space-y-0.5 overflow-y-auto pr-1">
           {[...capCounts]
@@ -214,6 +219,7 @@ function FilterPanel({ items, category, f, toggle, update }: PanelProps) {
             ))}
         </div>
       </Group>
+      )}
     </div>
   );
 }

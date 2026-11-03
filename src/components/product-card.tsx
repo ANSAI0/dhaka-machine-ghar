@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { Check, Plus } from "lucide-react";
 import { discountPercent, type Product } from "@/lib/catalog";
 import { flyToCart } from "@/lib/fly-to-cart";
-import { formatBDT } from "@/lib/site";
+import { formatBDT, priceText } from "@/lib/site";
 import { useCart } from "./cart";
 import { ProductImage } from "./product-image";
 
@@ -31,7 +31,7 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="mt-auto flex items-end justify-between gap-1.5 px-2.5 pb-3 pt-2">
         <div className="min-w-0 leading-tight">
           {product.oldPrice && <p className="text-[10px] text-gray-400 line-through md:text-[11px]">{formatBDT(product.oldPrice)}</p>}
-          <p className="whitespace-nowrap text-[15px] font-bold tracking-tight text-brand-700 md:text-[15px] lux:text-gold-300">{formatBDT(product.price)}</p>
+          <p className="whitespace-nowrap text-[15px] font-bold tracking-tight text-brand-700 md:text-[15px] lux:text-gold-300">{priceText(product.price)}</p>
         </div>
         <button
           type="button"

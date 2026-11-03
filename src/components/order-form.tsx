@@ -5,7 +5,7 @@ import { useState } from "react";
 import { CheckCircle2, Loader2, Minus, Plus } from "lucide-react";
 import type { Product } from "@/lib/catalog";
 import { districts, paymentLabels, validateOrder, type OrderInput, type PaymentPlan } from "@/lib/orders";
-import { formatBDT } from "@/lib/site";
+import { formatBDT, priceText } from "@/lib/site";
 import { useSite } from "./site-provider";
 import { trackConversion } from "@/lib/analytics";
 import { useCustomer } from "./customer-provider";
@@ -143,11 +143,11 @@ export function OrderForm({ lines, source, qtySlot, onPlaced }: Props) {
         {lines.map((l) => (
           <p key={l.product.slug} className="flex justify-between gap-3">
             <span className="text-gray-600">{l.product.name} × {l.qty}</span>
-            <strong className="shrink-0">{formatBDT(l.product.price * l.qty)}</strong>
+            <strong className="shrink-0">{priceText(l.product.price * l.qty)}</strong>
           </p>
         ))}
         {lines.length > 1 && (
-          <p className="flex justify-between border-t border-gray-200 pt-2"><span className="font-semibold text-gray-700">মোট</span><strong>{formatBDT(total)}</strong></p>
+          <p className="flex justify-between border-t border-gray-200 pt-2"><span className="font-semibold text-gray-700">মোট</span><strong>{priceText(total)}</strong></p>
         )}
         <p className="mt-1 flex justify-between border-t border-gray-200 pt-2 text-base">
           <span className="font-semibold text-gray-800">এখন পরিশোধ</span>
@@ -215,7 +215,7 @@ export function ProductOrderForm({ product, source = "product-page" }: { product
           <span className="mb-1 block text-sm font-semibold text-gray-700">পরিমাণ</span>
           <div className="flex items-center gap-3">
             <QtyStepper value={qty} onChange={setQty} />
-            <span className="text-sm text-gray-600">মোট: <strong className="text-brand-700">{formatBDT(product.price * qty)}</strong></span>
+            <span className="text-sm text-gray-600">মোট: <strong className="text-brand-700">{priceText(product.price * qty)}</strong></span>
           </div>
         </div>
       }

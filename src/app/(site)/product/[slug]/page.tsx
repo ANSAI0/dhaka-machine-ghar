@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { BadgeCheck, CheckCircle2, Phone, ShieldCheck, Truck, Wallet } from "lucide-react";
 import { discountPercent, findCategory, findProduct } from "@/lib/catalog";
 import { getCatalog } from "@/lib/catalog-server";
-import { formatBDT } from "@/lib/site";
+import { formatBDT, priceText } from "@/lib/site";
 import { getSite } from "@/lib/settings";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { ConditionBadge } from "@/components/condition-badge";
@@ -26,8 +26,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const p = findProduct(await getCatalog(), (await params).slug);
   if (!p) return {};
   return {
-    title: `${p.name} — ${formatBDT(p.price)}`,
-    description: `${p.nameBn}. ${p.short} Price in Bangladesh: ${formatBDT(p.price)}.`,
+    title: p.price > 0 ? `${p.name} — ${formatBDT(p.price)}` : p.name,
+    description: `${p.nameBn}. ${p.short} Price in Bangladesh: ${priceText(p.price)}.`,
     openGraph: { images: p.image ? [p.image] : ["/brand/dmg-logo.jpg"] },
   };
 }
@@ -86,7 +86,7 @@ export default async function ProductPage({ params }: Params) {
           </div>
 
           <div className="flex flex-wrap items-end gap-3 border-b border-gray-100 pb-4">
-            <span className="text-3xl font-bold text-accent-600">{formatBDT(p.price)}</span>
+            <span className="text-3xl font-bold text-accent-600">{p.price > 0 ? formatBDT(p.price) : "দাম জানতে কল করুন"}</span>
             {p.oldPrice && <span className="pb-1 text-lg text-gray-400 line-through">{formatBDT(p.oldPrice)}</span>}
             {p.offer && (
               <span className="mb-1 rounded-full bg-accent-600 px-3 py-1 text-xs font-bold text-white">
@@ -99,9 +99,9 @@ export default async function ProductPage({ params }: Params) {
           <div className="flex items-center justify-between text-sm">
             <span className="flex items-center gap-1.5 font-semibold text-brand-700">
               <span className="h-2 w-2 animate-pulse rounded-full bg-brand-500" />
-              {p.condition === "new" && p.brand === site.name ? "অর্ডারে তৈরি (Made to order)" : "স্টকে আছে (In Stock)"}
+              {p.category === "power-press" ? "অর্ডারে তৈরি (Made to order)" : "স্টকে আছে (In Stock)"}
             </span>
-            <span className="text-gray-500">Capacity: <strong className="text-gray-800">{p.capacity}</strong></span>
+            {p.capacity && <span className="text-gray-500">Capacity: <strong className="text-gray-800">{p.capacity}</strong></span>}
           </div>
 
           <p className="text-sm leading-relaxed text-gray-600">{p.short}</p>
@@ -117,7 +117,13 @@ export default async function ProductPage({ params }: Params) {
           <div className="flex items-center gap-3 rounded-xl border border-steel-100 bg-steel-50 p-3">
             <Wallet className="h-8 w-8 shrink-0 text-steel-600" />
             <p className="text-sm text-gray-700">
-              মাত্র <strong className="text-steel-700">{formatBDT(advance)}</strong> ({site.advancePercent}%) অগ্রিম দিয়ে বুকিং করুন — bKash / Nagad / Bank
+              {p.price > 0 ? (
+                <>
+                  মাত্র <strong className="text-steel-700">{formatBDT(advance)}</strong> ({site.advancePercent}%) অগ্রিম দিয়ে বুকিং করুন — bKash / Nagad / Bank
+                </>
+              ) : (
+                <>দাম ও ডেলিভারির সময় জানতে কল বা WhatsApp করুন — {site.advancePercent}% অগ্রিমে বুকিং (bKash / Nagad / Bank)</>
+              )}
             </p>
           </div>
 
@@ -162,7 +168,7 @@ export default async function ProductPage({ params }: Params) {
                   <p className="mb-5 text-sm text-gray-500">{p.name}</p>
                   <table className="w-full overflow-hidden rounded-xl text-sm">
                     <tbody>
-                      {[["Model / Type", p.name] as [string, string], ["Brand", p.brand] as [string, string], ...p.specs, ["Power supply", p.voltage] as [string, string], ["Condition", p.condition === "new" ? "Brand New (Factory Made)" : "Foreign Reconditioned"] as [string, string]].map(([k, v], i) => (
+                      {[["Model / Type", p.name] as [string, string], ["Brand", p.brand] as [string, string], ...p.specs, ...(p.voltage ? [["Power supply", p.voltage] as [string, string]] : []), ["Condition", p.condition === "new" ? "Brand New (Factory Made)" : "Foreign Reconditioned"] as [string, string]].map(([k, v], i) => (
                         <tr key={k} className={i % 2 ? "bg-white" : "bg-gray-50"}>
                           <th scope="row" className="w-2/5 p-3 text-left font-semibold text-gray-600">{k}</th>
                           <td className="p-3 font-medium text-gray-900">{v}</td>
@@ -173,11 +179,15 @@ export default async function ProductPage({ params }: Params) {
                 </div>
               ),
             },
-            {
-              id: "roi",
-              label: "লাভের হিসাব (ROI)",
-              content: <RoiCalculator product={p} />,
-            },
+            ...(p.roi
+              ? [
+                  {
+                    id: "roi",
+                    label: "লাভের হিসাব (ROI)",
+                    content: <RoiCalculator product={p} />,
+                  },
+                ]
+              : []),
             {
               id: "video",
               label: "ভিডিও",

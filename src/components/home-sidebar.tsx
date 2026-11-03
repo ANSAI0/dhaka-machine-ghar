@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BadgePercent, ChevronRight, Flame, LayoutGrid } from "lucide-react";
 import { discountPercent, productsIn, type Catalog } from "@/lib/catalog";
-import { formatBDT } from "@/lib/site";
+import { formatBDT, priceText } from "@/lib/site";
 import { CategoryIcon } from "./category-icon";
 
 const endsLabel = (iso: string) => new Date(iso).toLocaleDateString("bn-BD", { day: "numeric", month: "short", timeZone: "Asia/Dhaka" });
@@ -78,7 +78,7 @@ export function HomeSidebar({ catalog }: { catalog: Catalog }) {
                     {p.offer?.title && <span className="mb-0.5 inline-block rounded bg-accent-50 px-1.5 py-px text-[10px] font-bold text-accent-700">{p.offer.title}</span>}
                     <span className="line-clamp-2 text-[13px] font-semibold leading-snug text-gray-800 group-hover:text-brand-700">{p.nameBn}</span>
                     <span className="mt-0.5 flex items-baseline gap-1.5">
-                      <span className="text-sm font-bold text-accent-600">{formatBDT(p.price)}</span>
+                      <span className="text-sm font-bold text-accent-600">{priceText(p.price)}</span>
                       {p.oldPrice && <span className="text-[10px] text-gray-400 line-through">{formatBDT(p.oldPrice)}</span>}
                     </span>
                     {p.offer?.endsAt && <span className="block text-[10px] text-gray-400">শেষ: {endsLabel(p.offer.endsAt)}</span>}

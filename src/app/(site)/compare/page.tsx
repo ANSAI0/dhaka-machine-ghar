@@ -4,7 +4,7 @@ import Link from "next/link";
 import { GitCompareArrows, ShoppingCart, X } from "lucide-react";
 import type { Product } from "@/lib/catalog";
 import { useCatalog } from "@/components/catalog-provider";
-import { formatBDT } from "@/lib/site";
+import { priceText } from "@/lib/site";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { PageHero } from "@/components/page-hero";
 import { useCart } from "@/components/cart";
@@ -21,7 +21,7 @@ export default function ComparePage() {
   // Union of spec labels, in first-seen order, so each row lines up across machines.
   const specKeys = [...new Set(items.flatMap((p) => p.specs.map(([k]) => k)))];
   const rows: { label: string; value: (p: Product) => React.ReactNode }[] = [
-    { label: "Price", value: (p) => <span className="font-bold text-accent-600">{formatBDT(p.price)}</span> },
+    { label: "Price", value: (p) => <span className="font-bold text-accent-600">{priceText(p.price)}</span> },
     { label: "Condition", value: (p) => <ConditionBadge condition={p.condition} /> },
     { label: "Brand", value: (p) => p.brand },
     { label: "Capacity", value: (p) => p.capacity },

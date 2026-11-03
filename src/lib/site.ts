@@ -50,3 +50,5 @@ export function buildSite(e: EditableSite): SiteInfo {
 }
 
 export const formatBDT = (n: number) => "৳" + n.toLocaleString("en-IN");
+// Products without a set price (0) are quoted on request.
+export const priceText = (n: number) => (n > 0 ? formatBDT(n) : "Call for price");

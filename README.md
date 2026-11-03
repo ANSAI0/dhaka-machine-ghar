@@ -40,7 +40,7 @@ Defined in `src/app/globals.css` (`@theme`).
 
 ## Offers & product photos
 - Admin → Offers: pick a machine, offer price (must be below the regular price), optional title and start/end dates. Live offers appear in the home sidebar's "অফার চলছে" box (empty → "এই মুহূর্তে কোনো অফার নেই"), on the product card/page, and are charged at checkout (`effectivePrice` in `lib/offers.ts`).
-- Seeded product photos are freely licensed Wikimedia Commons images (`public/catalog/`, credits in `prisma/seed-data/image-credits.json`), marked "প্রতীকী ছবি" with attribution on the product page. Uploading a real photo in Admin → Products clears the credit.
+- Products are DMG's own machines and photos (`public/products/`), defined in `prisma/seed-data/catalog.ts`. `npx tsx scripts/sync-catalog.ts` replaces the whole catalog with that file. Price 0 shows as "Call for price"; set real prices in Admin → Products.
 
 ## Roadmap
 - [x] **1. Setup, theme & home page** — Medivila-style layout re-themed to logo colors, mega menu, category sidebar, product grid, cart context, WhatsApp/call buttons

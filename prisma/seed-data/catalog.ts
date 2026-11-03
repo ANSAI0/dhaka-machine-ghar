@@ -1,5 +1,5 @@
-// Initial catalog, loaded into the database by `npm run db:seed`.
-// After that the admin panel is the source of truth — edit products there, not here.
+// The DMG catalog: the owner's own products and photos (public/products). Loaded by `npm run db:seed`
+// and scripts/sync-catalog.ts; afterwards the admin panel is the source of truth.
 import type { Category, Product } from "../../src/lib/catalog";
 
 export type SeedCategory = Omit<Category, "subcategories"> & { subcategories: { slug: string; name: string }[] };
@@ -7,653 +7,1655 @@ export type SeedProduct = Omit<Product, "icon" | "offer">;
 
 export const seedCategories: SeedCategory[] = [
   {
-    slug: "power-press",
-    name: "Power Press Machines",
-    nameBn: "পাওয়ার প্রেস মেশিন",
-    icon: "Factory",
-    subcategories: [
-      { slug: "channel-body", name: "Channel Body Power Press" },
-      { slug: "c-frame", name: "Bow Body / C-Frame Power Press" },
-      { slug: "hydraulic", name: "Hydraulic Power Press" },
-    ],
+    "slug": "power-press",
+    "name": "Power Press Machines",
+    "nameBn": "পাওয়ার প্রেস মেশিন",
+    "icon": "Factory",
+    "subcategories": [
+      {
+        "slug": "channel-body",
+        "name": "Channel Body Power Press"
+      },
+      {
+        "slug": "bou-body",
+        "name": "Bou Body (C-Frame) Power Press"
+      },
+      {
+        "slug": "hydraulic",
+        "name": "Hydraulic Press"
+      }
+    ]
   },
   {
-    slug: "workshop",
-    name: "Foreign & Reconditioned Workshop Machines",
-    nameBn: "লেদ, শেপার, মিলিং ও ড্রিল",
-    icon: "Cog",
-    subcategories: [
-      { slug: "lathe", name: "Lathe Machines" },
-      { slug: "shaper", name: "Shaper Machines" },
-      { slug: "milling", name: "Milling Machines" },
-      { slug: "drill", name: "Drill Presses" },
-    ],
+    "slug": "workshop",
+    "name": "Workshop Machines",
+    "nameBn": "ওয়ার্কশপ মেশিন",
+    "icon": "Cog",
+    "subcategories": [
+      {
+        "slug": "shearing",
+        "name": "Shearing Machines"
+      },
+      {
+        "slug": "drill",
+        "name": "Drill Machines"
+      }
+    ]
   },
   {
-    slug: "fabrication",
-    name: "Metalworking & Fabrication",
-    nameBn: "মেটাল ফেব্রিকেশন মেশিন",
-    icon: "Wrench",
-    subcategories: [
-      { slug: "brakes-shears", name: "Sheet Metal Brakes & Shears" },
-      { slug: "benders", name: "Roll Benders & Tube/Pipe Benders" },
-      { slug: "saws", name: "Industrial Bandsaws & Cold Saws" },
-      { slug: "grinders", name: "Grinders & Belt Sanders" },
-    ],
+    "slug": "ac-stand",
+    "name": "AC Stands",
+    "nameBn": "এসি স্ট্যান্ড",
+    "icon": "Wrench",
+    "subcategories": [
+      {
+        "slug": "wall-stand",
+        "name": "Wall Stand"
+      },
+      {
+        "slug": "floor-stand",
+        "name": "Floor Stand"
+      },
+      {
+        "slug": "bulk",
+        "name": "Bulk / By KG"
+      }
+    ]
   },
   {
-    slug: "construction",
-    name: "Construction & SME Machinery",
-    nameBn: "কনস্ট্রাকশন ও এসএমই মেশিন",
-    icon: "HardHat",
-    subcategories: [
-      { slug: "crusher", name: "Brick & Stone Crusher" },
-      { slug: "mixer", name: "Concrete & Hopper Mixer" },
-      { slug: "hoist", name: "Roof Hoist & Tower Winch" },
-      { slug: "compactor", name: "Vibrator & Plate Compactor" },
-    ],
-  },
-  {
-    slug: "spare-parts",
-    name: "Spare Parts, Dies & Panels",
-    nameBn: "স্পেয়ার পার্টস, ডাই ও প্যানেল",
-    icon: "CircuitBoard",
-    subcategories: [
-      { slug: "dies", name: "Cutting & Punching Dies" },
-      { slug: "electrical", name: "Motors, Gearboxes & PLC Panels" },
-    ],
-  },
+    "slug": "hardware",
+    "name": "Bolts & Hardware",
+    "nameBn": "বোল্ট ও হার্ডওয়্যার",
+    "icon": "CircuitBoard",
+    "subcategories": [
+      {
+        "slug": "bolts",
+        "name": "Anchor / Rawal Bolts"
+      }
+    ]
+  }
 ];
 
-const dmg = "Dhaka Machine Ghar";
-
+// price 0 = "price on request" (set real prices in Admin → Products).
 export const seedProducts: SeedProduct[] = [
-  // ── Power Press (in-house) ────────────────────────────────
   {
-    slug: "channel-body-power-press-10-ton",
-    name: "Channel Body Power Press 10 Ton",
-    nameBn: "চ্যানেল বডি পাওয়ার প্রেস ১০ টন",
-    category: "power-press",
-    subcategory: "channel-body",
-    condition: "new",
-    price: 185000,
-    brand: dmg,
-    capacity: "10 Ton",
-    voltage: "220V Single Phase",
-    short: "Small-workshop punching & cutting press for washers, clips and hardware parts.",
-    highlights: ["Heavy channel steel body", "Clutch & flywheel balanced", "1 year service warranty"],
-    specs: [
-      ["Capacity", "10 Ton"],
-      ["Stroke", "40 mm"],
-      ["Strokes per minute", "70–80"],
-      ["Motor", "2 HP"],
-      ["Bed size", "300 × 250 mm"],
-      ["Body", "Channel steel, welded & stress-relieved"],
-      ["Weight (approx.)", "550 kg"],
+    "slug": "channel-body-power-press-teal-yellow",
+    "name": "Channel Body Power Press — Teal & Yellow",
+    "nameBn": "চ্যানেল বডি পাওয়ার প্রেস — টিল ও হলুদ",
+    "category": "power-press",
+    "subcategory": "channel-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/channel-body-power-press-teal-yellow.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "highlights": [
+      "Strong two-pillar channel body frame",
+      "Heavy flywheel with gear drive",
+      "Adjustable stroke and ram for different dies",
+      "Tonnage and size made to your order",
+      "Warranty and after-sales service from DMG"
     ],
-    roi: { product: "Washer / clip", unitsPerDay: 6000, profitPerUnit: 0.4, monthlyCost: 18000 },
-    featured: true,
-    landing: true,
-    landingCopy: {
-      headline: "মাত্র ১০ টন প্রেস দিয়ে শুরু করুন নিজের ওয়াশার ও ক্লিপ তৈরির কারখানা",
-      sub: "কম পুঁজিতে ছোট ওয়ার্কশপের জন্য সবচেয়ে লাভজনক পাওয়ার প্রেস — আমাদের নিজস্ব কারখানায় তৈরি।",
-    },
+    "specs": [
+      [
+        "Type",
+        "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Teal with yellow gear"
+      ]
+    ],
+    "featured": true
   },
   {
-    slug: "channel-body-power-press-25-ton",
-    name: "Channel Body Power Press 25 Ton",
-    nameBn: "চ্যানেল বডি পাওয়ার প্রেস ২৫ টন",
-    category: "power-press",
-    subcategory: "channel-body",
-    condition: "new",
-    price: 295000,
-    brand: dmg,
-    capacity: "25 Ton",
-    voltage: "440V Three Phase",
-    short: "Best-selling press for tin, aluminium utensil and hardware production lines.",
-    highlights: ["Thick channel frame", "Hardened crankshaft", "Free die-setting support"],
-    specs: [
-      ["Capacity", "25 Ton"],
-      ["Stroke", "50 mm"],
-      ["Strokes per minute", "60–70"],
-      ["Motor", "3 HP"],
-      ["Bed size", "450 × 350 mm"],
-      ["Weight (approx.)", "1,100 kg"],
+    "slug": "channel-body-power-press-sky-blue",
+    "name": "Channel Body Power Press — Sky Blue",
+    "nameBn": "চ্যানেল বডি পাওয়ার প্রেস — আকাশি",
+    "category": "power-press",
+    "subcategory": "channel-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/channel-body-power-press-sky-blue.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "highlights": [
+      "Strong two-pillar channel body frame",
+      "Heavy flywheel with gear drive",
+      "Adjustable stroke and ram for different dies",
+      "Tonnage and size made to your order",
+      "Warranty and after-sales service from DMG"
     ],
-    roi: { product: "Aluminium utensil part", unitsPerDay: 4000, profitPerUnit: 0.8, monthlyCost: 22000 },
-    featured: true,
-    landing: true,
-    landingCopy: {
-      headline: "২৫ টন চ্যানেল বডি পাওয়ার প্রেস — হাঁড়ি-পাতিল ও হার্ডওয়্যার তৈরির সেরা মেশিন",
-      sub: "মজবুত চ্যানেল বডি, হার্ডেনড ক্র্যাংকশাফট ও ফ্রি ডাই সেটিং সাপোর্ট সহ।",
-    },
+    "specs": [
+      [
+        "Type",
+        "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Sky blue"
+      ]
+    ],
+    "featured": true
   },
   {
-    slug: "channel-body-power-press-50-ton",
-    name: "Channel Body Power Press 50 Ton",
-    nameBn: "চ্যানেল বডি পাওয়ার প্রেস ৫০ টন",
-    category: "power-press",
-    subcategory: "channel-body",
-    condition: "new",
-    price: 520000,
-    brand: dmg,
-    capacity: "50 Ton",
-    voltage: "440V Three Phase",
-    short: "Heavy-duty cutting, blanking & deep-draw press for factory production.",
-    highlights: ["Double-gear drive", "Pneumatic clutch option", "On-site installation"],
-    specs: [
-      ["Capacity", "50 Ton"],
-      ["Stroke", "70 mm"],
-      ["Strokes per minute", "45–55"],
-      ["Motor", "7.5 HP"],
-      ["Bed size", "600 × 450 mm"],
-      ["Weight (approx.)", "2,600 kg"],
+    "slug": "channel-body-power-press-green",
+    "name": "Channel Body Power Press — Green",
+    "nameBn": "চ্যানেল বডি পাওয়ার প্রেস — সবুজ",
+    "category": "power-press",
+    "subcategory": "channel-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/channel-body-power-press-green.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "highlights": [
+      "Strong two-pillar channel body frame",
+      "Heavy flywheel with gear drive",
+      "Adjustable stroke and ram for different dies",
+      "Tonnage and size made to your order",
+      "Warranty and after-sales service from DMG"
     ],
-    roi: { product: "Steel bracket", unitsPerDay: 3000, profitPerUnit: 2, monthlyCost: 35000 },
-    featured: true,
-    landing: true,
-    landingCopy: {
-      headline: "৫০ টন হেভি ডিউটি পাওয়ার প্রেস — ফ্যাক্টরি প্রোডাকশনের জন্য",
-      sub: "কাটিং, ব্ল্যাংকিং ও ডিপ-ড্র — লোড টেস্ট করে আপনার কারখানায় ইনস্টল করে দিই।",
-    },
+    "specs": [
+      [
+        "Type",
+        "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Green with red fittings"
+      ]
+    ],
+    "featured": false
   },
   {
-    slug: "channel-body-power-press-100-ton",
-    name: "Channel Body Power Press 100 Ton",
-    nameBn: "চ্যানেল বডি পাওয়ার প্রেস ১০০ টন",
-    category: "power-press",
-    subcategory: "channel-body",
-    condition: "new",
-    price: 1150000,
-    brand: dmg,
-    capacity: "100 Ton",
-    voltage: "440V Three Phase",
-    short: "Industrial-grade press for automotive parts, thick-plate blanking and forming.",
-    highlights: ["Built to order", "Load-tested before delivery", "Engineer commissioning"],
-    specs: [
-      ["Capacity", "100 Ton"],
-      ["Stroke", "100 mm"],
-      ["Strokes per minute", "30–40"],
-      ["Motor", "15 HP"],
-      ["Bed size", "900 × 600 mm"],
-      ["Weight (approx.)", "6,500 kg"],
+    "slug": "channel-body-power-press-teal-orange",
+    "name": "Channel Body Power Press — Teal & Orange",
+    "nameBn": "চ্যানেল বডি পাওয়ার প্রেস — টিল ও কমলা",
+    "category": "power-press",
+    "subcategory": "channel-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/channel-body-power-press-teal-orange.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "highlights": [
+      "Strong two-pillar channel body frame",
+      "Heavy flywheel with gear drive",
+      "Adjustable stroke and ram for different dies",
+      "Tonnage and size made to your order",
+      "Warranty and after-sales service from DMG"
     ],
+    "specs": [
+      [
+        "Type",
+        "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Teal with orange fittings"
+      ]
+    ],
+    "featured": false
   },
   {
-    slug: "c-frame-power-press-15-ton",
-    name: "C-Frame (Bow Body) Power Press 15 Ton",
-    nameBn: "বো বডি / সি-ফ্রেম পাওয়ার প্রেস ১৫ টন",
-    category: "power-press",
-    subcategory: "c-frame",
-    condition: "new",
-    price: 230000,
-    brand: dmg,
-    capacity: "15 Ton",
-    voltage: "220V Single Phase",
-    short: "Cast-iron C-frame press with open front for easy die access.",
-    highlights: ["Cast iron body", "Open-front loading", "Low vibration"],
-    specs: [
-      ["Capacity", "15 Ton"],
-      ["Stroke", "45 mm"],
-      ["Motor", "2 HP"],
-      ["Body", "Cast iron"],
-      ["Weight (approx.)", "800 kg"],
+    "slug": "channel-body-power-press-bright-green",
+    "name": "Channel Body Power Press — Bright Green",
+    "nameBn": "চ্যানেল বডি পাওয়ার প্রেস — উজ্জ্বল সবুজ",
+    "category": "power-press",
+    "subcategory": "channel-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/channel-body-power-press-bright-green.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "highlights": [
+      "Strong two-pillar channel body frame",
+      "Heavy flywheel with gear drive",
+      "Adjustable stroke and ram for different dies",
+      "Tonnage and size made to your order",
+      "Warranty and after-sales service from DMG"
     ],
-    roi: { product: "Electrical fitting", unitsPerDay: 5000, profitPerUnit: 0.5, monthlyCost: 20000 },
+    "specs": [
+      [
+        "Type",
+        "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Bright green"
+      ]
+    ],
+    "featured": true
   },
   {
-    slug: "baileigh-hsp-50a-hydraulic-shop-press",
-    name: "Hydraulic Shop Press 50 Ton (HSP-50A)",
-    nameBn: "হাইড্রোলিক শপ প্রেস ৫০ টন",
-    category: "power-press",
-    subcategory: "hydraulic",
-    condition: "new",
-    price: 365000,
-    brand: "Baileigh",
-    capacity: "50 Ton",
-    voltage: "Manual",
-    short: "Air/hydraulic H-frame shop press for bearing work, straightening and pressing.",
-    highlights: ["Air-over-hydraulic pump", "Movable cylinder", "Adjustable bed height"],
-    specs: [
-      ["Capacity", "50 Ton"],
-      ["Pump", "Air / hydraulic"],
-      ["Cylinder stroke", "10 in (254 mm)"],
-      ["Frame", "H-frame welded steel"],
-      ["Bed width", "Approx. 35 in"],
+    "slug": "channel-body-power-press-blue",
+    "name": "Channel Body Power Press — Blue",
+    "nameBn": "চ্যানেল বডি পাওয়ার প্রেস — নীল",
+    "category": "power-press",
+    "subcategory": "channel-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/channel-body-power-press-blue.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "highlights": [
+      "Strong two-pillar channel body frame",
+      "Heavy flywheel with gear drive",
+      "Adjustable stroke and ram for different dies",
+      "Tonnage and size made to your order",
+      "Warranty and after-sales service from DMG"
     ],
-    featured: true,
+    "specs": [
+      [
+        "Type",
+        "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Blue"
+      ]
+    ],
+    "featured": false
   },
   {
-    slug: "baileigh-hsp-75a-hydraulic-shop-press",
-    name: "Hydraulic Shop Press 75 Ton (HSP-75A)",
-    nameBn: "হাইড্রোলিক শপ প্রেস ৭৫ টন",
-    category: "power-press",
-    subcategory: "hydraulic",
-    condition: "new",
-    price: 495000,
-    brand: "Baileigh",
-    capacity: "75 Ton",
-    voltage: "Manual",
-    short: "Heavy-duty air/hydraulic shop press for truck, bus and heavy-equipment workshops.",
-    highlights: ["75 ton capacity", "Pressure gauge", "Winch-adjusted bed"],
-    specs: [
-      ["Capacity", "75 Ton"],
-      ["Pump", "Air / hydraulic"],
-      ["Cylinder stroke", "10 in (254 mm)"],
-      ["Frame", "H-frame welded steel"],
+    "slug": "channel-body-power-press-mint",
+    "name": "Channel Body Power Press — Mint Green",
+    "nameBn": "চ্যানেল বডি পাওয়ার প্রেস — মিন্ট সবুজ",
+    "category": "power-press",
+    "subcategory": "channel-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/channel-body-power-press-mint.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "highlights": [
+      "Strong two-pillar channel body frame",
+      "Heavy flywheel with gear drive",
+      "Adjustable stroke and ram for different dies",
+      "Tonnage and size made to your order",
+      "Warranty and after-sales service from DMG"
     ],
-  },
-
-  // ── Workshop machines ─────────────────────────────────────
-  {
-    slug: "baileigh-pl-1440e-metal-lathe",
-    name: "Metal Lathe 14\" × 40\" (PL-1440E)",
-    nameBn: "মেটাল লেদ মেশিন ১৪×৪০",
-    category: "workshop",
-    subcategory: "lathe",
-    condition: "new",
-    price: 690000,
-    brand: "Baileigh",
-    capacity: "14\" swing, 40\" centres",
-    voltage: "220V Single Phase",
-    short: "Precision gear-head lathe with DRO for job shops and maintenance workshops.",
-    highlights: ["Gear-head headstock", "Digital read-out", "Quick-change tool post"],
-    specs: [
-      ["Swing over bed", "14 in"],
-      ["Distance between centres", "40 in"],
-      ["Spindle bore", "1.5 in"],
-      ["Motor", "3 HP"],
-      ["Power", "220V single phase"],
+    "specs": [
+      [
+        "Type",
+        "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Mint green with red fittings"
+      ]
     ],
-    featured: true,
-    landing: true,
-    landingCopy: {
-      headline: "নিখুঁত টার্নিং ও থ্রেডিংয়ের জন্য গিয়ার-হেড মেটাল লেদ মেশিন",
-      sub: "DRO সহ ১৪×৪০ প্রিসিশন লেদ — জব শপ ও মেইনটেন্যান্স ওয়ার্কশপের জন্য।",
-    },
+    "featured": false
   },
   {
-    slug: "baileigh-pl-1340e-metal-lathe",
-    name: "Metal Lathe 13\" × 40\" (PL-1340E)",
-    nameBn: "মেটাল লেদ মেশিন ১৩×৪০",
-    category: "workshop",
-    subcategory: "lathe",
-    condition: "new",
-    price: 560000,
-    brand: "Baileigh",
-    capacity: "13\" swing, 40\" centres",
-    voltage: "220V Single Phase",
-    short: "Compact bench-style precision lathe for turning, facing and threading.",
-    highlights: ["Thread cutting gearbox", "Hardened ways", "Coolant system"],
-    specs: [
-      ["Swing over bed", "13 in"],
-      ["Distance between centres", "40 in"],
-      ["Spindle bore", "1.375 in"],
-      ["Motor", "2 HP"],
+    "slug": "channel-body-power-press-steel-blue",
+    "name": "Channel Body Power Press — Steel Blue",
+    "nameBn": "চ্যানেল বডি পাওয়ার প্রেস — স্টিল ব্লু",
+    "category": "power-press",
+    "subcategory": "channel-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/channel-body-power-press-steel-blue.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "highlights": [
+      "Strong two-pillar channel body frame",
+      "Heavy flywheel with gear drive",
+      "Adjustable stroke and ram for different dies",
+      "Tonnage and size made to your order",
+      "Warranty and after-sales service from DMG"
     ],
+    "specs": [
+      [
+        "Type",
+        "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Steel blue"
+      ]
+    ],
+    "featured": false
   },
   {
-    slug: "reconditioned-lathe-6ft",
-    name: "Reconditioned Lathe Machine 6 ft (Japan)",
-    nameBn: "রিকন্ডিশন্ড লেদ মেশিন ৬ ফুট",
-    category: "workshop",
-    subcategory: "lathe",
-    condition: "reconditioned",
-    price: 340000,
-    brand: "Japan Import",
-    capacity: "6 ft bed",
-    voltage: "440V Three Phase",
-    short: "Fully serviced Japanese gear-head lathe, tested and ready to work.",
-    highlights: ["Bed reground", "New belts & bearings", "Test run on video"],
-    specs: [
-      ["Bed length", "6 ft"],
-      ["Swing", "16 in"],
-      ["Motor", "5 HP"],
-      ["Origin", "Japan"],
+    "slug": "channel-body-power-press-green-orange-gear",
+    "name": "Channel Body Power Press — Green & Orange",
+    "nameBn": "চ্যানেল বডি পাওয়ার প্রেস — সবুজ ও কমলা",
+    "category": "power-press",
+    "subcategory": "channel-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/channel-body-power-press-green-orange-gear.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "highlights": [
+      "Strong two-pillar channel body frame",
+      "Heavy flywheel with gear drive",
+      "Adjustable stroke and ram for different dies",
+      "Tonnage and size made to your order",
+      "Warranty and after-sales service from DMG"
     ],
-    roi: { product: "Turning job work", unitsPerDay: 1, profitPerUnit: 2500, monthlyCost: 25000 },
-    featured: true,
+    "specs": [
+      [
+        "Type",
+        "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Green with orange gear"
+      ]
+    ],
+    "featured": false
   },
   {
-    slug: "reconditioned-shaper-18in",
-    name: "Reconditioned Shaper Machine 18\"",
-    nameBn: "রিকন্ডিশন্ড শেপার মেশিন ১৮ ইঞ্চি",
-    category: "workshop",
-    subcategory: "shaper",
-    condition: "reconditioned",
-    price: 260000,
-    brand: "Japan Import",
-    capacity: "18\" stroke",
-    voltage: "440V Three Phase",
-    short: "Heavy shaper for keyways, slots and flat surfacing.",
-    highlights: ["Auto feed", "Overhauled ram", "Vice included"],
-    specs: [
-      ["Max stroke", "18 in"],
-      ["Motor", "3 HP"],
-      ["Origin", "Japan"],
+    "slug": "heavy-duty-channel-body-power-press",
+    "name": "Heavy Duty Channel Body Power Press",
+    "nameBn": "হেভি ডিউটি চ্যানেল বডি পাওয়ার প্রেস",
+    "category": "power-press",
+    "subcategory": "channel-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/heavy-duty-channel-body-power-press.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Large, heavy duty channel body power press with a multi-groove pulley and big gear — for high-tonnage punching and forming.",
+    "highlights": [
+      "Strong two-pillar channel body frame",
+      "Heavy flywheel with gear drive",
+      "Adjustable stroke and ram for different dies",
+      "Tonnage and size made to your order",
+      "Warranty and after-sales service from DMG"
     ],
+    "specs": [
+      [
+        "Type",
+        "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Green with red pulley"
+      ]
+    ],
+    "featured": true
   },
   {
-    slug: "reconditioned-vertical-milling",
-    name: "Reconditioned Vertical Milling Machine",
-    nameBn: "রিকন্ডিশন্ড ভার্টিক্যাল মিলিং মেশিন",
-    category: "workshop",
-    subcategory: "milling",
-    condition: "reconditioned",
-    price: 620000,
-    brand: "Taiwan Import",
-    capacity: "Table 1270 × 254 mm",
-    voltage: "440V Three Phase",
-    short: "Turret-type vertical mill for die making and precision machining.",
-    highlights: ["Power feed", "2-axis DRO", "Spindle rebuilt"],
-    specs: [
-      ["Table size", "1270 × 254 mm"],
-      ["Spindle taper", "R8 / NT30"],
-      ["Motor", "3 HP"],
+    "slug": "heavy-duty-channel-body-power-press-grey",
+    "name": "Heavy Duty Channel Body Power Press — Grey",
+    "nameBn": "হেভি ডিউটি চ্যানেল বডি পাওয়ার প্রেস — ধূসর",
+    "category": "power-press",
+    "subcategory": "channel-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/heavy-duty-channel-body-power-press-grey.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Heavy duty channel body power press with a large multi-groove pulley and gear drive — built for long production runs.",
+    "highlights": [
+      "Strong two-pillar channel body frame",
+      "Heavy flywheel with gear drive",
+      "Adjustable stroke and ram for different dies",
+      "Tonnage and size made to your order",
+      "Warranty and after-sales service from DMG"
     ],
+    "specs": [
+      [
+        "Type",
+        "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Grey with red pulley and gear"
+      ]
+    ],
+    "featured": false
   },
   {
-    slug: "gear-head-drill-press-32mm",
-    name: "Gear Head Pillar Drill 32 mm",
-    nameBn: "গিয়ার হেড পিলার ড্রিল ৩২ মিমি",
-    category: "workshop",
-    subcategory: "drill",
-    condition: "new",
-    price: 145000,
-    brand: "Imported",
-    capacity: "32 mm drilling",
-    voltage: "440V Three Phase",
-    short: "Heavy pillar drill with gear head and auto feed.",
-    highlights: ["Auto feed", "MT4 spindle", "Coolant pump"],
-    specs: [
-      ["Drilling capacity", "32 mm"],
-      ["Spindle taper", "MT4"],
-      ["Motor", "1.5 HP"],
+    "slug": "channel-body-power-press-motor-top-teal",
+    "name": "Channel Body Power Press with Top Motor — Teal",
+    "nameBn": "টপ মোটর চ্যানেল বডি পাওয়ার প্রেস — টিল",
+    "category": "power-press",
+    "subcategory": "channel-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/channel-body-power-press-motor-top-teal.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Channel body power press with the motor mounted on top and double gear drive — compact, heavy-duty and ready for continuous production work.",
+    "highlights": [
+      "Top-mounted motor saves floor space",
+      "Double gear drive for higher pressing force",
+      "Strong two-pillar channel body frame",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
     ],
-  },
-
-  // ── Fabrication (Baileigh) ───────────────────────────────
-  {
-    slug: "baileigh-bp-7098cnc-press-brake",
-    name: "CNC Hydraulic Press Brake 98 Ton (BP-7098CNC)",
-    nameBn: "সিএনসি হাইড্রোলিক প্রেস ব্রেক ৯৮ টন",
-    category: "fabrication",
-    subcategory: "brakes-shears",
-    condition: "new",
-    price: 4850000,
-    brand: "Baileigh",
-    capacity: "98 Ton, 8 ft",
-    voltage: "440V Three Phase",
-    short: "CNC-controlled hydraulic press brake for repeatable sheet-metal bending.",
-    highlights: ["CNC back gauge", "Programmable bends", "Segmented tooling"],
-    specs: [
-      ["Capacity", "98 Ton"],
-      ["Bending length", "8 ft"],
-      ["Control", "CNC"],
-      ["Power", "440V three phase"],
+    "specs": [
+      [
+        "Type",
+        "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Drive",
+        "Top-mounted motor, double gear and flywheel"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Teal"
+      ]
     ],
-    featured: true,
-  },
-  {
-    slug: "baileigh-bp-3305cnc-press-brake",
-    name: "CNC Hydraulic Press Brake 33 Ton (BP-3305CNC)",
-    nameBn: "সিএনসি প্রেস ব্রেক ৩৩ টন",
-    category: "fabrication",
-    subcategory: "brakes-shears",
-    condition: "new",
-    price: 2650000,
-    brand: "Baileigh",
-    capacity: "33 Ton, 5 ft",
-    voltage: "440V Three Phase",
-    short: "Compact CNC press brake for small fabrication shops.",
-    highlights: ["Touch-screen CNC", "Compact footprint", "Fast cycle"],
-    specs: [
-      ["Capacity", "33 Ton"],
-      ["Bending length", "5 ft"],
-      ["Control", "CNC"],
-    ],
+    "featured": true
   },
   {
-    slug: "baileigh-bb-4812-box-pan-brake",
-    name: "Manual Box & Pan Brake 4 ft (BB-4812)",
-    nameBn: "বক্স ও প্যান ব্রেক ৪ ফুট",
-    category: "fabrication",
-    subcategory: "brakes-shears",
-    condition: "new",
-    price: 285000,
-    brand: "Baileigh",
-    capacity: "4 ft, 12 gauge",
-    voltage: "Manual",
-    short: "Manual box & pan brake with removable fingers for boxes and trays.",
-    highlights: ["Removable fingers", "Counter-balanced", "No power required"],
-    specs: [
-      ["Bending length", "48 in"],
-      ["Mild steel capacity", "12 gauge"],
-      ["Operation", "Manual"],
+    "slug": "channel-body-power-press-motor-top-blue",
+    "name": "Channel Body Power Press with Top Motor — Blue",
+    "nameBn": "টপ মোটর চ্যানেল বডি পাওয়ার প্রেস — নীল",
+    "category": "power-press",
+    "subcategory": "channel-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/channel-body-power-press-motor-top-blue.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Channel body power press with the motor mounted on top and double gear drive — compact, heavy-duty and ready for continuous production work.",
+    "highlights": [
+      "Top-mounted motor saves floor space",
+      "Double gear drive for higher pressing force",
+      "Strong two-pillar channel body frame",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
     ],
+    "specs": [
+      [
+        "Type",
+        "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Drive",
+        "Top-mounted motor, double gear and flywheel"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Blue"
+      ]
+    ],
+    "featured": false
   },
   {
-    slug: "baileigh-bb-12010h-hydraulic-box-pan-brake",
-    name: "Hydraulic Box & Pan Brake 10 ft (BB-12010H)",
-    nameBn: "হাইড্রোলিক বক্স ও প্যান ব্রেক ১০ ফুট",
-    category: "fabrication",
-    subcategory: "brakes-shears",
-    condition: "new",
-    price: 1950000,
-    brand: "Baileigh",
-    capacity: "10 ft, 10 gauge",
-    voltage: "440V Three Phase",
-    short: "Hydraulic-clamp box & pan brake for long 10 ft panels.",
-    highlights: ["Hydraulic clamping", "Angle stop", "Heavy frame"],
-    specs: [
-      ["Bending length", "120 in"],
-      ["Mild steel capacity", "10 gauge"],
-      ["Clamping", "Hydraulic"],
+    "slug": "bou-body-power-press-green-red",
+    "name": "Bou Body Power Press — Green & Red",
+    "nameBn": "বউ বডি পাওয়ার প্রেস — সবুজ ও লাল",
+    "category": "power-press",
+    "subcategory": "bou-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/bou-body-power-press-green-red.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "highlights": [
+      "Open-front C-frame for easy die setting and loading",
+      "Heavy flywheel and gear drive",
+      "Large working table with T-slots",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
     ],
+    "specs": [
+      [
+        "Type",
+        "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Green with red gear"
+      ]
+    ],
+    "featured": true
   },
   {
-    slug: "baileigh-sh-5210-power-shear",
-    name: "Power Shear 52\" (SH-5210)",
-    nameBn: "পাওয়ার শিয়ার মেশিন ৫২ ইঞ্চি",
-    category: "fabrication",
-    subcategory: "brakes-shears",
-    condition: "new",
-    price: 760000,
-    brand: "Baileigh",
-    capacity: "52 in, 10 gauge",
-    voltage: "220V Single Phase",
-    short: "Motorised sheet shear for fast straight cuts on sheet metal.",
-    highlights: ["Foot pedal control", "Back gauge", "Hold-downs"],
-    specs: [
-      ["Cutting length", "52 in"],
-      ["Mild steel capacity", "10 gauge"],
-      ["Drive", "Electric motor"],
+    "slug": "bou-body-power-press-grey-orange",
+    "name": "Bou Body Power Press — Grey & Orange",
+    "nameBn": "বউ বডি পাওয়ার প্রেস — ধূসর ও কমলা",
+    "category": "power-press",
+    "subcategory": "bou-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/bou-body-power-press-grey-orange.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "highlights": [
+      "Open-front C-frame for easy die setting and loading",
+      "Heavy flywheel and gear drive",
+      "Large working table with T-slots",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
     ],
+    "specs": [
+      [
+        "Type",
+        "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Grey with orange gear"
+      ]
+    ],
+    "featured": true
   },
   {
-    slug: "baileigh-sh-70250hd-hydraulic-shear",
-    name: "Heavy-Duty Hydraulic Shear (SH-70250HD)",
-    nameBn: "হেভি ডিউটি হাইড্রোলিক শিয়ার",
-    category: "fabrication",
-    subcategory: "brakes-shears",
-    condition: "new",
-    price: 3450000,
-    brand: "Baileigh",
-    capacity: "1/4 in plate",
-    voltage: "440V Three Phase",
-    short: "Swing-beam hydraulic shear for heavy plate cutting.",
-    highlights: ["Powered back gauge", "Hydraulic hold-downs", "Front support arms"],
-    specs: [
-      ["Mild steel capacity", "1/4 in"],
-      ["Drive", "Hydraulic"],
-      ["Power", "440V three phase"],
+    "slug": "bou-body-power-press-green-black",
+    "name": "Bou Body Power Press — Green & Black",
+    "nameBn": "বউ বডি পাওয়ার প্রেস — সবুজ ও কালো",
+    "category": "power-press",
+    "subcategory": "bou-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/bou-body-power-press-green-black.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "highlights": [
+      "Open-front C-frame for easy die setting and loading",
+      "Heavy flywheel and gear drive",
+      "Large working table with T-slots",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
     ],
+    "specs": [
+      [
+        "Type",
+        "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Green with black gear"
+      ]
+    ],
+    "featured": false
   },
   {
-    slug: "baileigh-rdb-175-tube-bender",
-    name: "Rotary Draw Tube Bender (RDB-175)",
-    nameBn: "টিউব / পাইপ বেন্ডার",
-    category: "fabrication",
-    subcategory: "benders",
-    condition: "new",
-    price: 210000,
-    brand: "Baileigh",
-    capacity: "Up to 2 in tube",
-    voltage: "Manual",
-    short: "Manual rotary draw bender for gates, grills, roll cages and furniture.",
-    highlights: ["Up to 180° bends", "Degree ring", "Interchangeable dies"],
-    specs: [
-      ["Max tube OD", "2 in"],
-      ["Max bend", "180°"],
-      ["Operation", "Manual ratchet"],
+    "slug": "bou-body-power-press-lime",
+    "name": "Bou Body Power Press — Lime Green",
+    "nameBn": "বউ বডি পাওয়ার প্রেস — লাইম সবুজ",
+    "category": "power-press",
+    "subcategory": "bou-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/bou-body-power-press-lime.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "highlights": [
+      "Open-front C-frame for easy die setting and loading",
+      "Heavy flywheel and gear drive",
+      "Large working table with T-slots",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
     ],
-    roi: { product: "Steel gate / grill bend", unitsPerDay: 150, profitPerUnit: 40, monthlyCost: 15000 },
-    landing: true,
-    landingCopy: {
-      headline: "গেট, গ্রিল ও ফার্নিচারের পাইপ বাঁকান নিখুঁতভাবে — বিদ্যুৎ ছাড়াই",
-      sub: "২ ইঞ্চি পর্যন্ত টিউব ১৮০° পর্যন্ত বেন্ড — ম্যানুয়াল রোটারি ড্র বেন্ডার।",
-    },
+    "specs": [
+      [
+        "Type",
+        "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Lime green with red-yellow pulley"
+      ]
+    ],
+    "featured": true
   },
   {
-    slug: "baileigh-rdb-250-hydraulic-tube-bender",
-    name: "Hydraulic Tube & Pipe Bender (RDB-250)",
-    nameBn: "হাইড্রোলিক টিউব ও পাইপ বেন্ডার",
-    category: "fabrication",
-    subcategory: "benders",
-    condition: "new",
-    price: 690000,
-    brand: "Baileigh",
-    capacity: "Up to 3 in tube",
-    voltage: "220V Single Phase",
-    short: "Hydraulic rotary draw bender for high-volume tube and pipe bending.",
-    highlights: ["Hydraulic drive", "Auto stop", "Large capacity"],
-    specs: [
-      ["Max tube OD", "3 in"],
-      ["Max bend", "180°"],
-      ["Drive", "Hydraulic"],
+    "slug": "bou-body-power-press-open-table",
+    "name": "Bou Body Power Press — Open Front Table",
+    "nameBn": "বউ বডি পাওয়ার প্রেস — খোলা টেবিল",
+    "category": "power-press",
+    "subcategory": "bou-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/bou-body-power-press-open-table.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "highlights": [
+      "Open-front C-frame for easy die setting and loading",
+      "Heavy flywheel and gear drive",
+      "Large working table with T-slots",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
     ],
-  },
-
-  // ── Construction ─────────────────────────────────────────
-  {
-    slug: "brick-crusher-machine",
-    name: "Brick & Stone Crusher Machine",
-    nameBn: "ইট ও পাথর ভাঙ্গার মেশিন",
-    category: "construction",
-    subcategory: "crusher",
-    condition: "new",
-    price: 395000,
-    brand: dmg,
-    capacity: "3–5 ton/hour",
-    voltage: "440V Three Phase",
-    short: "Jaw-type crusher for brick chips (khoa) and stone aggregate.",
-    highlights: ["Manganese jaw plate", "Adjustable chip size", "Diesel option"],
-    specs: [
-      ["Output", "3–5 ton / hour"],
-      ["Motor", "15 HP"],
-      ["Jaw plate", "Manganese steel"],
+    "specs": [
+      [
+        "Type",
+        "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Green with red pulley"
+      ]
     ],
-    roi: { product: "Brick chips (cft)", unitsPerDay: 1200, profitPerUnit: 6, monthlyCost: 60000 },
-    featured: true,
-    landing: true,
-    landingCopy: {
-      headline: "ইট ভাঙ্গার মেশিন — প্রতিদিন হাজার সিএফটি খোয়া, নিয়মিত আয়",
-      sub: "ঘণ্টায় ৩–৫ টন আউটপুট, ম্যাঙ্গানিজ জ' প্লেট — নির্মাণ এলাকায় চাহিদা সারা বছর।",
-    },
+    "featured": false
   },
   {
-    slug: "concrete-hopper-mixer",
-    name: "Concrete Hopper Mixer Machine",
-    nameBn: "কংক্রিট হপার মিক্সার মেশিন",
-    category: "construction",
-    subcategory: "mixer",
-    condition: "new",
-    price: 275000,
-    brand: dmg,
-    capacity: "1 bag (10/7 cft)",
-    voltage: "Manual",
-    short: "Diesel / electric hopper mixer for building and road casting.",
-    highlights: ["Hydraulic hopper", "Heavy drum", "Towable chassis"],
-    specs: [
-      ["Capacity", "1 bag mix"],
-      ["Engine", "Diesel 10 HP / Electric 5 HP"],
-      ["Drum", "3 mm steel"],
+    "slug": "bou-body-power-press-teal-yellow",
+    "name": "Bou Body Power Press — Teal & Yellow",
+    "nameBn": "বউ বডি পাওয়ার প্রেস — টিল ও হলুদ",
+    "category": "power-press",
+    "subcategory": "bou-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/bou-body-power-press-teal-yellow.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "highlights": [
+      "Open-front C-frame for easy die setting and loading",
+      "Heavy flywheel and gear drive",
+      "Large working table with T-slots",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
     ],
+    "specs": [
+      [
+        "Type",
+        "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Teal with yellow pulley"
+      ]
+    ],
+    "featured": false
   },
   {
-    slug: "roof-hoist-machine",
-    name: "Roof Hoist / Tower Winch Machine",
-    nameBn: "রুফ হয়েস্ট মেশিন",
-    category: "construction",
-    subcategory: "hoist",
-    condition: "new",
-    price: 165000,
-    brand: dmg,
-    capacity: "500 kg lift",
-    voltage: "220V Single Phase",
-    short: "Material lifting winch for building roof casting.",
-    highlights: ["Brake motor", "Steel wire rope", "Easy to shift"],
-    specs: [
-      ["Lift capacity", "500 kg"],
-      ["Motor", "3 HP"],
-      ["Rope length", "60 m"],
+    "slug": "bou-body-power-press-sky-blue",
+    "name": "Bou Body Power Press — Sky Blue",
+    "nameBn": "বউ বডি পাওয়ার প্রেস — আকাশি",
+    "category": "power-press",
+    "subcategory": "bou-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/bou-body-power-press-sky-blue.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "highlights": [
+      "Open-front C-frame for easy die setting and loading",
+      "Heavy flywheel and gear drive",
+      "Large working table with T-slots",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
     ],
+    "specs": [
+      [
+        "Type",
+        "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Sky blue"
+      ]
+    ],
+    "featured": false
   },
   {
-    slug: "plate-compactor",
-    name: "Plate Compactor Machine",
-    nameBn: "প্লেট কম্প্যাক্টর মেশিন",
-    category: "construction",
-    subcategory: "compactor",
-    condition: "new",
-    price: 98000,
-    brand: "Imported",
-    capacity: "90 kg plate",
-    voltage: "Manual",
-    short: "Petrol plate compactor for soil, sand and paving.",
-    highlights: ["Honda-type engine", "Water tank", "Foldable handle"],
-    specs: [
-      ["Plate weight", "90 kg"],
-      ["Engine", "Petrol 6.5 HP"],
+    "slug": "bou-body-power-press-blue",
+    "name": "Bou Body Power Press — Blue",
+    "nameBn": "বউ বডি পাওয়ার প্রেস — নীল",
+    "category": "power-press",
+    "subcategory": "bou-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/bou-body-power-press-blue.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "highlights": [
+      "Open-front C-frame for easy die setting and loading",
+      "Heavy flywheel and gear drive",
+      "Large working table with T-slots",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
     ],
+    "specs": [
+      [
+        "Type",
+        "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Blue"
+      ]
+    ],
+    "featured": false
   },
-
-  // ── Spare parts ──────────────────────────────────────────
   {
-    slug: "custom-punching-die",
-    name: "Custom Cutting & Punching Die",
-    nameBn: "কাস্টম কাটিং ও পাঞ্চিং ডাই",
-    category: "spare-parts",
-    subcategory: "dies",
-    condition: "new",
-    price: 18000,
-    brand: dmg,
-    capacity: "Made to drawing",
-    voltage: "Manual",
-    short: "Hardened tool-steel dies made to your sample or drawing.",
-    highlights: ["D2 / HCHCr steel", "Heat treated", "Trial on press"],
-    specs: [
-      ["Material", "D2 / HCHCr tool steel"],
-      ["Hardness", "58–62 HRC"],
-      ["Lead time", "5–10 days"],
+    "slug": "bou-body-power-press-light-green",
+    "name": "Bou Body Power Press — Light Green",
+    "nameBn": "বউ বডি পাওয়ার প্রেস — হালকা সবুজ",
+    "category": "power-press",
+    "subcategory": "bou-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/bou-body-power-press-light-green.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "highlights": [
+      "Open-front C-frame for easy die setting and loading",
+      "Heavy flywheel and gear drive",
+      "Large working table with T-slots",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
     ],
+    "specs": [
+      [
+        "Type",
+        "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Light green"
+      ]
+    ],
+    "featured": false
   },
   {
-    slug: "plc-control-panel",
-    name: "Power Press PLC Control Panel",
-    nameBn: "পিএলসি কন্ট্রোল প্যানেল",
-    category: "spare-parts",
-    subcategory: "electrical",
-    condition: "new",
-    price: 65000,
-    brand: dmg,
-    capacity: "Up to 15 HP",
-    voltage: "440V Three Phase",
-    short: "Starter + PLC panel with emergency stop and stroke counter.",
-    highlights: ["Stroke counter", "Emergency stop", "Overload protection"],
-    specs: [
-      ["Motor range", "Up to 15 HP"],
-      ["Controls", "PLC, E-stop, counter"],
+    "slug": "bou-body-power-press-green-wheel",
+    "name": "Bou Body Power Press — Green",
+    "nameBn": "বউ বডি পাওয়ার প্রেস — সবুজ",
+    "category": "power-press",
+    "subcategory": "bou-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/bou-body-power-press-green-wheel.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "highlights": [
+      "Open-front C-frame for easy die setting and loading",
+      "Heavy flywheel and gear drive",
+      "Large working table with T-slots",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
     ],
+    "specs": [
+      [
+        "Type",
+        "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Green with black flywheel"
+      ]
+    ],
+    "featured": false
   },
+  {
+    "slug": "bou-body-power-press-big-gear",
+    "name": "Bou Body Power Press — Big Gear",
+    "nameBn": "বউ বডি পাওয়ার প্রেস — বড় গিয়ার",
+    "category": "power-press",
+    "subcategory": "bou-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/bou-body-power-press-big-gear.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "highlights": [
+      "Open-front C-frame for easy die setting and loading",
+      "Heavy flywheel and gear drive",
+      "Large working table with T-slots",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Green with red parts"
+      ]
+    ],
+    "featured": false
+  },
+  {
+    "slug": "bou-body-power-press-olive",
+    "name": "Bou Body Power Press — Olive",
+    "nameBn": "বউ বডি পাওয়ার প্রেস — জলপাই",
+    "category": "power-press",
+    "subcategory": "bou-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/bou-body-power-press-olive.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "highlights": [
+      "Open-front C-frame for easy die setting and loading",
+      "Heavy flywheel and gear drive",
+      "Large working table with T-slots",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Olive green"
+      ]
+    ],
+    "featured": false
+  },
+  {
+    "slug": "double-gear-bou-body-power-press",
+    "name": "Double Gear Bou Body Power Press",
+    "nameBn": "ডাবল গিয়ার বউ বডি পাওয়ার প্রেস",
+    "category": "power-press",
+    "subcategory": "bou-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/double-gear-bou-body-power-press.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Double gear bou body (C-frame) power press — two gear stages for extra pressing force on heavier punching and forming jobs.",
+    "highlights": [
+      "Open-front C-frame for easy die setting and loading",
+      "Heavy flywheel and gear drive",
+      "Large working table with T-slots",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Drive",
+        "Motor, flywheel and double gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Grey-blue with orange gears"
+      ]
+    ],
+    "featured": true
+  },
+  {
+    "slug": "double-gear-bou-body-power-press-green",
+    "name": "Double Gear Bou Body Power Press — Green",
+    "nameBn": "ডাবল গিয়ার বউ বডি পাওয়ার প্রেস — সবুজ",
+    "category": "power-press",
+    "subcategory": "bou-body",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/double-gear-bou-body-power-press-green.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Double gear bou body (C-frame) power press — two gear stages for extra pressing force on heavier punching and forming jobs.",
+    "highlights": [
+      "Open-front C-frame for easy die setting and loading",
+      "Heavy flywheel and gear drive",
+      "Large working table with T-slots",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Drive",
+        "Motor, flywheel and double gear"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Green"
+      ]
+    ],
+    "featured": false
+  },
+  {
+    "slug": "hydraulic-h-frame-press",
+    "name": "Hydraulic Power Press — H-Frame",
+    "nameBn": "হাইড্রোলিক পাওয়ার প্রেস — এইচ ফ্রেম",
+    "category": "power-press",
+    "subcategory": "hydraulic",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/hydraulic-h-frame-press.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "H-frame hydraulic power press with its own power pack and pressure gauge — smooth, controlled force for pressing, bending and forming.",
+    "highlights": [
+      "Rigid H-frame with hydraulic cylinder",
+      "Hydraulic power pack with pressure gauge",
+      "Smooth, adjustable pressing force",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
+    ],
+    "specs": [
+      [
+        "Type",
+        "H-frame hydraulic press"
+      ],
+      [
+        "Drive",
+        "Electric motor and hydraulic power pack"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Teal green"
+      ]
+    ],
+    "featured": true
+  },
+  {
+    "slug": "hydraulic-c-frame-press",
+    "name": "Hydraulic C-Frame Press",
+    "nameBn": "হাইড্রোলিক সি-ফ্রেম প্রেস",
+    "category": "power-press",
+    "subcategory": "hydraulic",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/hydraulic-c-frame-press.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Open-front C-frame hydraulic press — easy access from three sides for punching, pressing and assembly work.",
+    "highlights": [
+      "Open-front C-frame body",
+      "Hydraulic cylinder with pressure lines",
+      "Quiet, smooth operation",
+      "Tonnage made to your order",
+      "Warranty and after-sales service from DMG"
+    ],
+    "specs": [
+      [
+        "Type",
+        "C-frame hydraulic press"
+      ],
+      [
+        "Drive",
+        "Hydraulic power pack"
+      ],
+      [
+        "Capacity",
+        "Made to order (tonnage as you need)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Teal"
+      ]
+    ],
+    "featured": false
+  },
+  {
+    "slug": "mechanical-shearing-machine",
+    "name": "Mechanical Sheet Shearing Machine",
+    "nameBn": "মেকানিক্যাল শিট শেয়ারিং মেশিন",
+    "category": "workshop",
+    "subcategory": "shearing",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/mechanical-shearing-machine.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Flywheel-driven mechanical shearing machine for straight cutting of MS and GI sheet.",
+    "highlights": [
+      "Straight, clean sheet cutting",
+      "Heavy flywheel drive",
+      "Hold-down clamps for steady cuts",
+      "Size made to your order"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Mechanical sheet shearing machine"
+      ],
+      [
+        "Drive",
+        "Motor and flywheel"
+      ],
+      [
+        "Cutting length",
+        "As per order"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Green with orange blade guard"
+      ]
+    ],
+    "featured": false
+  },
+  {
+    "slug": "pillar-drill-machine",
+    "name": "Pillar Drill Machine",
+    "nameBn": "পিলার ড্রিল মেশিন",
+    "category": "workshop",
+    "subcategory": "drill",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/pillar-drill-machine.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Heavy pillar drill machine for drilling holes in steel parts, brackets and stands — used daily in our own workshop.",
+    "highlights": [
+      "Rigid pillar and base",
+      "Adjustable work table",
+      "Belt-driven spindle with speed steps",
+      "Ideal for brackets and fabrication work"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Pillar drill machine"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ]
+    ],
+    "featured": false
+  },
+  {
+    "slug": "dmg-ac-outdoor-stand",
+    "name": "DMG AC Outdoor Unit Stand (Wall Bracket)",
+    "nameBn": "ডিএমজি এসি আউটডোর স্ট্যান্ড (ওয়াল ব্র্যাকেট)",
+    "category": "ac-stand",
+    "subcategory": "wall-stand",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/dmg-ac-outdoor-stand.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Pair of strong DMG wall brackets for the outdoor unit (ODU) of split ACs — supplied with rawal bolts, nuts and washers.",
+    "highlights": [
+      "Universal — fits split AC outdoor units of all major brands",
+      "Thick steel with powder coating",
+      "Comes with rawal bolts, nuts and washers",
+      "DMG embossed, made in our factory",
+      "Retail and wholesale; also sold by KG"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Wall-mount AC outdoor unit stand (pair)"
+      ],
+      [
+        "Material",
+        "Steel, powder coated"
+      ],
+      [
+        "In the pack",
+        "2 brackets, rawal bolts, nuts, washers"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Off-white"
+      ]
+    ],
+    "featured": true
+  },
+  {
+    "slug": "dmg-ac-stand-box-pack",
+    "name": "DMG AC Stand — Universal Box Pack",
+    "nameBn": "ডিএমজি এসি স্ট্যান্ড — ইউনিভার্সাল বক্স প্যাক",
+    "category": "ac-stand",
+    "subcategory": "wall-stand",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/dmg-ac-stand-box-pack.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "DMG universal AC outdoor stand in its retail box — a full set with rawal bolts, nuts and washers, ready for the shop shelf.",
+    "highlights": [
+      "Retail box with full fitting kit",
+      "Universal fit for split AC outdoor units",
+      "Good for dealers and AC installers",
+      "Wholesale prices for bulk orders"
+    ],
+    "specs": [
+      [
+        "Type",
+        "AC outdoor unit stand, boxed set"
+      ],
+      [
+        "In the box",
+        "2 brackets, rawal bolts, nuts, washers"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ]
+    ],
+    "featured": false
+  },
+  {
+    "slug": "ac-floor-stand",
+    "name": "AC Floor Stand (Ground Stand)",
+    "nameBn": "এসি ফ্লোর স্ট্যান্ড (গ্রাউন্ড স্ট্যান্ড)",
+    "category": "ac-stand",
+    "subcategory": "floor-stand",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/ac-floor-stand.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Pair of U-shaped floor stands that keep the AC outdoor unit off the roof or ground — with rubber pads and fixing bolts.",
+    "highlights": [
+      "For roof-top or ground installation",
+      "Rubber pads reduce vibration",
+      "Rust-resistant powder coating",
+      "Fixing bolts included"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Floor / ground stand for AC outdoor unit (pair)"
+      ],
+      [
+        "Material",
+        "Steel, powder coated"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Off-white"
+      ]
+    ],
+    "featured": false
+  },
+  {
+    "slug": "heavy-duty-ac-stand-red",
+    "name": "Heavy Duty AC Stand — Red Oxide",
+    "nameBn": "হেভি ডিউটি এসি স্ট্যান্ড — রেড অক্সাইড",
+    "category": "ac-stand",
+    "subcategory": "wall-stand",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/heavy-duty-ac-stand-red.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Heavy duty welded AC stand with red oxide primer — for big outdoor units and commercial AC installations.",
+    "highlights": [
+      "Welded heavy angle frame",
+      "Red oxide anti-rust primer",
+      "For large and commercial AC units",
+      "Size made to order"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Heavy duty welded AC stand"
+      ],
+      [
+        "Finish",
+        "Red oxide primer"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Red oxide"
+      ]
+    ],
+    "featured": false
+  },
+  {
+    "slug": "ac-stand-bulk-by-kg",
+    "name": "AC Stand — Bulk (Sold by KG)",
+    "nameBn": "এসি স্ট্যান্ড — পাইকারি (কেজি হিসেবে)",
+    "category": "ac-stand",
+    "subcategory": "bulk",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/ac-stand-bulk-by-kg.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Galvanized AC stand brackets in bulk, sold by weight (KG) — for dealers, AC shops and installers.",
+    "highlights": [
+      "Sold by KG at wholesale price",
+      "Galvanized steel brackets",
+      "Ready stock in our factory",
+      "Delivery all over Bangladesh"
+    ],
+    "specs": [
+      [
+        "Type",
+        "AC stand brackets, bulk"
+      ],
+      [
+        "Sold by",
+        "Weight (KG)"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ],
+      [
+        "Colour",
+        "Galvanized"
+      ]
+    ],
+    "featured": false
+  },
+  {
+    "slug": "rawal-anchor-bolt",
+    "name": "Rawal Bolt (Anchor Bolt) for AC Stand",
+    "nameBn": "রাওয়াল বোল্ট (অ্যাঙ্কর বোল্ট)",
+    "category": "hardware",
+    "subcategory": "bolts",
+    "condition": "new",
+    "price": 0,
+    "image": "/products/rawal-anchor-bolt.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Expansion rawal (anchor) bolts with nut and washer for fixing AC stands and brackets to brick or concrete walls.",
+    "highlights": [
+      "Expansion sleeve grips brick and concrete",
+      "With nut and washer",
+      "Sold per piece or in bulk"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Expansion anchor (rawal) bolt"
+      ],
+      [
+        "Use",
+        "Fixing AC stands and brackets to walls"
+      ]
+    ],
+    "featured": false
+  }
 ];

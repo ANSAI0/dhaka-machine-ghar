@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Loader2, ShoppingCart, Trash2 } from "lucide-react";
-import { formatBDT } from "@/lib/site";
+import { formatBDT, priceText } from "@/lib/site";
 import { useSite } from "@/components/site-provider";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { PageHero } from "@/components/page-hero";
@@ -64,7 +64,7 @@ export default function CheckoutPage() {
                   <ConditionBadge condition={p.condition} className="w-fit" />
                   <div className="mt-auto flex items-center justify-between gap-2">
                     <QtyStepper value={qty} onChange={(n) => cart.setQty(p.slug, n)} label={`${p.name} quantity`} />
-                    <span className="text-sm font-bold text-brand-700">{formatBDT(p.price * qty)}</span>
+                    <span className="text-sm font-bold text-brand-700">{priceText(p.price * qty)}</span>
                   </div>
                 </div>
               </article>

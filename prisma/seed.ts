@@ -1,14 +1,7 @@
 // npm run db:seed          → load/refresh the catalog from prisma/seed-data
 // npm run db:seed -- --demo → also add a demo order + warranties for trying /track and /warranty
 import { PrismaClient, type Prisma } from "@prisma/client";
-import { readFileSync } from "node:fs";
-import path from "node:path";
 import { seedCategories, seedProducts } from "./seed-data/catalog";
-
-// Representative photos (Wikimedia Commons, free licences) — see prisma/seed-data/image-credits.json.
-const photos: Record<string, { image: string; credit: string; source: string }> = JSON.parse(
-  readFileSync(path.join(__dirname, "seed-data", "image-credits.json"), "utf8"),
-);
 
 const db = new PrismaClient();
 
@@ -39,9 +32,7 @@ async function seedCatalog() {
       condition: p.condition,
       price: p.price,
       oldPrice: p.oldPrice ?? null,
-      image: photos[p.slug]?.image ?? p.image ?? null,
-      imageCredit: photos[p.slug]?.credit ?? null,
-      imageSource: photos[p.slug]?.source ?? null,
+      image: p.image ?? null,
       brand: p.brand,
       capacity: p.capacity,
       voltage: p.voltage,
@@ -63,8 +54,8 @@ async function seedCatalog() {
 
 async function seedDemo() {
   const daysAgo = (d: number) => new Date(Date.now() - d * 864e5);
-  const press = await db.product.findUniqueOrThrow({ where: { slug: "channel-body-power-press-25-ton" } });
-  const lathe = await db.product.findUniqueOrThrow({ where: { slug: "reconditioned-lathe-6ft" } });
+  const press = await db.product.findUniqueOrThrow({ where: { slug: "channel-body-power-press-teal-yellow" } });
+  const lathe = await db.product.findUniqueOrThrow({ where: { slug: "bou-body-power-press-green-red" } });
 
   await db.order.deleteMany({ where: { id: { contains: "DEMO" } } });
   await db.order.create({
