@@ -11,7 +11,7 @@ import { useSite } from "./site-provider";
 
 type Msg = { role: "user" | "assistant"; text: string };
 const KEY = "dmg-chat";
-const suggestions = ["২৫ টন পাওয়ার প্রেসের দাম কত?", "রিকন্ডিশন্ড লেদ মেশিন আছে?", "অগ্রিম কত দিতে হবে?", "আমাকে কল করুন"];
+const suggestions = ["চ্যানেল বডি পাওয়ার প্রেস", "এসি স্ট্যান্ড আছে?", "আপনাদের ঠিকানা কোথায়?", "ওয়ারেন্টি কত দিন?"];
 
 // Turns site paths (/product/…) and phone numbers in bot replies into links.
 function Rich({ text }: { text: string }) {

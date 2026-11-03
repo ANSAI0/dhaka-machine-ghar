@@ -1,7 +1,7 @@
 import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import type { Catalog, Product } from "./catalog";
-import { formatBDT, type SiteInfo } from "./site";
+import { priceText, type SiteInfo } from "./site";
 import { isValidBDPhone, normalizePhone } from "./orders";
 
 export type ChatTurn = { role: "user" | "assistant"; text: string; at: string };
@@ -14,24 +14,34 @@ const MODEL = "claude-opus-5-5";
 export const aiConfigured = () => !!process.env.ANTHROPIC_API_KEY;
 
 const productLine = (p: Product) =>
-  `- ${p.name} (${p.nameBn}) | ${p.capacity} | ${p.condition === "new" ? "Brand New" : "Foreign Reconditioned"} | ${formatBDT(p.price)} | /product/${p.slug}`;
+  [
+    `- ${p.name} (${p.nameBn}) | ${priceText(p.price)} | /product/${p.slug}`,
+    `  ${p.short}`,
+    p.highlights.length ? `  Highlights: ${p.highlights.join("; ")}` : "",
+    p.specs.length ? `  Specs: ${p.specs.map(([k, v]) => `${k}: ${v}`).join("; ")}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
 
 // Stable prefix (catalog + business info) so prompt caching applies across visitors.
 function systemPrompt(catalog: Catalog, site: SiteInfo, knowledge: string) {
   const byCat = catalog.categories
     .map((c) => `## ${c.name} (${c.nameBn}) — /category/${c.slug}\n${catalog.products.filter((p) => p.category === c.slug).map(productLine).join("\n")}`)
     .join("\n\n");
-  return `You are "DMG সহকারী", the website assistant of ${site.name} (${site.nameBn}), a power press manufacturer and importer of foreign & reconditioned workshop machinery in Bangladesh.
+  return `You are "DMG সহকারী", the website assistant of ${site.name} (${site.nameBn}), a Bangladeshi manufacturer of mechanical and hydraulic power presses (channel body / H-frame, bou body / C-frame, hydraulic) built in its own factory, and maker of AC outdoor-unit stands (wall brackets, floor stands; sold per piece, boxed and in bulk by KG) and rawal (anchor) bolts. It also sells shearing and drill machines.
 
 Reply in the visitor's language — Bangla by default, English if they write in English. Keep replies short (2–5 sentences), friendly and concrete. Plain text only, no markdown formatting; put site links as bare relative paths like /product/<slug> on their own.
 
 What you can do:
-- Recommend machines from the catalog below with price and link. Never invent machines, prices or specs that are not listed; if something isn't listed, offer a custom quotation (/quotation) — the factory builds power presses to order.
+- Answer any question about the business, the website and the products from the catalog and info below: what a product is, what it is used for, its specs, which one suits the visitor's work, and its link. Never invent machines, prices, tonnage or specs that are not listed. Where the price is "Call for price", explain that it depends on the tonnage/size and offer a call back or a quotation. Power presses are built to order in the tonnage the buyer needs (/quotation).
+- AC stands are sold per piece, in a box with the fitting kit, and in bulk by KG for dealers and installers.
+- Machines carry a serial-based warranty with after-sales service; it can be checked at /warranty.
 - Explain ordering: ${site.advancePercent}% advance booking by bKash/Nagad/Bank, the rest at delivery; delivery all over Bangladesh; order progress is visible at /track.
 - When a visitor shows buying interest or asks for a call back, ask for their name and mobile number. When you have both, call the save_lead tool once, then tell them the team will call soon.
 - For negotiation, final price, visits or anything you can't answer, hand over to a person: hotline ${site.phone}, WhatsApp ${site.phone} (the chat window has a WhatsApp button).
 
-Business info: factory ${site.address}; showroom ${site.showroom}; hours ${site.hours}; email ${site.email}.
+Business info: factory ${site.address}; showroom ${site.showroom}; hours ${site.hours}; phone ${site.phone}; email ${site.email}.
+Website pages: all products /shop, custom quotation /quotation, order tracking /track, warranty & service /warranty, contact & map /contact, terms /terms, refund policy /refund.
 ${knowledge ? `\nNotes from the owner:\n${knowledge}\n` : ""}
 # Catalog (prices in BDT)
 ${byCat}`;
@@ -106,19 +116,18 @@ export async function aiReply(history: ChatTurn[], catalog: Catalog, site: SiteI
 
 const synonyms: [RegExp, string][] = [
   [/প্রেস|press/i, "press"],
-  [/লেদ|lathe/i, "lathe"],
-  [/শেপার|shaper/i, "shaper"],
-  [/মিলিং|milling/i, "milling"],
+  [/চ্যানেল|channel|h.?frame/i, "channel"],
+  [/বউ|বো বডি|bou|bow|c.?frame|সি ফ্রেম/i, "bou"],
+  [/হাইড্রোলিক|hydraulic/i, "hydraulic"],
+  [/মোটর|motor/i, "motor"],
+  [/হেভি|heavy/i, "heavy"],
+  [/ডাবল|double/i, "double"],
+  [/এসি|ac\b|a\.c|air ?con|স্ট্যান্ড|stand|ব্র্যাকেট|bracket/i, "stand"],
+  [/ফ্লোর|floor|ground|গ্রাউন্ড/i, "floor"],
+  [/কেজি|kg|পাইকারি|wholesale|bulk/i, "kg"],
+  [/বোল্ট|bolt|রাওয়াল|rawal|anchor/i, "bolt"],
   [/ড্রিল|drill/i, "drill"],
-  [/বেন্ড|bender|পাইপ/i, "bender"],
-  [/শিয়ার|shear|কাটিং/i, "shear"],
-  [/ব্রেক|brake/i, "brake"],
-  [/ইট|পাথর|crusher/i, "crusher"],
-  [/মিক্সার|mixer/i, "mixer"],
-  [/হয়েস্ট|hoist|winch/i, "hoist"],
-  [/ডাই|die/i, "die"],
-  [/প্যানেল|panel|plc/i, "panel"],
-  [/রিকন্ডিশন|recondition|পুরাতন|used/i, "reconditioned"],
+  [/শিয়ার|শেয়ার|shear|কাটিং/i, "shear"],
 ];
 
 const bnDigits = (s: string) => s.replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d)));
@@ -140,8 +149,11 @@ export function basicReply(raw: string, catalog: Catalog, site: SiteInfo): BotRe
   const ton = text.match(/(\d+)\s*(?:টন|ton)/i)?.[1];
   const scored = catalog.products
     .map((p) => {
-      const hay = `${p.name} ${p.nameBn} ${p.capacity} ${p.subcategory} ${p.condition}`.toLowerCase();
-      let s = terms.filter((t) => hay.includes(t)).length * 2;
+      const norm = (x: string) => x.toLowerCase().replace(/bou body|c-frame/g, "bou").replace(/h-frame/g, "channel");
+      // A term in the product's name / category counts far more than one in its description.
+      const title = norm(`${p.name} ${p.category} ${p.subcategory}`);
+      const body = norm(`${p.capacity} ${p.short}`);
+      let s = terms.reduce((sum, t) => sum + (title.includes(t) ? 4 : body.includes(t) ? 1 : 0), 0);
       if (ton && new RegExp(`\\b${ton}\\s*ton`, "i").test(p.capacity)) s += 3;
       return { p, s };
     })
@@ -152,13 +164,29 @@ export function basicReply(raw: string, catalog: Catalog, site: SiteInfo): BotRe
   if (/ট্র্যাক|track|অর্ডার কোথায়/i.test(text)) {
     return { text: `ইনভয়েস বা মোবাইল নম্বর দিয়ে অর্ডারের অবস্থা দেখুন: /track`, mode: "basic" };
   }
+  // Common questions about the business
+  const faq: [RegExp, string][] = [
+    [/ঠিকানা|কোথায়|লোকেশন|location|address|শোরুম|showroom|কারখানা|factory|ম্যাপ|map/i, `কারখানা: ${site.address}\nশোরুম: ${site.showroom}\nম্যাপ ও যোগাযোগ: /contact\nকল: ${site.phone}`],
+    [/সময়|খোলা|বন্ধ|hours|open|time/i, `আমাদের সময়: ${site.hours}। কল: ${site.phone}`],
+    [/ওয়ারেন্টি|গ্যারান্টি|warranty|guarantee|সার্ভিস|service/i, `আমাদের মেশিনে সিরিয়াল নম্বর ভিত্তিক ওয়ারেন্টি ও বিক্রয়-পরবর্তী সার্ভিস আছে। সিরিয়াল দিয়ে যাচাই ও সার্ভিস অনুরোধ: /warranty`],
+    [/ডেলিভারি|delivery|কুরিয়ার|courier|সারা দেশ/i, `সারা বাংলাদেশে ট্রান্সপোর্ট/কুরিয়ারে ডেলিভারি দেওয়া হয়। অর্ডারের প্রতিটি ধাপ দেখুন /track এ। বিস্তারিত: ${site.phone}`],
+    [/পেমেন্ট|payment|বিকাশ|bkash|নগদ|nagad|অগ্রিম|advance|ব্যাংক|bank/i, `মোট মূল্যের ${site.advancePercent}% অগ্রিম (bKash / Nagad / Bank বা অনলাইনে) দিয়ে অর্ডার কনফার্ম, বাকি ডেলিভারির সময়।`],
+    [/কাস্টম|custom|মাপে|টনেজ|tonnage|বানিয়ে/i, `আপনার প্রয়োজনীয় টনেজ ও মাপে পাওয়ার প্রেস নিজস্ব কারখানায় তৈরি করে দিই। কোটেশন নিন: /quotation`],
+  ];
+  if (!scored.length) {
+    const hit = faq.find(([re]) => re.test(text));
+    if (hit) return { text: `${hit[1]}\n\nকল ব্যাক চাইলে আপনার নাম ও মোবাইল নম্বর লিখুন।`, mode: "basic" };
+    if (/দাম|price|কত টাকা|rate|মূল্য/i.test(text)) {
+      return { text: `দাম মেশিনের টনেজ/সাইজ অনুযায়ী আলাদা। সব পণ্য দেখুন /shop — অথবা আপনার নাম ও মোবাইল নম্বর লিখুন, আমরা কল করে দাম জানাব। সরাসরি কল: ${site.phone}`, mode: "basic" };
+    }
+  }
   if (scored.length) {
-    const list = scored.map(({ p }) => `• ${p.nameBn} — ${formatBDT(p.price)}\n/product/${p.slug}`).join("\n");
-    return { text: `এই মেশিনগুলো দেখতে পারেন:\n${list}\n\nকল ব্যাক চাইলে আপনার নাম ও মোবাইল নম্বর লিখুন।`, mode: "basic" };
+    const list = scored.map(({ p }) => `• ${p.nameBn} — ${priceText(p.price)}\n/product/${p.slug}`).join("\n");
+    return { text: `এই পণ্যগুলো দেখতে পারেন:\n${list}\n\nকল ব্যাক চাইলে আপনার নাম ও মোবাইল নম্বর লিখুন।`, mode: "basic" };
   }
   const cats = catalog.categories.map((c) => `• ${c.nameBn}: /category/${c.slug}`).join("\n");
   return {
-    text: `আসসালামু আলাইকুম! কোন মেশিন খুঁজছেন? যেমন: "২৫ টন পাওয়ার প্রেস" বা "লেদ মেশিন"।\n${cats}\n\nনিজের মাপে মেশিন বানাতে: /quotation\nসরাসরি কথা বলতে: ${site.phone}`,
+    text: `আসসালামু আলাইকুম! ঢাকা মেশিন ঘরে পাওয়ার প্রেস (চ্যানেল বডি, বউ বডি, হাইড্রোলিক), এসি স্ট্যান্ড ও রাওয়াল বোল্ট পাবেন। কী জানতে চান? যেমন: "চ্যানেল বডি প্রেস", "এসি স্ট্যান্ড", "ঠিকানা", "ওয়ারেন্টি"।\n${cats}\n\nনিজের মাপে মেশিন বানাতে: /quotation\nসরাসরি কথা বলতে: ${site.phone}`,
     mode: "basic",
   };
 }

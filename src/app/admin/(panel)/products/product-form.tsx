@@ -77,7 +77,7 @@ export function ProductForm({ categories, initial }: { categories: Category[]; i
             <Field name="brand" error={fe.brand} label="Brand">
               <input id="pf-brand" name="brand" defaultValue={initial?.brand ?? "Dhaka Machine Ghar"} className={`${input} border-gray-200`} />
             </Field>
-            <Field name="capacity" error={fe.capacity} label="Capacity *" hint="Shown on cards and used by the capacity filter, e.g. 25 Ton">
+            <Field name="capacity" error={fe.capacity} label="Capacity" hint="Optional — e.g. 25 Ton. Shown on the product page and used by the capacity filter">
               <input id="pf-capacity" name="capacity" defaultValue={initial?.capacity} className={`${input} ${b("capacity")}`} />
             </Field>
             <Field name="voltage" error={fe.voltage} label="Power supply">
@@ -127,7 +127,7 @@ export function ProductForm({ categories, initial }: { categories: Category[]; i
       <div className="space-y-6">
         <section className="space-y-4 rounded-2xl border border-gray-200 bg-white p-5">
           <h2 className="font-bold text-gray-800">Price (৳)</h2>
-          <Field name="price" error={fe.price} label="Price *"><input id="pf-price" name="price" inputMode="numeric" defaultValue={initial?.price} className={`${input} ${b("price")}`} /></Field>
+          <Field name="price" error={fe.price} label="Price (empty = Call for price)"><input id="pf-price" name="price" inputMode="numeric" defaultValue={initial?.price || ""} placeholder="e.g. 185000" className={`${input} ${b("price")}`} /></Field>
           <Field name="oldPrice" error={fe.oldPrice} label="Old price (shows discount)"><input id="pf-oldPrice" name="oldPrice" inputMode="numeric" defaultValue={initial?.oldPrice} className={`${input} ${b("oldPrice")}`} /></Field>
         </section>
 

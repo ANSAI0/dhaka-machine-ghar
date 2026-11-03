@@ -56,10 +56,11 @@ export async function saveProduct(originalSlug: string | null, _: ProductFormSta
   if (name.length < 3) e.name = "Required";
   if (!nameBn) e.nameBn = "Required";
   if (condition !== "new" && condition !== "reconditioned") e.condition = "Required";
-  if (!price || Number.isNaN(price) || price <= 0) e.price = "Enter a price in taka";
-  if (oldPrice !== null && (Number.isNaN(oldPrice) || oldPrice <= (price ?? 0))) e.oldPrice = "Must be higher than the price (or empty)";
+  // Empty or 0 = "Call for price" on the website.
+  if (price !== null && (Number.isNaN(price) || price < 0)) e.price = "Enter a price in taka, or leave empty for \"Call for price\"";
+  if (oldPrice !== null && !price) e.oldPrice = "Set the price first (old price shows a discount)";
+  else if (oldPrice !== null && (Number.isNaN(oldPrice) || oldPrice <= (price ?? 0))) e.oldPrice = "Must be higher than the price (or empty)";
   if (videoId === undefined) e.video = "Not a YouTube link or id";
-  if (!str(fd, "capacity")) e.capacity = "Required";
   if (!str(fd, "short")) e.short = "Required";
 
   const category = await db.category.findUnique({ where: { slug: categorySlug }, include: { subcategories: true } });
@@ -90,7 +91,7 @@ export async function saveProduct(originalSlug: string | null, _: ProductFormSta
     categoryId: category!.id,
     subcategoryId: sub?.id ?? null,
     condition: condition as "new" | "reconditioned",
-    price: price!,
+    price: price ?? 0,
     oldPrice,
     brand: str(fd, "brand") || "Dhaka Machine Ghar",
     capacity: str(fd, "capacity"),

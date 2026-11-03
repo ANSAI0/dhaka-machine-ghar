@@ -28,8 +28,8 @@ export function ProductCard({ product }: { product: Product }) {
           {product.name}
         </h3>
       </Link>
-      <div className="mt-auto flex items-end justify-between gap-1.5 px-2.5 pb-3 pt-2">
-        <div className="min-w-0 leading-tight">
+      <div className="mt-auto flex flex-col gap-2 px-2.5 pb-3 pt-2 sm:flex-row sm:items-end sm:justify-between sm:gap-1.5">
+        <div className="min-w-0 text-center leading-tight sm:text-left">
           {product.oldPrice && <p className="text-[10px] text-gray-400 line-through md:text-[11px]">{formatBDT(product.oldPrice)}</p>}
           <p className="whitespace-nowrap text-[15px] font-bold tracking-tight text-brand-700 md:text-[15px] lux:text-gold-300">{priceText(product.price)}</p>
         </div>
@@ -40,7 +40,7 @@ export function ProductCard({ product }: { product: Product }) {
             flyToCart(imageRef.current);
           }}
           aria-label={added ? `${product.name} added to cart` : `Add ${product.name} to cart`}
-          className={`flex h-8 shrink-0 items-center gap-0.5 rounded-lg border px-2 text-[11px] font-bold transition-colors ${
+          className={`flex h-8 shrink-0 items-center justify-center gap-0.5 rounded-lg border px-2 text-[11px] font-bold transition-colors ${
             added
               ? "border-brand-600 bg-brand-600 text-white lux:border-gold-400 lux:bg-gold-400 lux:text-lux-950"
               : "border-brand-600/50 text-brand-700 hover:bg-brand-600 hover:text-white lux:border-gold-400/50 lux:text-gold-300"

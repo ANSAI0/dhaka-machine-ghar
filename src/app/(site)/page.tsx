@@ -15,10 +15,10 @@ import { WhatsappIcon } from "@/components/brand-icons";
 
 // "Especially for you" cards under the hero.
 const shortcuts = (site: SiteInfo) => [
-  { title: "Call Now", text: "Talk to us directly", cta: "Call Now", href: `tel:${site.phoneIntl}`, Icon: Phone, photo: "/products/heavy-duty-channel-body-power-press.webp" },
-  { title: "WhatsApp", text: "Send photos, get a price", cta: "Chat Now", href: `https://wa.me/${site.whatsappIntl}`, Icon: WhatsappIcon, photo: "/products/bou-body-power-press-lime.webp" },
-  { title: "Custom Machine", text: "Built to your size", cta: "Get Quote", href: "/quotation", Icon: FileText, photo: "/products/hydraulic-h-frame-press.webp" },
-  { title: "Track Order", text: "Live factory updates", cta: "Track", href: "/track", Icon: Truck, photo: "/products/channel-body-power-press-teal-yellow.webp" },
+  { title: "Call Now", text: "Talk to us directly", cta: "Call Now", href: `tel:${site.phoneIntl}`, Icon: Phone, photo: "/products/heavy-duty-channel-body-power-press.webp", tone: "from-accent-700/95 via-accent-600/80 to-accent-500/55" },
+  { title: "WhatsApp", text: "Send photos, get a price", cta: "Chat Now", href: `https://wa.me/${site.whatsappIntl}`, Icon: WhatsappIcon, photo: "/products/bou-body-power-press-lime.webp", tone: "from-brand-900/95 via-brand-700/80 to-brand-500/55" },
+  { title: "Custom Machine", text: "Built to your size", cta: "Get Quote", href: "/quotation", Icon: FileText, photo: "/products/hydraulic-h-frame-press.webp", tone: "from-steel-700/95 via-steel-600/80 to-steel-500/55" },
+  { title: "Track Order", text: "Live factory updates", cta: "Track", href: "/track", Icon: Truck, photo: "/products/channel-body-power-press-teal-yellow.webp", tone: "from-ink/95 via-gray-800/80 to-gray-600/55" },
 ];
 
 const trust = (site: SiteInfo) => [
@@ -53,10 +53,10 @@ export default async function Home() {
         <section className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5 lux:border-white/[0.07] lux:bg-lux-800">
           <h2 className="mb-4 text-center text-lg font-bold text-gray-900 sm:text-xl lux:text-white">Especially For You</h2>
           <div className="no-scrollbar -mx-4 flex snap-x gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 xl:grid-cols-4">
-            {shortcuts(site).map(({ title, text, cta, href, Icon, photo }) => (
-              <a key={title} href={href} className="group relative isolate flex w-[46%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl bg-brand-900 p-3.5 text-white shadow-[0_10px_22px_-12px_rgba(16,24,40,0.55)] transition-transform hover:-translate-y-0.5 sm:w-auto sm:p-4 lux:ring-1 lux:ring-gold-400/25">
+            {shortcuts(site).map(({ title, text, cta, href, Icon, photo, tone }) => (
+              <a key={title} href={href} className="group relative isolate flex w-[46%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl bg-ink p-3.5 text-white shadow-[0_10px_22px_-12px_rgba(16,24,40,0.55)] transition-transform hover:-translate-y-0.5 sm:w-auto sm:p-4 lux:ring-1 lux:ring-gold-400/25">
                 <Image src={photo} alt="" fill sizes="(min-width: 1280px) 220px, 46vw" className="-z-10 object-cover opacity-45 transition-transform duration-500 group-hover:scale-105" />
-                <span className="absolute inset-0 -z-10 bg-gradient-to-br from-brand-900/95 via-brand-800/80 to-brand-600/55" />
+                <span className={`absolute inset-0 -z-10 bg-gradient-to-br ${tone} lux:from-lux-900/95 lux:via-lux-800/85 lux:to-lux-700/60`} />
                 <div className="flex items-start justify-between gap-2">
                   <p className="text-[15px] font-bold leading-tight drop-shadow sm:text-base">{title}</p>
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15 text-white ring-1 ring-white/30 lux:bg-gold-gradient lux:text-lux-950 lux:ring-0">
@@ -64,7 +64,7 @@ export default async function Home() {
                   </span>
                 </div>
                 <p className="mb-4 mt-1 text-xs text-white/80 sm:text-sm">{text}</p>
-                <span className="mt-auto rounded-lg bg-white py-2 text-center text-xs font-bold text-brand-800 sm:text-sm lux:bg-gold-gradient lux:text-lux-950">{cta}</span>
+                <span className="mt-auto rounded-lg bg-white py-2 text-center text-xs font-bold text-gray-900 sm:text-sm lux:bg-gold-gradient lux:text-lux-950">{cta}</span>
               </a>
             ))}
           </div>
