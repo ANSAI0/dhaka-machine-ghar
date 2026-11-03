@@ -20,7 +20,7 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-[0_2px_10px_-4px_rgba(16,24,40,0.12)] transition-shadow duration-300 hover:shadow-[0_14px_30px_-14px_rgba(16,24,40,0.3)] lux:border-white/[0.07] lux:bg-lux-800">
       <Link href={`/product/${product.slug}`} className="block">
-        <div ref={imageRef} className="relative aspect-square overflow-hidden bg-white lux:bg-lux-700">
+        <div ref={imageRef} className="relative aspect-square overflow-hidden bg-studio lux:bg-lux-700 lux:bg-none">
           {off > 0 && <span className="absolute left-2 top-2 z-10 rounded-md bg-accent-600 px-1.5 py-0.5 text-[10px] font-bold text-white">{off}% OFF</span>}
           <ProductImage product={product} sizes="(max-width: 768px) 50vw, 240px" />
         </div>

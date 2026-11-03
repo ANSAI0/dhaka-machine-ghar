@@ -15,10 +15,10 @@ import { WhatsappIcon } from "@/components/brand-icons";
 
 // "Especially for you" cards under the hero.
 const shortcuts = (site: SiteInfo) => [
-  { title: "Call Now", text: "Talk to us directly", cta: "Call Now", href: `tel:${site.phoneIntl}`, Icon: Phone, photo: "/products/heavy-duty-channel-body-power-press.webp", tone: "from-accent-700/95 via-accent-600/80 to-accent-500/55" },
-  { title: "WhatsApp", text: "Send photos, get a price", cta: "Chat Now", href: `https://wa.me/${site.whatsappIntl}`, Icon: WhatsappIcon, photo: "/products/bou-body-power-press-lime.webp", tone: "from-brand-900/95 via-brand-700/80 to-brand-500/55" },
-  { title: "Custom Machine", text: "Built to your size", cta: "Get Quote", href: "/quotation", Icon: FileText, photo: "/products/hydraulic-h-frame-press.webp", tone: "from-steel-700/95 via-steel-600/80 to-steel-500/55" },
-  { title: "Track Order", text: "Live factory updates", cta: "Track", href: "/track", Icon: Truck, photo: "/products/channel-body-power-press-teal-yellow.webp", tone: "from-ink/95 via-gray-800/80 to-gray-600/55" },
+  { title: "Call Now", text: "Talk to us directly", cta: "Call Now", href: `tel:${site.phoneIntl}`, Icon: Phone, photo: "/shortcuts/heavy-duty-channel-body-power-press.webp", tone: "from-accent-700/95 via-accent-600/80 to-accent-500/55" },
+  { title: "WhatsApp", text: "Send photos, get a price", cta: "Chat Now", href: `https://wa.me/${site.whatsappIntl}`, Icon: WhatsappIcon, photo: "/shortcuts/bou-body-power-press-lime.webp", tone: "from-brand-900/95 via-brand-700/80 to-brand-500/55" },
+  { title: "Custom Machine", text: "Built to your size", cta: "Get Quote", href: "/quotation", Icon: FileText, photo: "/shortcuts/hydraulic-h-frame-press.webp", tone: "from-steel-700/95 via-steel-600/80 to-steel-500/55" },
+  { title: "Track Order", text: "Live factory updates", cta: "Track", href: "/track", Icon: Truck, photo: "/shortcuts/channel-body-power-press-teal-yellow.webp", tone: "from-ink/95 via-gray-800/80 to-gray-600/55" },
 ];
 
 const trust = (site: SiteInfo) => [
@@ -78,9 +78,9 @@ export default async function Home() {
               const img = coverOf(c.slug);
               return (
                 <Link key={c.slug} href={`/category/${c.slug}`} className="group flex w-[27%] shrink-0 snap-start flex-col items-center gap-2 text-center sm:w-auto">
-                  <span className="relative block aspect-square w-full overflow-hidden rounded-2xl border border-gray-100 bg-gray-50 shadow-sm transition-shadow group-hover:shadow-md lux:border-white/10 lux:bg-lux-700">
+                  <span className="relative block aspect-square w-full overflow-hidden rounded-2xl border border-gray-100 bg-studio shadow-sm transition-shadow group-hover:shadow-md lux:border-white/10 lux:bg-lux-700 lux:bg-none">
                     {img ? (
-                      <Image src={img} alt="" fill sizes="(min-width: 640px) 160px, 30vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
+                      <Image src={img} alt="" fill sizes="(min-width: 640px) 160px, 30vw" className="object-contain p-1.5 drop-shadow-[0_8px_8px_rgba(15,23,42,0.16)] transition-transform duration-300 group-hover:scale-105" />
                     ) : (
                       <span className="flex h-full w-full items-center justify-center text-brand-600 lux:text-gold-300">
                         <CategoryIcon name={c.icon} className="h-9 w-9" strokeWidth={1.5} />

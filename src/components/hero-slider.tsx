@@ -4,11 +4,12 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { ArrowRight } from "lucide-react";
 
-const SRC = "/hero/dmg-workshop.mp4";
+// 1080p for wide screens, 720p for phones (half the download).
+const SRC_HD = "/hero/dmg-workshop-1080.mp4";
+const SRC_SD = "/hero/dmg-workshop-720.mp4";
 const POSTER = "/hero/dmg-workshop-poster.webp";
 
-// Home hero: a muted loop of DMG's own workshop (presses running, drilling, welding) dimmed behind a
-// short headline. Plays only while on screen.
+// Home hero: a muted loop of metal work (grinding sparks, welding) dimmed behind a short headline. Plays only while on screen.
 export function HeroSlider() {
   const box = useRef<HTMLElement>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -17,6 +18,7 @@ export function HeroSlider() {
     const el = box.current;
     const v = video.current;
     if (!el || !v) return;
+    v.src = window.matchMedia("(min-width: 768px)").matches ? SRC_HD : SRC_SD;
     const io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()));
     io.observe(el);
     return () => io.disconnect();
@@ -26,7 +28,6 @@ export function HeroSlider() {
     <section ref={box} aria-label="Dhaka Machine Ghar workshop" className="relative isolate overflow-hidden rounded-2xl bg-ink shadow-lg sm:rounded-3xl">
       <video
         ref={video}
-        src={SRC}
         poster={POSTER}
         autoPlay
         muted

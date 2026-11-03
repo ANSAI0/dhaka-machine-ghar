@@ -114,8 +114,8 @@ export function ProductMarquee({ title, items, href }: { title: string; items: P
               <li key={`${copy}-${p.slug}`} aria-hidden={copy === 1} className="w-40 shrink-0">
                 <Link href={`/product/${p.slug}`} tabIndex={copy === 1 ? -1 : undefined} className="relative block overflow-hidden rounded-lg bg-white shadow-[0_12px_28px_-14px_rgba(16,24,40,0.35)] ring-1 ring-black/5 lux:bg-lux-800 lux:shadow-[0_16px_30px_-14px_rgba(0,0,0,0.9)] lux:ring-white/[0.08]">
                   <span aria-hidden className="pointer-events-none absolute inset-x-4 top-0 z-20 hidden h-px bg-gradient-to-r from-transparent via-gold-300/70 to-transparent lux:block" />
-                  <div className="relative aspect-[4/5] overflow-hidden bg-gray-50">
-                    {p.image ? <Image src={p.image} alt={p.name} fill sizes="160px" className="object-cover" /> : <ProductImage product={p} sizes="160px" />}
+                  <div className="relative aspect-[4/5] overflow-hidden bg-studio lux:bg-lux-700 lux:bg-none">
+                    {p.image ? <Image src={p.image} alt={p.name} fill sizes="160px" className="object-contain p-2 drop-shadow-[0_10px_10px_rgba(15,23,42,0.18)]" /> : <ProductImage product={p} sizes="160px" />}
                     {p.capacity && <span className="absolute left-2 top-2 z-10 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-bold text-gray-800 shadow-sm lux:bg-lux-950/80 lux:text-gold-300 lux:ring-1 lux:ring-gold-400/30">{p.capacity}</span>}
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-1/3 bg-gradient-to-t from-lux-800 to-transparent lux:block" />
                   </div>
@@ -151,9 +151,9 @@ export function ProductMarquee({ title, items, href }: { title: string; items: P
               className="group absolute left-1/2 top-[48%] w-56 overflow-hidden rounded-2xl bg-white shadow-[0_20px_40px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 will-change-transform lg:w-60"
               style={{ transform: "translate(-50%, -50%)" }}
             >
-              <div className="relative aspect-[4/5] overflow-hidden bg-gray-50">
+              <div className="relative aspect-[4/5] overflow-hidden bg-studio">
                 {p.image ? (
-                  <Image src={p.image} alt={p.name} fill sizes="(min-width: 1024px) 240px, 224px" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <Image src={p.image} alt={p.name} fill sizes="(min-width: 1024px) 240px, 224px" className="object-contain p-3 drop-shadow-[0_14px_14px_rgba(15,23,42,0.2)] transition-transform duration-700 group-hover:scale-105" />
                 ) : (
                   <ProductImage product={p} sizes="240px" />
                 )}

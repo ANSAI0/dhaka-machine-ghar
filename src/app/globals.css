@@ -155,11 +155,17 @@ body {
   background-image: linear-gradient(135deg, var(--color-gold-300), var(--color-gold-400) 45%, var(--color-gold-500));
 }
 
-/* Phones: "sharp & bold" — big rounded corners become tight ones. */
+/* Product "studio" backdrop behind cut-out machine photos. */
+@utility bg-studio {
+  background-color: #f6f8f7;
+  background-image: radial-gradient(85% 70% at 50% 42%, #ffffff 0%, #f3f6f5 60%, #e7ece9 100%);
+}
+
+/* Phones: big rounded corners become softly rounded ones. */
 @media (max-width: 767px) {
   :root {
-    --radius-xl: 0.5rem;
-    --radius-2xl: 0.5rem;
-    --radius-3xl: 0.625rem;
+    --radius-xl: 0.625rem;
+    --radius-2xl: 0.75rem;
+    --radius-3xl: 0.875rem;
   }
 }

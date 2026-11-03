@@ -3,7 +3,7 @@ import type { Product } from "@/lib/catalog";
 import { CategoryIcon } from "./category-icon";
 
 // Real photo when we have one; otherwise a branded placeholder until the admin uploads images.
-// `cover` fills the whole box (cards); the default keeps the full machine in view.
+// Photos are background-free cut-outs; the default keeps the whole machine in view on the parent's backdrop.
 export function ProductImage({ product, sizes, priority, cover = false }: { product: Product; sizes: string; priority?: boolean; cover?: boolean }) {
   if (product.image) {
     return (
@@ -13,7 +13,7 @@ export function ProductImage({ product, sizes, priority, cover = false }: { prod
         fill
         sizes={sizes}
         priority={priority}
-        className={`transition-transform duration-500 group-hover:scale-105 ${cover ? "object-cover" : "object-contain p-3"}`}
+        className={`transition-transform duration-500 group-hover:scale-105 ${cover ? "object-cover" : "object-contain p-3 drop-shadow-[0_12px_14px_rgba(15,23,42,0.18)]"}`}
       />
     );
   }

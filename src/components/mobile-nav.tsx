@@ -20,7 +20,7 @@ export function MobileNav() {
   const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 bg-brand-900 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_-12px_rgba(0,0,0,0.5)] md:hidden lux:bg-lux-900" aria-label="Quick">
+    <nav className="fixed inset-x-0 bottom-0 z-40 rounded-t-2xl bg-brand-900 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_-12px_rgba(0,0,0,0.5)] md:hidden lux:bg-lux-900" aria-label="Quick">
       <div className="flex">
         {items.map(({ href, label, Icon }) => {
           const active = isActive(href);

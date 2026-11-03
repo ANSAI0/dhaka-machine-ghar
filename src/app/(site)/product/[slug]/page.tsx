@@ -62,7 +62,7 @@ export default async function ProductPage({ params }: Params) {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Image */}
         <div className="lg:sticky lg:top-40 lg:self-start">
-          <div data-product-image className="group relative aspect-square overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+          <div data-product-image className="group relative aspect-square overflow-hidden rounded-2xl border border-gray-100 bg-studio shadow-sm">
             {off > 0 && <span className="absolute left-3 top-3 z-10 rounded-full bg-accent-600 px-3 py-1 text-xs font-bold text-white">{off}% ছাড়</span>}
             <ProductImage product={p} sizes="(max-width: 1024px) 100vw, 600px" priority />
           </div>
