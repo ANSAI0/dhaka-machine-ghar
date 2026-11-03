@@ -16,7 +16,7 @@ export default async function TermsPage() {
       sections={[
         {
           h: "About us",
-          p: [`${site.name} (${site.nameBn}) manufactures power press machines in its own factory at ${site.address}, and sells foreign and reconditioned workshop machines from its showroom at ${site.showroom}.`],
+          p: [`${site.name} (${site.nameBn}) manufactures power press machines in its own factory at ${site.address}, and makes AC outdoor-unit stands and rawal bolts; its showroom is at ${site.showroom}.`],
         },
         {
           h: "Prices and orders",

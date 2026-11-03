@@ -17,7 +17,7 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 export const metadata: Metadata = {
   title: { default: `${brand.name} (${brand.nameBn}) — Power Press & Workshop Machinery`, template: `%s | ${brand.name}` },
   description:
-    "Dhaka Machine Ghar — power press manufacturer in Keraniganj, Dhaka and supplier of lathe, shaper, milling, drill, press brake, shear and construction machinery in Bangladesh.",
+    "Dhaka Machine Ghar — maker of channel body, bou body and hydraulic power presses, AC outdoor stands and rawal bolts in Dhaka, Bangladesh.",
   icons: { icon: "/brand/dmg-logo-square.png" },
 };
 

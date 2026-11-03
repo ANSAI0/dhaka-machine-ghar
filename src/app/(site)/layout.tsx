@@ -5,6 +5,7 @@ import { CustomerProvider } from "@/components/customer-provider";
 import { FloatingContact } from "@/components/floating-contact";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { MapStrip } from "@/components/map-strip";
 import { MobileNav } from "@/components/mobile-nav";
 import { TrackingScripts } from "@/components/tracking-scripts";
 
@@ -15,6 +16,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <CustomerProvider>
       <Header categories={catalog.categories} />
       <main className="min-h-[60vh]">{children}</main>
+      <MapStrip />
       <Footer categories={catalog.categories} />
       <MobileNav />
       <FloatingContact />

@@ -8,14 +8,14 @@ import { Logo } from "./logo";
 export async function Footer({ categories }: { categories: Category[] }) {
   const site = await getSite();
   return (
-    <footer className="mt-16 border-t-4 border-accent-600 bg-brand-900 pb-24 pt-10 text-white md:pb-8">
+    <footer className="mt-6 border-t-4 md:mt-16 border-accent-600 bg-brand-900 pb-24 pt-10 text-white md:pb-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
             <Logo dark />
             <p className="text-sm leading-relaxed text-gray-300">
-              Power press manufacturer and importer of foreign &amp; reconditioned workshop machinery — lathe, shaper, milling, drill and
-              fabrication machines.
+              Maker of channel body, bou body and hydraulic power presses in our own factory, AC outdoor stands (retail and by KG)
+              and rawal bolts.
             </p>
             <div className="flex gap-3">
               <a href={site.facebook} target="_blank" rel="noopener" aria-label="Facebook" className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1877f2] hover:opacity-90">

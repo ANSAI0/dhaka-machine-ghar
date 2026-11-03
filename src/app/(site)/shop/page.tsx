@@ -10,7 +10,7 @@ import { ShopView } from "@/components/shop-view";
 
 export const metadata: Metadata = {
   title: "All Machines",
-  description: "Power press, lathe, shaper, milling, drill, press brake, shear, tube bender and construction machinery with ৳ BDT prices.",
+  description: "Channel body, bou body and hydraulic power presses, AC outdoor stands, rawal bolts, shearing and drill machines from Dhaka Machine Ghar.",
 };
 
 export default async function ShopPage() {
@@ -18,7 +18,7 @@ export default async function ShopPage() {
   return (
     <div className="container mx-auto px-3 pt-4 sm:px-4 lg:pt-6">
       <Breadcrumb items={[{ label: "Shop" }]} />
-      <PageHero eyebrow="Shop" title="All Machines" text="Factory-made power presses and foreign & reconditioned workshop machines." image={heroImages.workshop.src}>
+      <PageHero eyebrow="Shop" title="All Machines" text="Factory-made power presses, AC stands, bolts and workshop machines." image={heroImages.workshop.src}>
         <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1">
           {categories.map((c) => (
             <Link key={c.slug} href={`/category/${c.slug}`} className="flex shrink-0 items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-sm font-semibold md:backdrop-blur transition hover:border-white/40 hover:bg-white hover:text-ink">
