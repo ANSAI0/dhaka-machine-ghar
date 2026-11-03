@@ -44,10 +44,10 @@ export async function POST(req: Request) {
     } catch (e) {
       // Keep the visitor served even when the API is unavailable.
       console.error("Chat AI error", e instanceof Anthropic.APIError ? `${e.status} ${e.message}` : e);
-      reply = basicReply(message, catalog, site);
+      reply = basicReply(message, catalog, site, bot.knowledge, history);
     }
   } else {
-    reply = basicReply(message, catalog, site);
+    reply = basicReply(message, catalog, site, bot.knowledge, history);
   }
 
   const updated = [...turns, { role: "assistant" as const, text: reply.text, at: new Date().toISOString() }];
