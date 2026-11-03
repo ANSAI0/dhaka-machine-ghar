@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown, LayoutGrid } from "lucide-react";
+import { ChevronDown, LayoutGrid, Mail, Phone } from "lucide-react";
 import type { Category } from "@/lib/catalog";
 import { CategoryIcon } from "./category-icon";
+import { useSite } from "./site-provider";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -14,21 +15,22 @@ const navLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
-// Header menu: frosted white bar with the All Categories mega menu.
+// Header menu: brand-green bar with the All Categories mega menu, page links, and phone / email on the right.
 export function MainNav({ categories }: { categories: Category[] }) {
   const path = usePathname();
   const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
+  const site = useSite();
 
   return (
-    <nav className="border-b border-gray-200/70 bg-white/60 backdrop-blur-md" aria-label="Main">
-      <div className="container mx-auto flex items-center gap-1 px-4 py-1.5">
+    <nav className="bg-brand-600" aria-label="Main">
+      <div className="container mx-auto flex items-center gap-1 px-4">
         <div className="group relative">
-          <button className="flex items-center gap-2 whitespace-nowrap rounded-lg bg-brand-600 px-3 py-2 text-[13px] font-bold text-white shadow-sm transition hover:bg-brand-700 lg:px-4 lg:text-sm">
+          <button className="flex items-center gap-2 whitespace-nowrap bg-brand-800 px-3 py-2.5 text-[13px] font-bold text-white transition hover:bg-brand-900 lg:px-4 lg:text-sm">
             <LayoutGrid className="h-4 w-4" /> <span className="lg:hidden">Categories</span>
             <span className="hidden lg:inline">All Categories</span>
             <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
           </button>
-          <div className="invisible absolute left-0 top-full z-50 mt-1.5 w-[min(92vw,1000px)] translate-y-2 rounded-2xl border border-gray-100 bg-white p-6 opacity-0 shadow-2xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="invisible absolute left-0 top-full z-50 w-[min(92vw,1000px)] translate-y-2 rounded-2xl border border-gray-100 bg-white p-6 opacity-0 shadow-2xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
             <div className="grid grid-cols-3 gap-6 lg:grid-cols-5">
               {categories.map((c) => (
                 <div key={c.slug}>
@@ -55,15 +57,19 @@ export function MainNav({ categories }: { categories: Category[] }) {
               key={l.href}
               href={l.href}
               aria-current={isActive(l.href) ? "page" : undefined}
-              className={`relative whitespace-nowrap rounded-lg px-2.5 py-2 text-[13px] font-semibold transition-colors lg:px-4 lg:text-sm ${
+              className={`relative whitespace-nowrap px-2.5 py-2.5 text-[13px] font-semibold transition-colors lg:px-4 lg:text-sm ${
                 isActive(l.href)
-                  ? "text-brand-700 after:absolute after:inset-x-3 after:-bottom-1.5 after:h-0.5 after:rounded-full after:bg-brand-600"
-                  : "text-gray-600 hover:bg-gray-900/5 hover:text-gray-900"
+                  ? "text-white after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 after:rounded-full after:bg-white"
+                  : "text-white/80 hover:text-white"
               }`}
             >
               {l.label}
             </Link>
           ))}
+        </div>
+        <div className="ml-auto hidden items-center gap-5 text-[13px] text-white/90 lg:flex">
+          <a href={`tel:${site.phoneIntl}`} className="flex items-center gap-1.5 hover:text-white"><Phone className="h-3.5 w-3.5" /> {site.phone}</a>
+          <a href={`mailto:${site.email}`} className="flex items-center gap-1.5 hover:text-white"><Mail className="h-3.5 w-3.5" /> {site.email}</a>
         </div>
       </div>
     </nav>

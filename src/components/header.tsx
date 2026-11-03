@@ -29,9 +29,9 @@ function SearchBox({ onDone }: { onDone?: () => void }) {
         input.current?.blur();
         onDone?.();
       }}
-      className="group/search flex h-11 w-full items-center rounded-full bg-gray-100 pl-4 pr-1 ring-1 ring-black/[0.04] transition-all duration-200 hover:bg-gray-100/70 focus-within:bg-white focus-within:shadow-[0_10px_30px_-12px_rgba(46,94,71,0.45)] focus-within:ring-2 focus-within:ring-brand-600/30 lux:bg-white/[0.06] lux:ring-white/10 lux:focus-within:bg-white/[0.09] lux:focus-within:ring-gold-400/50 lux:focus-within:shadow-[0_10px_30px_-12px_rgba(214,174,85,0.35)]"
+      className="group/search flex h-11 w-full items-center rounded-xl border-2 border-brand-600/40 bg-white pl-3.5 pr-1 transition-all duration-200 focus-within:border-brand-600 focus-within:shadow-[0_8px_24px_-12px_rgba(46,94,71,0.45)] lux:border-transparent lux:bg-white/[0.06] lux:ring-white/10 lux:focus-within:bg-white/[0.09] lux:focus-within:ring-gold-400/50 lux:focus-within:shadow-[0_10px_30px_-12px_rgba(214,174,85,0.35)]"
     >
-      <Search className="h-[18px] w-[18px] shrink-0 text-gray-400 transition-colors group-focus-within/search:text-brand-600 lux:text-white/40 lux:group-focus-within/search:text-gold-300" strokeWidth={2} />
+      <Search className="h-[18px] w-[18px] shrink-0 text-brand-600 lux:text-white/40 lux:group-focus-within/search:text-gold-300" strokeWidth={2} />
       <input
         ref={input}
         value={q}
@@ -43,10 +43,9 @@ function SearchBox({ onDone }: { onDone?: () => void }) {
       <button
         type="submit"
         aria-label="Search"
-        className="flex h-9 w-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-brand-600 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-700 sm:w-auto sm:px-5 lux:bg-gold-gradient lux:text-lux-950 lux:shadow-[0_4px_14px_-4px_rgba(214,174,85,0.6)]"
+        className="flex h-8 w-10 shrink-0 items-center justify-center gap-1.5 rounded-lg bg-brand-600 text-sm font-semibold text-white transition-colors hover:bg-brand-700 sm:w-auto sm:px-5 lux:bg-gold-gradient lux:text-lux-950 lux:shadow-[0_4px_14px_-4px_rgba(214,174,85,0.6)]"
       >
-        <Search className="h-4 w-4 sm:hidden" strokeWidth={2.25} />
-        <span className="hidden sm:inline">Search</span>
+        <Search className="h-4 w-4" strokeWidth={2.25} />
       </button>
     </form>
   );
@@ -56,7 +55,7 @@ function SearchBox({ onDone }: { onDone?: () => void }) {
 const iconBox = "relative flex h-9 w-9 items-center justify-center text-gray-800 transition-colors group-hover:text-brand-700 lux:text-white/90";
 const iconBoxOn = "!text-brand-700 lux:!text-gold-300";
 
-export function Header({ categories, announcement }: { categories: Category[]; announcement?: React.ReactNode }) {
+export function Header({ categories }: { categories: Category[] }) {
   const path = usePathname();
   const { items, count } = useCart();
   const { getProduct } = useCatalog();
@@ -81,8 +80,8 @@ export function Header({ categories, announcement }: { categories: Category[]; a
       {/* Main row. Phones: menu | centred logo | call + cart. md+: logo, search, hotline, track, cart. */}
       <div className="border-b border-gray-100 lux:border-white/[0.06]">
         <div className={`container mx-auto grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 transition-all duration-300 md:flex md:gap-6 md:px-4 ${scrolled ? "py-1.5" : "py-2 md:py-3"}`}>
-          <button onClick={() => setDrawer(true)} className="-ml-1 justify-self-start rounded-lg p-1.5 text-gray-800 active:bg-gray-100 md:hidden lux:text-white/90 lux:active:bg-white/10" aria-label="Open menu">
-            <Menu className="h-6 w-6" />
+          <button onClick={() => setDrawer(true)} className="justify-self-start rounded-full border border-gray-200 bg-white p-2 text-gray-800 shadow-sm active:bg-gray-100 md:hidden lux:border-white/15 lux:bg-white/[0.04] lux:text-white/90 lux:active:bg-white/10" aria-label="Open menu">
+            <Menu className="h-5 w-5" />
           </button>
           <Logo variant="mark" className={scrolled ? "h-7 md:h-8" : "h-8 md:h-10"} />
           <div className="hidden min-w-0 flex-1 md:block lg:pr-6">
@@ -133,8 +132,6 @@ export function Header({ categories, announcement }: { categories: Category[]; a
         </div>
       </div>
 
-      {/* Phones: the ribbon sits above the logo row; desktop: between the logo row and the menu. */}
-      <div className="max-md:order-first">{announcement}</div>
 
       {/* Main nav */}
       <div className="hidden md:block">

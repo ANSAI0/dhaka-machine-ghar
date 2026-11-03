@@ -1,24 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, FileText, Phone, ShieldCheck, Truck, Wallet } from "lucide-react";
-import { productsIn, type Product } from "@/lib/catalog";
+import { productsIn } from "@/lib/catalog";
 import { getCatalog } from "@/lib/catalog-server";
 import { heroImages } from "@/lib/hero-images";
-import { getSite } from "@/lib/settings";
+import { getHeroBanners, getSite } from "@/lib/settings";
 import type { SiteInfo } from "@/lib/site";
 import { CategoryIcon } from "@/components/category-icon";
-import { DesktopHero } from "@/components/desktop-hero";
 import { HeroSlider } from "@/components/hero-slider";
 import { HomeSidebar } from "@/components/home-sidebar";
-import { ProductCard } from "@/components/product-card";
+import { CategorySection } from "@/components/category-section";
 import { ProductMarquee } from "@/components/product-marquee";
 import { WhatsappIcon } from "@/components/brand-icons";
 
-const offers = (site: SiteInfo) => [
-  { title: "Call Us", short: "Call", sub: site.phone, href: `tel:${site.phoneIntl}`, Icon: Phone, tint: "bg-accent-50 text-accent-600 ring-accent-100", grad: "from-accent-500 to-accent-700" },
-  { title: "WhatsApp", short: "WhatsApp", sub: "Chat with photos", href: `https://wa.me/${site.whatsappIntl}`, Icon: WhatsappIcon, tint: "bg-[#e8f8ee] text-[#128c4a] ring-[#c9eed7]", grad: "from-[#2fd96b] to-[#128c4a]" },
-  { title: "Custom Build", short: "Custom", sub: "Made to order", href: "/quotation", Icon: FileText, tint: "bg-steel-50 text-steel-600 ring-steel-100", grad: "from-steel-500 to-steel-700" },
-  { title: "Track Order", short: "Track", sub: "Live updates", href: "/track", Icon: Truck, tint: "bg-brand-50 text-brand-600 ring-brand-100", grad: "from-brand-500 to-brand-800" },
+// "Especially for you" cards under the hero.
+const shortcuts = (site: SiteInfo) => [
+  { title: "Call Now", text: "Talk to us directly", cta: "Call Now", href: `tel:${site.phoneIntl}`, Icon: Phone, bg: "from-accent-500 to-accent-700", fg: "text-accent-700" },
+  { title: "WhatsApp", text: "Send photos, get a price", cta: "Chat Now", href: `https://wa.me/${site.whatsappIntl}`, Icon: WhatsappIcon, bg: "from-[#25d366] to-[#128c4a]", fg: "text-[#128c4a]" },
+  { title: "Custom Machine", text: "Built to your size", cta: "Get Quote", href: "/quotation", Icon: FileText, bg: "from-steel-500 to-steel-700", fg: "text-steel-700" },
+  { title: "Track Order", text: "Live factory updates", cta: "Track", href: "/track", Icon: Truck, bg: "from-brand-500 to-brand-800", fg: "text-brand-700" },
 ];
 
 const trust = (site: SiteInfo) => [
@@ -29,8 +29,13 @@ const trust = (site: SiteInfo) => [
 ];
 
 export default async function Home() {
-  const [catalog, site] = await Promise.all([getCatalog(), getSite()]);
+  const [catalog, site, banners] = await Promise.all([getCatalog(), getSite(), getHeroBanners()]);
   const { categories, products } = catalog;
+  // Category tile photo: a featured machine's photo if there is one, else any photo in the category.
+  const coverOf = (slug: string) => {
+    const inCat = productsIn(catalog, slug).filter((p) => p.image);
+    return (inCat.find((p) => p.featured) ?? inCat[0])?.image;
+  };
   // Ribbon: featured first, then the rest — photographed machines only, one per photo.
   const seen = new Set<string>();
   const popular = [...products.filter((p) => p.featured), ...products.filter((p) => !p.featured)]
@@ -42,82 +47,53 @@ export default async function Home() {
       <HomeSidebar catalog={catalog} />
 
       <div className="min-w-0 flex-1 space-y-6 sm:space-y-8">
-        <div className="md:hidden">
-          <HeroSlider />
-        </div>
-        <div className="hidden md:block">
-          <DesktopHero />
-        </div>
+        <HeroSlider banners={banners} />
 
-
-        {/* Phones: one row of four premium icons, short labels only */}
-        <section className="grid grid-cols-4 gap-1 rounded-2xl border border-gray-100 bg-white px-2 py-3.5 shadow-[0_12px_28px_-16px_rgba(16,24,40,0.35)] md:hidden lux:border-white/[0.08] lux:bg-lux-800">
-          {offers(site).map(({ title, short, href, Icon, grad }) => (
-            <a key={title} href={href} aria-label={title} className="flex flex-col items-center gap-2 active:scale-95">
-              <span className={`relative flex h-[52px] w-[52px] items-center justify-center rounded-2xl bg-gradient-to-br ${grad} text-white shadow-[0_8px_18px_-8px_rgba(16,24,40,0.55),inset_0_1px_0_rgba(255,255,255,0.35)] lux:bg-none lux:bg-gold-gradient lux:text-lux-950`}>
-                <Icon className="h-[22px] w-[22px]" strokeWidth={2} />
-              </span>
-              <span className="text-[11px] font-semibold tracking-wide text-gray-700 lux:text-white/80">{short}</span>
-            </a>
-          ))}
+        {/* Especially for you */}
+        <section className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5 lux:border-white/[0.07] lux:bg-lux-800">
+          <h2 className="mb-4 text-center text-lg font-bold text-gray-900 sm:text-xl lux:text-white">Especially For You</h2>
+          <div className="no-scrollbar -mx-4 flex snap-x gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 xl:grid-cols-4">
+            {shortcuts(site).map(({ title, text, cta, href, Icon, bg, fg }) => (
+              <a key={title} href={href} className={`flex w-[46%] shrink-0 snap-start flex-col rounded-2xl bg-gradient-to-br ${bg} p-3.5 text-white shadow-[0_10px_22px_-12px_rgba(16,24,40,0.55)] transition-transform hover:-translate-y-0.5 sm:w-auto sm:p-4`}>
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-[15px] font-bold leading-tight sm:text-base">{title}</p>
+                  <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white ${fg} shadow-md`}>
+                    <Icon className="h-5 w-5" />
+                  </span>
+                </div>
+                <p className="mb-4 mt-1 text-xs text-white/85 sm:text-sm">{text}</p>
+                <span className={`mt-auto rounded-lg bg-white py-2 text-center text-xs font-bold ${fg} sm:text-sm`}>{cta}</span>
+              </a>
+            ))}
+          </div>
         </section>
 
-        {/* Quick actions (tablet / desktop) */}
-        <section className="grid grid-cols-2 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm max-md:hidden xl:grid-cols-4 lux:border-white/[0.07] lux:bg-lux-800/80 lux:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)]">
-          {offers(site).map(({ title, sub, href, Icon, tint }, idx) => (
-            <a
-              key={title}
-              href={href}
-              className={`group flex items-center gap-3 p-3.5 transition-colors hover:bg-gray-50 sm:p-5 ${idx % 2 === 0 ? "border-r" : "xl:border-r"} ${idx < 2 ? "border-b xl:border-b-0" : ""} border-gray-100 last:border-r-0 lux:border-white/[0.06] lux:bg-lux-800 lux:active:bg-white/[0.04]`}
-            >
-              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1 transition-transform duration-300 group-hover:scale-110 sm:h-12 sm:w-12 ${tint} lux:bg-gold-gradient lux:text-lux-950 lux:ring-0 lux:shadow-[0_6px_16px_-6px_rgba(214,174,85,0.55)]`}>
-                <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-sm font-bold text-gray-900 sm:text-[15px] lux:text-white">{title}</span>
-                <span className="block truncate text-xs text-gray-500 lux:text-white/45">{sub}</span>
-              </span>
-              <ArrowRight className="hidden h-4 w-4 shrink-0 -translate-x-1 text-gray-300 transition-all group-hover:translate-x-0 group-hover:text-gray-700 2xl:block" />
-            </a>
-          ))}
+        {/* Shop by category — photo tiles */}
+        <section className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-6 lux:border-white/[0.07] lux:bg-lux-800">
+          <h2 className="mb-4 text-center text-lg font-bold text-gray-900 sm:mb-5 sm:text-xl lux:text-white">Shop by Category</h2>
+          <div className="no-scrollbar -mx-4 flex snap-x gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-5 sm:gap-4 sm:overflow-visible sm:px-0">
+            {categories.map((c) => {
+              const img = coverOf(c.slug);
+              return (
+                <Link key={c.slug} href={`/category/${c.slug}`} className="group flex w-[27%] shrink-0 snap-start flex-col items-center gap-2 text-center sm:w-auto">
+                  <span className="relative block aspect-square w-full overflow-hidden rounded-2xl border border-gray-100 bg-gray-50 shadow-sm transition-shadow group-hover:shadow-md lux:border-white/10 lux:bg-lux-700">
+                    {img ? (
+                      <Image src={img} alt="" fill sizes="(min-width: 640px) 160px, 30vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
+                    ) : (
+                      <span className="flex h-full w-full items-center justify-center text-brand-600 lux:text-gold-300">
+                        <CategoryIcon name={c.icon} className="h-9 w-9" strokeWidth={1.5} />
+                      </span>
+                    )}
+                  </span>
+                  <span className="line-clamp-2 text-[11px] font-semibold leading-tight text-gray-700 group-hover:text-brand-700 sm:text-sm lux:text-white/85">{c.name}</span>
+                </Link>
+              );
+            })}
+          </div>
         </section>
 
         {/* Popular machines — continuous ribbon */}
-        <ProductMarquee title="Popular Machines" subtitle="Featured" items={popular} href="/shop" />
-
-        {/* Shop by category */}
-        <section className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-7 lux:border-white/[0.07] lux:bg-gradient-to-b lux:from-lux-800 lux:to-lux-900">
-          <SectionHeading eyebrow="Browse" title="Shop by Category" center />
-          {/* Phones: swipeable story-style circles with a gold ring */}
-          <div className="no-scrollbar -mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-1 md:hidden">
-            {categories.map((c) => (
-              <Link key={c.slug} href={`/category/${c.slug}`} className="flex w-[76px] shrink-0 snap-start flex-col items-center gap-2 text-center">
-                <span className="block rounded-full bg-gradient-to-br from-brand-500 via-brand-700 to-steel-600 p-[2px] shadow-[0_8px_20px_-10px_rgba(46,94,71,0.5)] lux:bg-gold-gradient lux:shadow-[0_8px_20px_-8px_rgba(214,174,85,0.5)]">
-                  <span className="flex h-[68px] w-[68px] items-center justify-center rounded-full border-[3px] border-white bg-gradient-to-b from-brand-50 to-white text-brand-700 lux:border-lux-900 lux:from-lux-700 lux:to-lux-900 lux:text-gold-300">
-                    <CategoryIcon name={c.icon} className="h-7 w-7" strokeWidth={1.5} />
-                  </span>
-                </span>
-                <span className="line-clamp-2 text-[11px] font-semibold leading-tight text-gray-800 lux:text-white/85">{c.name}</span>
-                <span className="-mt-1.5 text-[10px] font-semibold text-gray-400 lux:text-gold-400/70">{productsIn(catalog, c.slug).length}</span>
-              </Link>
-            ))}
-          </div>
-          <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-5 sm:gap-4 max-md:hidden">
-            {categories.map((c) => (
-              <Link
-                key={c.slug}
-                href={`/category/${c.slug}`}
-                className="group flex flex-col items-center gap-2.5 rounded-2xl border border-transparent px-1 py-3 text-center transition-all hover:border-brand-100 hover:bg-gradient-to-b hover:from-brand-50 hover:to-white hover:shadow-sm sm:py-4"
-              >
-                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-50 to-steel-50 text-brand-600 ring-1 ring-brand-100 lux:from-lux-700 lux:to-lux-900 lux:text-gold-300 lux:ring-gold-400/30 lux:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_20px_-10px_rgba(0,0,0,0.8)] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:from-brand-600 group-hover:to-brand-800 group-hover:text-white group-hover:shadow-lg group-hover:shadow-brand-600/25 sm:h-[72px] sm:w-[72px]">
-                  <CategoryIcon name={c.icon} className="h-7 w-7 sm:h-9 sm:w-9" strokeWidth={1.5} />
-                </span>
-                <span className="line-clamp-2 text-xs font-bold leading-tight text-gray-800 sm:text-sm lux:text-white/90">{c.name}</span>
-                <span className="-mt-1.5 text-[10px] font-semibold text-gray-400 sm:text-[11px] lux:text-gold-400/70">{productsIn(catalog, c.slug).length} machines</span>
-              </Link>
-            ))}
-          </div>
-        </section>
+        <ProductMarquee title="Popular Machines" items={popular} href="/shop" />
 
         {/* Trust band */}
         <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-900 via-brand-800 to-steel-700 p-4 shadow-lg sm:rounded-3xl sm:p-6 lux:border lux:border-gold-400/20 lux:from-lux-800 lux:via-lux-900 lux:to-brand-900">
@@ -138,7 +114,7 @@ export default async function Home() {
         </section>
 
         {categories.slice(0, 2).map((c) => (
-          <ProductSection key={c.slug} title={c.name} subtitle="Category" items={productsIn(catalog, c.slug).slice(0, 10)} total={productsIn(catalog, c.slug).length} href={`/category/${c.slug}`} />
+          <CategorySection key={c.slug} title={c.name} items={productsIn(catalog, c.slug)} href={`/category/${c.slug}`} />
         ))}
 
         {/* Custom machine banner */}
@@ -166,48 +142,9 @@ export default async function Home() {
         </section>
 
         {categories.slice(2).map((c) => (
-          <ProductSection key={c.slug} title={c.name} subtitle="Category" items={productsIn(catalog, c.slug).slice(0, 10)} total={productsIn(catalog, c.slug).length} href={`/category/${c.slug}`} />
+          <CategorySection key={c.slug} title={c.name} items={productsIn(catalog, c.slug)} href={`/category/${c.slug}`} />
         ))}
       </div>
     </div>
-  );
-}
-
-function SectionHeading({ eyebrow, title, center }: { eyebrow: string; title: string; center?: boolean }) {
-  return (
-    <div className={`mb-5 sm:mb-6 ${center ? "text-center" : ""}`}>
-      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent-600 max-md:flex max-md:items-center max-md:justify-center max-md:gap-3 lux:text-gold-400">
-        <span className="h-px w-8 bg-gradient-to-r from-transparent to-brand-600/60 md:hidden lux:to-gold-400" />
-        {eyebrow}
-        <span className="h-px w-8 bg-gradient-to-l from-transparent to-brand-600/60 md:hidden lux:to-gold-400" />
-      </p>
-      <h2 className="mt-1 text-xl font-bold text-gray-900 sm:text-2xl max-md:font-extrabold max-md:uppercase max-md:tracking-tight lux:text-white">{title}</h2>
-      {center && <span className="mx-auto mt-2 block h-1 w-12 rounded-full bg-gradient-to-r from-brand-600 to-steel-600 lux:bg-gold-gradient" />}
-    </div>
-  );
-}
-
-function ProductSection({ title, subtitle, items, total, href }: { title: string; subtitle: string; items: Product[]; total?: number; href: string }) {
-  if (!items.length) return null;
-  return (
-    <section>
-      <div className="mb-4 flex items-end justify-between gap-3">
-        <div className="flex items-stretch gap-3">
-          <span className="w-1 rounded-full bg-gradient-to-b from-accent-600 to-brand-600 lux:bg-gold-gradient" />
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-400 lux:text-gold-400/80">{subtitle}</p>
-            <h2 className="text-lg font-bold text-gray-900 sm:text-xl max-md:text-base max-md:font-extrabold max-md:uppercase max-md:tracking-tight lux:text-white">{title}</h2>
-          </div>
-        </div>
-        <Link href={href} className="flex shrink-0 items-center gap-1 rounded-full border border-brand-100 bg-white px-3.5 py-1.5 text-xs font-bold text-brand-700 shadow-sm hover:border-brand-600 hover:bg-brand-600 hover:text-white lux:border-gold-400/30 lux:bg-white/[0.04] lux:text-gold-300 lux:shadow-none">
-          {total ? `View all ${total}` : "View all"} <ArrowRight className="h-3.5 w-3.5" />
-        </Link>
-      </div>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-3 xl:grid-cols-5">
-        {items.map((p) => (
-          <ProductCard key={p.slug} product={p} />
-        ))}
-      </div>
-    </section>
   );
 }

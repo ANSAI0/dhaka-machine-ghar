@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { ArrowRight } from "lucide-react";
 import type { Product } from "@/lib/catalog";
 import { ProductImage } from "./product-image";
 
@@ -13,7 +12,7 @@ const SPEED = 0.32; // cards per second, right to left
 // rest turn away and sink back. Transforms are written straight to the DOM each frame (no
 // re-renders). Hover pauses; reduced-motion users get a still row. Desktop/tablet only — phones
 // get the flat ribbon below.
-export function ProductMarquee({ title, subtitle, items, href }: { title: string; subtitle: string; items: Product[]; href: string }) {
+export function ProductMarquee({ title, items, href }: { title: string; items: Product[]; href: string }) {
   // Enough cards that the edges never run dry.
   const base = Array.from({ length: Math.max(1, Math.ceil(9 / Math.max(items.length, 1))) }, () => items).flat();
   const stage = useRef<HTMLDivElement>(null);
@@ -97,15 +96,12 @@ export function ProductMarquee({ title, subtitle, items, href }: { title: string
   return (
     <section className="py-2">
       <div className="mb-2 flex items-end justify-between gap-3">
-        <div className="flex items-stretch gap-3">
-          <span className="w-1 rounded-full bg-gradient-to-b from-accent-600 to-brand-600 lux:bg-gold-gradient" />
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-400 lux:text-gold-400/80">{subtitle}</p>
-            <h2 className="text-lg font-bold text-gray-900 sm:text-2xl max-md:text-base max-md:font-extrabold max-md:uppercase max-md:tracking-tight lux:text-white">{title}</h2>
-          </div>
-        </div>
-        <Link href={href} className="flex shrink-0 items-center gap-1 rounded-full border border-brand-100 bg-white px-3.5 py-1.5 text-xs font-bold text-brand-700 shadow-sm hover:border-brand-600 hover:bg-brand-600 hover:text-white lux:border-gold-400/30 lux:bg-white/[0.04] lux:text-gold-300 lux:shadow-none">
-          View all <ArrowRight className="h-3.5 w-3.5" />
+        <Link href={href} className="group">
+          <h2 className="text-lg font-bold text-gray-900 group-hover:text-brand-700 sm:text-xl lux:text-white">{title}</h2>
+          <span className="mt-1.5 block h-1 w-14 rounded-full bg-gradient-to-r from-brand-600 to-brand-400 lux:bg-gold-gradient" />
+        </Link>
+        <Link href={href} className="shrink-0 rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 hover:bg-brand-600 hover:text-white lux:bg-white/[0.06] lux:text-gold-300">
+          View all
         </Link>
       </div>
 

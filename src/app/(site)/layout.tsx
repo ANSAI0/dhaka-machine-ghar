@@ -1,5 +1,4 @@
 import { getCatalog } from "@/lib/catalog-server";
-import { AnnouncementBar } from "@/components/announcement-bar";
 import { CatalogProvider } from "@/components/catalog-provider";
 import { CompareBar } from "@/components/compare";
 import { CustomerProvider } from "@/components/customer-provider";
@@ -14,7 +13,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   return (
     <CatalogProvider catalog={catalog}>
       <CustomerProvider>
-      <Header categories={catalog.categories} announcement={<AnnouncementBar />} />
+      <Header categories={catalog.categories} />
       <main className="min-h-[60vh]">{children}</main>
       <Footer categories={catalog.categories} />
       <MobileNav />

@@ -83,7 +83,7 @@ export function ChatWidget() {
   return (
     <>
       {open && (
-        <section role="dialog" aria-label="DMG সহকারী chat" className="fixed inset-x-2 bottom-[100px] z-50 flex origin-bottom-right animate-pop-in max-h-[75vh] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl sm:inset-x-auto sm:right-5 sm:w-[380px] md:bottom-24">
+        <section role="dialog" aria-label="DMG সহকারী chat" className="fixed inset-x-2 bottom-[84px] z-50 flex origin-bottom-right animate-pop-in max-h-[75vh] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl sm:inset-x-auto sm:right-5 sm:w-[380px] md:bottom-24">
           <header className="flex items-center gap-3 bg-brand-700 px-4 py-3 text-white">
             <span className="relative h-10 w-10 shrink-0">
               <SupportAvatar className="h-10 w-10 rounded-full ring-2 ring-white/40" />
