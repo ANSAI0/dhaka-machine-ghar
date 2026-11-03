@@ -80,7 +80,7 @@
 /* Headline face: same pair as the body (Inter for English, Hind Siliguri for Bangla). "inline" so
    the utility reads the next/font variables set on <body>. */
 @theme inline {
-  --font-display: var(--font-inter), var(--font-hind), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-anek), var(--font-hind), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* scaleX, not width: animating width re-lays out the page every frame */

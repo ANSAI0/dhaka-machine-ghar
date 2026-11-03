@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Hind_Siliguri, Inter } from "next/font/google";
+import { Anek_Bangla, Hind_Siliguri, Inter } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/cart";
 import { CompareProvider } from "@/components/compare";
@@ -9,6 +9,8 @@ import { themeCss } from "@/lib/theme";
 import { brand } from "@/lib/site";
 
 // Inter sets English; it has no Bangla glyphs, so Bangla text falls through to Hind Siliguri.
+// Display face for the hero headline.
+const anek = Anek_Bangla({ variable: "--font-anek", subsets: ["bengali", "latin"], weight: ["600", "700"] });
 const hind = Hind_Siliguri({ variable: "--font-hind", subsets: ["bengali"], weight: ["400", "500", "600", "700"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 
@@ -31,7 +33,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const css = themeCss(theme);
   return (
     // Font variables go on <html>: Tailwind sets font-family there, so they must be defined at that level.
-    <html lang="bn" className={`${hind.variable} ${inter.variable} ${theme.mobile === "light" ? "" : "mobile-lux"}`}>
+    <html lang="bn" className={`${hind.variable} ${inter.variable} ${anek.variable} ${theme.mobile === "light" ? "" : "mobile-lux"}`}>
       <body className="antialiased">
         {/* Brand colours from Admin → Settings (only when changed from the logo defaults). */}
         {css && <style>{css}</style>}

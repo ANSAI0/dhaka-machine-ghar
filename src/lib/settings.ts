@@ -42,22 +42,10 @@ export type EmailSettings = {
 };
 const emailDefaults: EmailSettings = { enabled: false, host: "", port: 587, secure: false, user: "", pass: "", fromEmail: "", fromName: "Dhaka Machine Ghar", weekday: 6, weeklyNote: "", onOrder: true, onPayment: true, onStep: false, onDelivery: true, alertTo: "" };
 
-// Home hero banners uploaded in Admin → Hero Banners (shown in this order).
-export type Banner = { id: string; image: string; link: string; position?: string }; // position: CSS object-position for the crop
-
-// Shown until banners are uploaded in Admin → Hero Banners.
-export const defaultBanners: Banner[] = [
-  { id: "d1", image: "/banners/hydraulic-press-v2.webp", link: "/category/power-press" },
-  { id: "d2", image: "/banners/channel-press-v2.webp", link: "/category/power-press" },
-  { id: "d3", image: "/banners/ac-stand-v2.webp", link: "/contact", position: "center 35%" },
-  { id: "d4", image: "/banners/bou-body-press-v2.webp", link: "/category/power-press" },
-  { id: "d5", image: "/banners/workshop-machines-v2.webp", link: "/category/workshop", position: "center 20%" },
-];
-
 const smsDefaults: SmsSettings = { provider: "none", apiKey: "", senderId: "", customUrl: "", onOrder: true, onStep: true, language: "bn" };
 
 async function readFromDb() {
-  const rows = await db.setting.findMany({ where: { key: { in: ["site", "marketing", "theme", "bot", "sms", "email", "banners"] } } });
+  const rows = await db.setting.findMany({ where: { key: { in: ["site", "marketing", "theme", "bot", "sms", "email"] } } });
   const get = (k: string) => (rows.find((r) => r.key === k)?.value ?? {}) as Record<string, unknown>;
   return {
     site: { ...siteDefaults, ...get("site") } as EditableSite,
@@ -66,7 +54,6 @@ async function readFromDb() {
     bot: { ...botDefaults, ...get("bot") } as BotSettings,
     sms: { ...smsDefaults, ...get("sms") } as SmsSettings,
     email: { ...emailDefaults, ...get("email") } as EmailSettings,
-    banners: (Array.isArray(get("banners").items) ? get("banners").items : []) as Banner[],
   };
 }
 
@@ -90,12 +77,6 @@ async function read() {
 export const getSite = async () => buildSite((await read()).site);
 export const getEditableSite = async () => (await read()).site;
 export const getTheme = async () => (await read()).theme;
-export const getBanners = async () => (await read()).banners;
-// What the home hero shows: uploaded banners, or the defaults when none are uploaded.
-export const getHeroBanners = async () => {
-  const b = await getBanners();
-  return b.length ? b : defaultBanners;
-};
 export const getBotSettings = async () => (await read()).bot;
 // Includes the SMS API key — server only.
 export const getSmsSettings = async () => (await read()).sms;
