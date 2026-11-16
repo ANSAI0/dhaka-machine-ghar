@@ -37,7 +37,7 @@ export function LegalPage({ title, eyebrow, intro, updated, sections, site }: { 
           <section className="rounded-xl bg-gray-50 p-5 text-sm text-gray-700">
             <h2 className="font-bold text-gray-900">Contact</h2>
             <p className="mt-1">
-              {site.name} ({site.nameBn}) · Factory: {site.address} · Showroom: {site.showroom}
+              {site.name} ({site.nameBn}) · Factory: {site.address}{site.showroom && <> · Showroom: {site.showroom}</>}
             </p>
             <p className="mt-1">
               Phone: <a href={`tel:${site.phoneIntl}`} className="font-semibold text-brand-700">{site.phone}</a> · Email:{" "}

@@ -51,7 +51,7 @@ export function SiteSettingsForm({ v }: { v: EditableSite }) {
   return (
     <form onSubmit={f.onSubmit} className="grid gap-4 sm:grid-cols-2">
       <Row label="Factory address"><input name="address" defaultValue={v.address} className={input} /></Row>
-      <Row label="Showroom"><input name="showroom" defaultValue={v.showroom} className={input} /></Row>
+      <Row label="Showroom" hint="Optional — leave empty if the factory is also the showroom"><input name="showroom" defaultValue={v.showroom} className={input} /></Row>
       <Row label="Hotline"><input name="phone" defaultValue={v.phone} className={input} /></Row>
       <Row label="WhatsApp number" hint="Empty = same as hotline"><input name="whatsapp" defaultValue={v.whatsapp} className={input} /></Row>
       <Row label="Email"><input name="email" type="email" defaultValue={v.email} className={input} /></Row>

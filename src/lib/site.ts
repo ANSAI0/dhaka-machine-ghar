@@ -25,14 +25,14 @@ export type EditableSite = {
 
 export const siteDefaults: EditableSite = {
   address: "Sarighat, Aintha, Keraniganj, Dhaka, Bangladesh",
-  showroom: "Dholaikhal, Dhaka",
+  showroom: "",
   phone: "01712-808790",
   whatsapp: "",
   email: "dhakamachineghar@yahoo.com",
   facebook: "https://www.facebook.com/dhakamachineghar/",
   youtube: "https://www.youtube.com/@MDSHARIF-gn4ot",
   hours: "শনি – বৃহস্পতি, সকাল ৯টা – রাত ৮টা",
-  mapQuery: "Aintha, Keraniganj, Dhaka",
+  mapQuery: "Sarighat, Aintha, Keraniganj, Dhaka, Bangladesh",
   advancePercent: 20,
   warrantyNewMonths: 12,
   warrantyReconMonths: 6,

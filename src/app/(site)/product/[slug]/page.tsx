@@ -221,7 +221,7 @@ export default async function ProductPage({ params }: Params) {
                   <li><strong>ডেলিভারি:</strong> ঢাকার ভেতরে নিজস্ব পরিবহন; ঢাকার বাইরে ট্রান্সপোর্ট/কুরিয়ারে গেটপাস ও চালান সহ পাঠানো হয়।</li>
                   <li><strong>ইনস্টলেশন:</strong> ভারী মেশিনে ইঞ্জিনিয়ার দ্বারা ইনস্টলেশন ও ট্রায়াল রান।</li>
                   <li><strong>ওয়ারেন্টি:</strong> প্রতিটি মেশিনে সিরিয়াল নম্বর থাকে; সার্ভিস ও ওয়ারেন্টি দাবি <a href="/warranty" className="font-semibold text-brand-700 underline">Warranty &amp; Service</a> পেজ থেকে।</li>
-                  <li><strong>শোরুম:</strong> কারখানা — {site.address}; শোরুম — {site.showroom}।</li>
+                  <li><strong>শোরুম:</strong> {site.showroom ? <>কারখানা — {site.address}; শোরুম — {site.showroom}</> : <>কারখানা ও শোরুম — {site.address}</>}।</li>
                 </ul>
               ),
             },

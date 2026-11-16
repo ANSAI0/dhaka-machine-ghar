@@ -57,8 +57,8 @@ export async function Footer({ categories }: { categories: Category[] }) {
           <div>
             <h3 className="mb-4 text-lg font-bold">Contact Us</h3>
             <div className="space-y-3 text-sm text-gray-300">
-              <p className="flex items-start gap-2.5"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-steel-500" /> Factory: {site.address}</p>
-              <p className="flex items-start gap-2.5"><Store className="mt-0.5 h-4 w-4 shrink-0 text-steel-500" /> Showroom: {site.showroom}</p>
+              <p className="flex items-start gap-2.5"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-steel-500" /> {site.showroom ? "Factory" : "Factory & Showroom"}: {site.address}</p>
+              {site.showroom && <p className="flex items-start gap-2.5"><Store className="mt-0.5 h-4 w-4 shrink-0 text-steel-500" /> Showroom: {site.showroom}</p>}
               <a href={`tel:${site.phoneIntl}`} className="flex items-center gap-2.5 font-semibold hover:text-white"><Phone className="h-4 w-4 text-steel-500" /> {site.phone}</a>
               <a href={`mailto:${site.email}`} className="flex items-center gap-2.5 hover:text-white"><Mail className="h-4 w-4 text-steel-500" /> {site.email}</a>
             </div>

@@ -41,7 +41,7 @@ export async function saveSiteSettings(_: FormState, fd: FormData): Promise<Form
     warrantyNewMonths: Number(s(fd, "warrantyNewMonths")),
     warrantyReconMonths: Number(s(fd, "warrantyReconMonths")),
   };
-  if (!v.address || !v.showroom || !v.hours || !v.mapQuery) return { error: "Address, showroom, hours and map location are required" };
+  if (!v.address || !v.hours || !v.mapQuery) return { error: "Address, hours and map location are required" };
   const map = await resolveMapQuery(v.mapQuery);
   if (!map) return { error: "Couldn't read a location from that map link — open the place in Google Maps, tap Share → Copy link, and paste it here." };
   v.mapQuery = map;

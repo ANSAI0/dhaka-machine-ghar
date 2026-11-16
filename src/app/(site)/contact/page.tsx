@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const site = await getSite();
   return {
     title: "Contact",
-    description: `Contact Dhaka Machine Ghar — factory at ${site.address}, showroom at ${site.showroom}. Hotline ${site.phone}.`,
+    description: `Contact Dhaka Machine Ghar — ${site.showroom ? `factory at ${site.address}, showroom at ${site.showroom}` : `factory and showroom at ${site.address}`}. Hotline ${site.phone}.`,
   };
 }
 
@@ -48,14 +48,16 @@ export default async function ContactPage() {
         <div className="space-y-4">
           <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
             <Factory className="h-7 w-7 text-accent-600" />
-            <p className="mt-2 font-bold text-gray-900">কারখানা ও অফিস</p>
+            <p className="mt-2 font-bold text-gray-900">{site.showroom ? "কারখানা ও অফিস" : "কারখানা ও শোরুম"}</p>
             <p className="text-sm text-gray-600">{site.address}</p>
           </div>
-          <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-            <Store className="h-7 w-7 text-accent-600" />
-            <p className="mt-2 font-bold text-gray-900">শোরুম</p>
-            <p className="text-sm text-gray-600">{site.showroom}</p>
-          </div>
+          {site.showroom && (
+            <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+              <Store className="h-7 w-7 text-accent-600" />
+              <p className="mt-2 font-bold text-gray-900">শোরুম</p>
+              <p className="text-sm text-gray-600">{site.showroom}</p>
+            </div>
+          )}
           <div className="flex gap-3">
             <a href={site.facebook} target="_blank" rel="noopener" className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#1877f2] py-3 text-sm font-bold text-white"><FacebookIcon className="h-4 w-4" /> Facebook</a>
             <a href={site.youtube} target="_blank" rel="noopener" className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#ff0000] py-3 text-sm font-bold text-white"><YoutubeIcon className="h-4 w-4" /> YouTube</a>

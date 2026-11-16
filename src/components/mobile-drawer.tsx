@@ -141,7 +141,7 @@ export function MobileDrawer({ open, onClose, categories, me }: { open: boolean;
 
         {/* Contact footer */}
         <div className="border-t border-gray-100 bg-gray-50 p-4 lux:border-white/[0.06] lux:bg-lux-950/60">
-          <p className="mb-2 flex items-center gap-1.5 text-xs text-gray-500 lux:text-white/45"><MapPin className="h-3.5 w-3.5" /> {site.showroom}</p>
+          <p className="mb-2 flex items-center gap-1.5 text-xs text-gray-500 lux:text-white/45"><MapPin className="h-3.5 w-3.5" /> {site.showroom || site.address}</p>
           <div className="grid grid-cols-2 gap-2">
             <a href={`tel:${site.phoneIntl}`} className="flex items-center justify-center gap-1.5 rounded-xl bg-ink py-2.5 text-sm font-bold text-white lux:bg-gold-gradient lux:text-lux-950"><Phone className="h-4 w-4" /> কল করুন</a>
             <a href={`https://wa.me/${site.whatsappIntl}`} target="_blank" rel="noopener" className="flex items-center justify-center gap-1.5 rounded-xl bg-[#25d366] py-2.5 text-sm font-bold text-white"><WhatsappIcon className="h-4 w-4" /> WhatsApp</a>

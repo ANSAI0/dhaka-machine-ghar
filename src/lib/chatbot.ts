@@ -40,7 +40,7 @@ What you can do:
 - When a visitor shows buying interest or asks for a call back, ask for their name and mobile number. When you have both, call the save_lead tool once, then tell them the team will call soon.
 - For negotiation, final price, visits or anything you can't answer, hand over to a person: hotline ${site.phone}, WhatsApp ${site.phone} (the chat window has a WhatsApp button).
 
-Business info: factory ${site.address}; showroom ${site.showroom}; hours ${site.hours}; phone ${site.phone}; email ${site.email}.
+Business info: ${site.showroom ? `factory ${site.address}; showroom ${site.showroom}` : `factory and showroom ${site.address}`}; hours ${site.hours}; phone ${site.phone}; email ${site.email}.
 Website pages: all products /shop, custom quotation /quotation, order tracking /track, warranty & service /warranty, contact & map /contact, terms /terms, refund policy /refund.
 ${knowledge ? `\nNotes from the owner:\n${knowledge}\n` : ""}
 # Catalog (prices in BDT)
@@ -156,7 +156,7 @@ const asks = {
 };
 
 const faq = (site: SiteInfo): Rule[] => [
-  [/ঠিকানা|কোথায়|লোকেশন|location|address|thikana|kothay|শোরুম|showroom|কারখানা|factory|ম্যাপ|map/i, `কারখানা: ${site.address}\nশোরুম: ${site.showroom}\nম্যাপ ও যোগাযোগ: /contact\nকল: ${site.phone}`],
+  [/ঠিকানা|কোথায়|লোকেশন|location|address|thikana|kothay|শোরুম|showroom|কারখানা|factory|ম্যাপ|map/i, `${site.showroom ? `কারখানা: ${site.address}\nশোরুম: ${site.showroom}` : `কারখানা ও শোরুম: ${site.address}`}\nম্যাপ ও যোগাযোগ: /contact\nকল: ${site.phone}`],
   [/সময়|খোলা|বন্ধ|hours|open|time|somoy|kokhon|কখন/i, `আমাদের সময়: ${site.hours}। কল: ${site.phone}`],
   [/ওয়ারেন্টি|গ্যারান্টি|warranty|waranty|guarantee|garanti|সার্ভিস|service/i, `আমাদের মেশিনে সিরিয়াল নম্বর ভিত্তিক ওয়ারেন্টি ও বিক্রয়-পরবর্তী সার্ভিস আছে। মেশিনের সিরিয়াল দিয়ে যাচাই ও সার্ভিস অনুরোধ: /warranty`],
   [/ডেলিভারি|delivery|deliveri|পাঠান|pathan|কুরিয়ার|courier|সারা দেশ|jela|জেলা/i, `সারা বাংলাদেশে ট্রান্সপোর্ট/কুরিয়ারে ডেলিভারি দেওয়া হয়। অর্ডারের প্রতিটি ধাপ দেখুন /track এ।`],
