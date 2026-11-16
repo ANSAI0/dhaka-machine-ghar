@@ -1888,8 +1888,8 @@ export const seedProducts: SeedProduct[] = [
   },
   {
     "slug": "ac-floor-stand",
-    "name": "Roof Chowki AC Stand (Chader Chouki)",
-    "nameBn": "ছাদের চৌকি এসি স্ট্যান্ড",
+    "name": "Roof Chowki AC Stand — Plain",
+    "nameBn": "ছাদের চৌকি এসি স্ট্যান্ড — সাধারণ",
     "category": "ac-stand",
     "subcategory": "floor-stand",
     "condition": "new",
@@ -1898,10 +1898,50 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Roof-top chowki stand that keeps the AC outdoor unit off the roof floor — ৳320 per set; powder coated ৳400 per set.",
+    "short": "Roof-top chowki stand that keeps the AC outdoor unit off the roof floor — plain finish, ৳320 per set.",
     "highlights": [
-      "Plain: ৳320 per set",
-      "Powder coated: ৳400 per set",
+      "Price ৳320 per set",
+      "Keeps the outdoor unit off the roof floor",
+      "Strong steel, for roof or ground",
+      "Powder-coated version also available",
+      "Retail and wholesale"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Roof / floor chowki stand for AC outdoor unit (pair)"
+      ],
+      [
+        "Finish",
+        "Plain"
+      ],
+      [
+        "Price",
+        "৳320 per set"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ]
+    ],
+    "featured": false
+  },
+  {
+    "slug": "ac-floor-stand-powder-coated",
+    "name": "Roof Chowki AC Stand — Powder Coated",
+    "nameBn": "ছাদের চৌকি এসি স্ট্যান্ড — পাউডার কোটিং",
+    "category": "ac-stand",
+    "subcategory": "floor-stand",
+    "condition": "new",
+    "price": 400,
+    "image": "/products/ac-floor-stand.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Roof-top chowki stand for the AC outdoor unit with a powder-coated finish that lasts longer outdoors — ৳400 per set.",
+    "highlights": [
+      "Price ৳400 per set",
+      "Powder-coated finish, lasts longer outdoors",
       "Keeps the outdoor unit off the roof floor",
       "Strong steel, for roof or ground",
       "Retail and wholesale"
@@ -1912,11 +1952,11 @@ export const seedProducts: SeedProduct[] = [
         "Roof / floor chowki stand for AC outdoor unit (pair)"
       ],
       [
-        "Plain",
-        "৳320 per set"
+        "Finish",
+        "Powder coated"
       ],
       [
-        "Powder coated",
+        "Price",
         "৳400 per set"
       ],
       [
@@ -1968,8 +2008,8 @@ export const seedProducts: SeedProduct[] = [
   },
   {
     "slug": "rawal-anchor-bolt",
-    "name": "Royal Bolt (Rawal Anchor Bolt)",
-    "nameBn": "রয়েল বোল্ট (রাওয়াল অ্যাঙ্কর বোল্ট)",
+    "name": "Royal Bolt — Bangla Chaki",
+    "nameBn": "রয়েল বোল্ট — বাংলা চাকি",
     "category": "hardware",
     "subcategory": "bolts",
     "condition": "new",
@@ -1978,10 +2018,51 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Anchor bolt for fixing AC stands to walls — Bangla chaki ৳11 per piece; imported chaki, blackened and tempered ৳13 per piece.",
+    "short": "Anchor (royal / rawal) bolt for fixing AC stands to walls, made with Bangla chaki — ৳11 per piece.",
     "highlights": [
-      "Bangla chaki: ৳11 per piece",
-      "Imported (bideshi) chaki, black and tempered: ৳13 per piece",
+      "Price ৳11 per piece",
+      "Made with Bangla chaki",
+      "For fixing AC stands and brackets to walls",
+      "Imported-chaki version also available",
+      "Wholesale quantity available"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Expansion anchor (royal / rawal) bolt"
+      ],
+      [
+        "Chaki",
+        "Bangla"
+      ],
+      [
+        "Price",
+        "৳11 per piece"
+      ],
+      [
+        "Use",
+        "Fixing AC stands and brackets to walls"
+      ]
+    ],
+    "featured": false
+  },
+  {
+    "slug": "royal-bolt-imported-chaki",
+    "name": "Royal Bolt — Imported Chaki (Black, Tempered)",
+    "nameBn": "রয়েল বোল্ট — বিদেশি চাকি (কালো, টেম্পার করা)",
+    "category": "hardware",
+    "subcategory": "bolts",
+    "condition": "new",
+    "price": 13,
+    "image": "/products/rawal-anchor-bolt.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Anchor (royal / rawal) bolt made with imported chaki, blackened and tempered for extra strength — ৳13 per piece.",
+    "highlights": [
+      "Price ৳13 per piece",
+      "Imported (bideshi) chaki",
+      "Blackened and tempered for extra strength",
       "For fixing AC stands and brackets to walls",
       "Wholesale quantity available"
     ],
@@ -1991,11 +2072,11 @@ export const seedProducts: SeedProduct[] = [
         "Expansion anchor (royal / rawal) bolt"
       ],
       [
-        "Bangla chaki",
-        "৳11 per piece"
+        "Chaki",
+        "Imported, black, tempered"
       ],
       [
-        "Imported chaki (black, tempered)",
+        "Price",
         "৳13 per piece"
       ],
       [

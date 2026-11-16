@@ -17,7 +17,7 @@ import { factorySteps } from "./tracking";
 export type Lang = "bn" | "bl" | "en";
 type Step = "product" | "qty" | "name" | "phone" | "address" | "district" | "confirm";
 export type OrderDraft = { step: Step; slug?: string; qty?: number; name?: string; phone?: string; address?: string; district?: string; note?: string; generic?: boolean };
-export type BotState = { lang?: Lang; product?: string; candidates?: string[]; category?: string; order?: OrderDraft; awaitTrack?: boolean; misses?: number };
+export type BotState = { lang?: Lang; product?: string; candidates?: string[]; category?: string; terms?: string[]; order?: OrderDraft; awaitTrack?: boolean; misses?: number };
 export type AssistantReply = { text: string; state: BotState; lead?: LeadInput; orderId?: string; handover?: boolean };
 export type AssistantInput = { text: string; history: ChatTurn[]; state?: BotState | null; catalog: Catalog; site: SiteInfo; knowledge: string; channel: "web" | "messenger"; adTitle?: string };
 
@@ -56,6 +56,9 @@ const productTerms: Rule[] = [
   [/চৌকি|চৌকী|chouki|chowki|couki|ছাদ|chad|roof|floor|ফ্লোর/i, "chowki"],
   [/রেড|লাল|red|ব্ল্যাক|কালো|black/i, "red"],
   [/বোল্ট|bolt|রাওয়াল|রাওল|রয়েল|royal|rawal|rawl|anchor/i, "bolt"],
+  [/বাংলা চাকি|bangla chaki|bangla caki|(?<!বি)দেশি|\bdeshi\b|\bbangla\b/i, "bangla"],
+  [/বিদেশি|bideshi|imported|ইমপোর্ট|টেম্পার|temper/i, "imported"],
+  [/সাধারণ|সাধারন|plain|normal|নরমাল/i, "plain"],
   [/ড্রিল|drill/i, "drill"],
   [/শিয়ার|শেয়ার|shear|sheet cut|কাটিং মেশিন|cutting machine/i, "shear"],
   [/সবুজ|green|sobuj/i, "green"],
@@ -70,7 +73,7 @@ const productTerms: Rule[] = [
   [/জলপাই|olive/i, "olive"],
 ];
 
-function findProducts(text: string, catalog: Catalog) {
+function findProducts(text: string, catalog: Catalog, context: string[] = []) {
   const terms = productTerms.filter(([re]) => re.test(text)).map(([, t]) => t);
   const kg = bnDigits(text).match(/(\d[\d,]*)\s*(?:kg|কেজি|keji)/i)?.[1].replace(/,/g, "");
   if (!terms.length && !kg) return [];
@@ -82,6 +85,7 @@ function findProducts(text: string, catalog: Catalog) {
       const title = norm(`${p.name.replace(/\s*[—-]\s*with\b.*$/i, "")} ${p.category} ${p.subcategory}`);
       const body = norm(`${p.capacity} ${p.short}`);
       let s = terms.reduce((sum, t) => sum + (title.includes(t) ? 4 : body.includes(t) ? 1 : 0), 0);
+      if (s > 0) s += context.filter((t) => !terms.includes(t) && title.includes(t)).length * 2;
       if (ton && new RegExp(`\\b${ton}\\s*ton`, "i").test(`${p.capacity} ${p.name}`)) s += 3;
       const w = p.specs.find(([k]) => k === "Weight")?.[1].replace(/[^\d]/g, "");
       if (kg && w === kg) s += 5;
@@ -355,14 +359,17 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
   if (BYE.test(rest)) return out(say(lang, "আল্লাহ হাফেজ 🙏 ভালো থাকবেন।", "Allah hafez 🙏 Bhalo thakben.", "Goodbye 🙏 Take care."));
 
   // 5. Which product is this about?
-  const found = narrow(findProducts(rest, catalog), state);
+  const found = narrow(findProducts(rest, catalog, state.terms), state);
   const clear = isClear(found);
+  const topGroup = found.filter((x) => x.s === found[0]?.s);
+  const newTerms = productTerms.filter(([re]) => re.test(rest)).map(([, t]) => t);
+  if (newTerms.length) state.terms = [...new Set([...(state.terms ?? []), ...newTerms])].slice(-6);
   if (clear) {
     state.product = found[0].p.slug;
     state.category = found[0].p.category;
     state.candidates = undefined;
   } else if (found.length > 1) {
-    state.candidates = found.slice(0, 6).map((x) => x.p.slug);
+    state.candidates = (topGroup.length > 1 ? topGroup : found).slice(0, 6).map((x) => x.p.slug);
     state.category = found[0].p.category;
   }
   const current = clear ? found[0].p : bySlug(state.product);
@@ -424,7 +431,7 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
       `Yes, we build these in our own factory 👍 There are a few models and colours — see them here: /category/${found[0].p.category}\nThe price depends on tonnage and size — tell me the tonnage and the job and I'll get you a price.`));
   }
   if (found.length > 1) {
-    const list = [...found].sort((a, b) => b.s - a.s || Number(b.p.price > 0) - Number(a.p.price > 0)).slice(0, 5).map(({ p }) => `• ${nameOf(p, lang)} — ${unitPriceText(p)}`).join("\n");
+    const list = [...(topGroup.length > 1 ? topGroup : found)].sort((a, b) => b.s - a.s || Number(b.p.price > 0) - Number(a.p.price > 0)).slice(0, 5).map(({ p }) => `• ${nameOf(p, lang)} — ${unitPriceText(p)}`).join("\n");
     return out(hello + say(lang, `এই ধরনের কয়েকটা আছে:\n${list}\nকোনটার কথা জানতে চান?`, `Ei dhoroner koyekta ache:\n${list}\nKonta-r kotha jante chan?`, `We have a few of these:\n${list}\nWhich one would you like to know about?`) + `\n/category/${found[0].p.category}`);
   }
   if (current && /ওজন|কত কেজি|koto kg|koto keji|ojon|weight|kg koto/i.test(rest)) {
@@ -433,6 +440,11 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
   }
   // Follow-up on the product we were discussing ("dam koto?", "details?").
   if (current && (PRICE.test(rest) || /বিস্তারিত|details?|ডিটেইল|আর কি|ar ki|spec/i.test(rest))) return out(hello + aboutProduct(current, lang, seed + 1));
+  if (!current && state.candidates?.length && PRICE.test(rest) && !found.length) {
+    const listed = state.candidates.map((sl) => bySlug(sl)).filter((x): x is Product => !!x);
+    const list = listed.map((p) => `• ${nameOf(p, lang)} — ${byWeight(p) ? unitPriceText(p) : `${priceText(p.price)}/${unitOf(p, lang)}`}`).join("\n");
+    return out(hello + say(lang, `দামগুলো হলো:\n${list}\nকোনটা নেবেন বলুন?`, `Dam gula holo:\n${list}\nKonta niben bolen?`, `Here are the prices:\n${list}\nWhich one would you like?`));
+  }
   if (!current && (state.category === "power-press" || /প্রেস|press/i.test(rest)) && PRICE.test(rest)) {
     const some = catalog.products.filter((p) => p.category === "power-press" && p.price > 0).sort((a, b) => a.price - b.price);
     const pickd = [some[0], some[Math.floor(some.length / 2)], some[some.length - 1]].filter((x, i, a) => x && a.indexOf(x) === i);
@@ -488,9 +500,11 @@ function nextPrompt(d: OrderDraft, input: AssistantInput, lang: Lang, state: Bot
   if (!p) {
     d.step = "product";
     const listed = (state.candidates ?? []).map((sl) => input.catalog.products.find((x) => x.slug === sl)).filter((x): x is Product => !!x);
-    const opts = (listed.length ? listed : input.catalog.products.filter((x) => x.price > 0)).slice(0, 6).map((x) => `• ${nameOf(x, lang)} — ${unitPriceText(x)}`).join("\n");
-    return say(lang, `জি, অবশ্যই 😊 কোন প্রোডাক্টটা নিতে চান? নাম লিখুন — যেমন:\n${opts}\nবা "বউ বডি প্রেস", "চ্যানেল বডি প্রেস"।`,
-      `Ji, obosshoi 😊 Kon product ta nite chan? Nam likhun — jemon:\n${opts}\nba "bou body press", "channel body press".`,
+    const shown = (listed.length ? listed : input.catalog.products.filter((x) => x.price > 0)).slice(0, 6);
+    state.candidates = shown.map((x) => x.slug);
+    const opts = shown.map((x, i) => `${i + 1}. ${nameOf(x, lang)} — ${unitPriceText(x)}`).join("\n");
+    return say(lang, `জি, অবশ্যই 😊 কোন প্রোডাক্টটা নিতে চান? নম্বর বা নাম লিখুন:\n${opts}\nবা "বউ বডি প্রেস", "চ্যানেল বডি প্রেস"।`,
+      `Ji, obosshoi 😊 Kon product ta nite chan? Number ba nam likhun:\n${opts}\nba "bou body press", "channel body press".`,
       `Sure 😊 Which product would you like? Type its name — for example:\n${opts}\nor "bou body press", "channel body press".`);
   }
   if (!d.qty && (p.price === 0 || p.category === "power-press")) d.qty = 1; // machines: one unless the customer says more
@@ -548,7 +562,15 @@ async function continueOrder(text: string, raw: string, state: BotState, input: 
 
   switch (d.step) {
     case "product": {
-      const found = narrow(findProducts(text, catalog), state);
+      // "2", "২ নম্বর", "1 ta" picks from the numbered list we just showed.
+      const pickNo = text.trim().match(/^(\d)\s*(?:no|নম্বর|নং|ta|টা|টি)?\.?$/i)?.[1];
+      if (pickNo && state.candidates?.[Number(pickNo) - 1]) {
+        d.slug = state.candidates[Number(pickNo) - 1];
+        state.product = d.slug;
+        state.candidates = undefined;
+        break;
+      }
+      const found = narrow(findProducts(text, catalog, state.terms), state);
       if (!found.length) {
         const q = qtyIn(text);
         if (q) d.qty = q;

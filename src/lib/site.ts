@@ -65,6 +65,11 @@ export function byWeight(p: { price: number; specs: [string, string][] }) {
   return p.price > 0 && kg && rate ? { kg, rate } : null;
 }
 export const weightText = (kg: number) => `${kg.toLocaleString("en-IN")} kg`;
+// How a product is counted when bought: bolts per piece, AC stands per set, machines one by one.
+export const saleUnit = (p: { short: string; highlights: string[] }) => {
+  const t = `${p.short} ${p.highlights.join(" ")}`.toLowerCase();
+  return t.includes("per piece") ? "পিস" : t.includes("per set") ? "সেট" : "টি";
+};
 // "৳180/kg" for machines sold by weight, else the normal price (or "Call for price").
 export const unitPriceText = (p: { price: number; specs: [string, string][] }) => {
   const w = byWeight(p);

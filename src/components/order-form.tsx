@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle2, Loader2, Minus, Plus } from "lucide-react";
 import type { Product } from "@/lib/catalog";
 import { districts, paymentLabels, validateOrder, type OrderInput, type PaymentPlan } from "@/lib/orders";
-import { byWeight, formatBDT, priceText } from "@/lib/site";
+import { byWeight, formatBDT, priceText, saleUnit } from "@/lib/site";
 import { useSite } from "./site-provider";
 import { trackConversion } from "@/lib/analytics";
 import { useCustomer } from "./customer-provider";
@@ -142,7 +142,7 @@ export function OrderForm({ lines, source, qtySlot, onPlaced }: Props) {
       <div className="space-y-1 rounded-xl bg-gray-50 p-4 text-sm">
         {lines.map((l) => (
           <p key={l.product.slug} className="flex justify-between gap-3">
-            <span className="text-gray-600">{l.product.name} × {l.qty}</span>
+            <span className="text-gray-600">{l.product.name} × {l.qty} {saleUnit(l.product)}</span>
             <strong className="shrink-0">{priceText(l.product.price * l.qty)}</strong>
           </p>
         ))}
@@ -194,12 +194,27 @@ export function OrderSuccess({ order }: { order: Placed }) {
   );
 }
 
-export function QtyStepper({ value, onChange, label = "পরিমাণ" }: { value: number; onChange: (n: number) => void; label?: string }) {
+// − [typed number] + and the unit, so 500 bolts can be typed instead of clicked.
+export function QtyStepper({ value, onChange, label = "পরিমাণ", unit }: { value: number; onChange: (n: number) => void; label?: string; unit?: string }) {
+  const [text, setText] = useState(String(value));
+  useEffect(() => setText(String(value)), [value]);
   return (
-    <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 p-1" role="group" aria-label={label}>
+    <div className="flex items-center gap-1.5 rounded-xl border border-gray-200 bg-gray-50 p-1" role="group" aria-label={label}>
       <button type="button" onClick={() => onChange(Math.max(1, value - 1))} aria-label="Decrease quantity" className="flex h-9 w-9 items-center justify-center rounded-lg bg-white shadow-sm hover:bg-gray-100"><Minus className="h-4 w-4" /></button>
-      <span className="w-8 text-center font-bold" aria-live="polite">{value}</span>
+      <input
+        value={text}
+        inputMode="numeric"
+        aria-label={label}
+        onChange={(e) => {
+          const t = e.target.value.replace(/[^\d]/g, "").slice(0, 5);
+          setText(t);
+          if (Number(t) >= 1) onChange(Number(t));
+        }}
+        onBlur={() => setText(String(value))}
+        className="w-14 rounded-md bg-transparent text-center font-bold outline-none focus:bg-white focus:ring-2 focus:ring-brand-100"
+      />
       <button type="button" onClick={() => onChange(value + 1)} aria-label="Increase quantity" className="flex h-9 w-9 items-center justify-center rounded-lg bg-white shadow-sm hover:bg-gray-100"><Plus className="h-4 w-4" /></button>
+      {unit && <span className="pl-0.5 pr-2 text-sm font-semibold text-gray-600">{unit}</span>}
     </div>
   );
 }
@@ -214,7 +229,7 @@ export function ProductOrderForm({ product, source = "product-page" }: { product
         <div>
           <span className="mb-1 block text-sm font-semibold text-gray-700">পরিমাণ</span>
           <div className="flex items-center gap-3">
-            <QtyStepper value={qty} onChange={setQty} />
+            <QtyStepper value={qty} onChange={setQty} unit={saleUnit(product)} />
             <span className="text-sm text-gray-600">মোট: <strong className="text-brand-700">{priceText(product.price * qty)}</strong>{byWeight(product) && <span className="block text-[11px] text-gray-500">{byWeight(product)!.kg.toLocaleString("en-IN")} কেজি × {formatBDT(byWeight(product)!.rate)}{qty > 1 ? ` × ${qty}` : ""}</span>}</span>
           </div>
         </div>
