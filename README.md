@@ -6,7 +6,7 @@ Next.js 15 (App Router) + Tailwind CSS v4. Blueprint: `../dhaka_machine_ghar_web
 npm install                    # also runs prisma generate
 # .env → DATABASE_URL="postgresql://dmg:<password>@localhost:5432/dmg_ghar?schema=public"
 npx prisma migrate deploy      # create tables (use `npm run db:migrate` when changing the schema)
-npm run db:seed                # load the catalog (add `-- --demo` for a demo order + warranties)
+npm run db:seed                # load the catalog
 npm run admin:create -- --email you@example.com --name "Owner"   # prints a generated password
 npm run dev                    # http://localhost:3000  ·  admin: /admin
 ```
@@ -48,7 +48,7 @@ Defined in `src/app/globals.css` (`@theme`).
 - [x] **3. Product detail page** — spec table, ROI calculator, video tab, Bangla one-step order form, JSON-LD (`/product/[slug]`; orders POST to `/api/orders`)
 - [x] **4. Cart & checkout** — full payment / advance booking (bKash/Nagad/Bank), custom quotation form (`/checkout`, `/quotation`; quotes POST to `/api/quotes`)
 - [x] **5. Machine landing pages** — ad-optimised one-page order flow at `/lp/<slug>` for products with `landing: true` (minimal header, sticky mobile CTA, ROI, FAQ, order form; `noindex` + canonical to product page)
-- [x] **6. Order tracking (6-step factory) & warranty portal** — `/track` (invoice or phone; masked name/phone, no address), `/warranty` (serial check + service request), `/contact`. Try with `npm run db:seed -- --demo`
+- [x] **6. Order tracking (6-step factory) & warranty portal** — `/track` (invoice or phone; masked name/phone, no address), `/warranty` (serial check + service request), `/contact`
 - [x] **7. Backend & database** — Prisma + PostgreSQL; catalog, orders, quotes, warranty & service in the DB; prices always taken from the DB (leads table comes with the chatbot in step 9)
 - [x] **8. Admin dashboard** (`/admin`, owner/staff roles)
   - [x] 8a login (scrypt + signed httpOnly cookie, throttled), dashboard KPIs & factory pipeline

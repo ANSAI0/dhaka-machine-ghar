@@ -52,50 +52,7 @@ async function seedCatalog() {
   console.log(`Catalog: ${seedCategories.length} categories, ${seedProducts.length} products`);
 }
 
-async function seedDemo() {
-  const daysAgo = (d: number) => new Date(Date.now() - d * 864e5);
-  const press = await db.product.findUniqueOrThrow({ where: { slug: "channel-body-power-press-teal-yellow" } });
-  const lathe = await db.product.findUniqueOrThrow({ where: { slug: "bou-body-power-press-green-red" } });
-
-  await db.order.deleteMany({ where: { id: { contains: "DEMO" } } });
-  await db.order.create({
-    data: {
-      id: "DMG-DEMO-0001",
-      createdAt: daysAgo(9),
-      status: "load_test",
-      name: "Demo Customer",
-      phone: "01700000000",
-      address: "Demo address",
-      district: "Gazipur",
-      payment: "advance",
-      source: "demo",
-      total: press.price,
-      payNow: Math.round(press.price * 0.2),
-      items: { create: [{ productId: press.id, slug: press.slug, name: press.name, qty: 1, price: press.price }] },
-      events: {
-        create: [
-          { step: "registered", at: daysAgo(9) },
-          { step: "fabrication", at: daysAgo(7), note: "চেসিস ওয়েল্ডিং শুরু" },
-          { step: "motor_panel", at: daysAgo(3) },
-          { step: "load_test", at: daysAgo(1), note: "ট্রায়াল রান চলছে" },
-        ],
-      },
-    },
-  });
-
-  await db.serviceRequest.deleteMany({ where: { serial: { contains: "DEMO" } } });
-  await db.warranty.deleteMany({ where: { serial: { contains: "DEMO" } } });
-  await db.warranty.createMany({
-    data: [
-      { serial: "DMG-PP25-DEMO-0001", productId: press.id, slug: press.slug, productName: press.name, owner: "Demo Customer", phone: "01700000000", purchasedAt: daysAgo(60), months: 12 },
-      { serial: "DMG-LT06-DEMO-0002", productId: lathe.id, slug: lathe.slug, productName: lathe.name, owner: "Old Customer", phone: "01800000000", purchasedAt: daysAgo(500), months: 6 },
-    ],
-  });
-  console.log("Demo: /track?q=DMG-DEMO-0001 (phone 01700000000); warranty serials DMG-PP25-DEMO-0001 (active), DMG-LT06-DEMO-0002 (expired)");
-}
-
 seedCatalog()
-  .then(() => (process.argv.includes("--demo") ? seedDemo() : undefined))
   .catch((e) => {
     console.error(e);
     process.exitCode = 1;
