@@ -39,7 +39,20 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   const raw = await req.text();
   const m = await getMessengerSettings();
-  if (!validSignature(raw, req.headers.get("x-hub-signature-256"), m.appSecret)) return new Response("Bad signature", { status: 401 });
+  const sigOk = validSignature(raw, req.headers.get("x-hub-signature-256"), m.appSecret);
+  // Last webhook call (no message content) — shows whether Meta is reaching us when setting up.
+  let kinds: string[] = [];
+  try {
+    const b = JSON.parse(raw) as { object?: string; entry?: { messaging?: Record<string, unknown>[]; changes?: unknown[] }[] };
+    kinds = (b.entry ?? []).flatMap((e) => [...(e.messaging ?? []).map((x) => Object.keys(x).filter((k) => !["sender", "recipient", "timestamp"].includes(k)).join("+")), ...(e.changes?.length ? ["changes"] : [])]);
+    kinds.unshift(`object=${b.object}`);
+  } catch {
+    kinds = ["unparsable"];
+  }
+  await db.setting
+    .upsert({ where: { key: "messenger_debug" }, update: { value: { at: new Date().toISOString(), sigOk, kinds } }, create: { key: "messenger_debug", value: { at: new Date().toISOString(), sigOk, kinds } } })
+    .catch(() => {});
+  if (!sigOk) return new Response("Bad signature", { status: 401 });
 
   let body: { object?: string; entry?: { messaging?: MessagingEvent[] }[] };
   try {
