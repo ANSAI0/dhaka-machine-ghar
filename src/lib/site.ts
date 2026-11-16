@@ -72,6 +72,11 @@ export const saleUnit = (p: { short: string; highlights: string[] }) => {
 };
 // "৳180/kg" for machines sold by weight, else the normal price (or "Call for price").
 export const unitPriceText = (p: { price: number; specs: [string, string][] }) => {
-  const w = byWeight(p);
-  return w ? `${formatBDT(w.rate)}/kg` : priceText(p.price);
+  const rate = specNumber(p.specs, "Price rate");
+  return rate ? `${formatBDT(rate)}/kg` : priceText(p.price);
+};
+// Per-kg rate known but the machine's weight (and so its total) is not yet: priced on a call.
+export const rateOnly = (p: { price: number; specs: [string, string][] }) => {
+  const rate = specNumber(p.specs, "Price rate");
+  return rate && !byWeight(p) ? rate : 0;
 };

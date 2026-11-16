@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { BadgeCheck, CheckCircle2, Phone, ShieldCheck, Truck, Wallet } from "lucide-react";
 import { discountPercent, findCategory, findProduct } from "@/lib/catalog";
 import { getCatalog } from "@/lib/catalog-server";
-import { byWeight, formatBDT, priceText, unitPriceText, weightText } from "@/lib/site";
+import { byWeight, formatBDT, priceText, rateOnly, unitPriceText, weightText } from "@/lib/site";
 import { getSite } from "@/lib/settings";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { ConditionBadge } from "@/components/condition-badge";
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const p = findProduct(await getCatalog(), (await params).slug);
   if (!p) return {};
   return {
-    title: p.price > 0 ? `${p.name} — ${unitPriceText(p)}` : p.name,
+    title: p.price > 0 || rateOnly(p) ? `${p.name} — ${unitPriceText(p)}` : p.name,
     description: `${p.nameBn}. ${p.short} Price in Bangladesh: ${unitPriceText(p)}${byWeight(p) ? `, weight ${weightText(byWeight(p)!.kg)}` : ""}.`,
     openGraph: { images: p.image ? [p.image] : ["/brand/dmg-logo.jpg"] },
   };
@@ -86,7 +86,8 @@ export default async function ProductPage({ params }: Params) {
           </div>
 
           <div className="flex flex-wrap items-end gap-3 border-b border-gray-100 pb-4">
-            <span className="text-3xl font-bold text-accent-600">{byWeight(p) ? <>{formatBDT(byWeight(p)!.rate)}<span className="text-lg font-semibold"> / কেজি</span></> : p.price > 0 ? formatBDT(p.price) : "দাম জানতে কল করুন"}</span>
+            <span className="text-3xl font-bold text-accent-600">{byWeight(p) ? <>{formatBDT(byWeight(p)!.rate)}<span className="text-lg font-semibold"> / কেজি</span></> : rateOnly(p) ? <>{formatBDT(rateOnly(p))}<span className="text-lg font-semibold"> / কেজি</span></> : p.price > 0 ? formatBDT(p.price) : "দাম জানতে কল করুন"}</span>
+            {rateOnly(p) > 0 && <span className="mb-1 rounded-full bg-amber-50 px-3 py-1 text-sm font-bold text-amber-800">ওজন জানতে কল করুন</span>}
             {byWeight(p) && <span className="mb-1 rounded-full bg-brand-50 px-3 py-1 text-sm font-bold text-brand-800">ওজন {weightText(byWeight(p)!.kg)}</span>}
             {p.oldPrice && <span className="pb-1 text-lg text-gray-400 line-through">{formatBDT(p.oldPrice)}</span>}
             {p.offer && (

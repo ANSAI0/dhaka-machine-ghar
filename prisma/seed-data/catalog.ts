@@ -376,6 +376,7 @@ export const seedProducts: SeedProduct[] = [
     "voltage": "",
     "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
     "highlights": [
+      "Price ৳180 per kg — total depends on this machine's weight",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
@@ -386,6 +387,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Type",
         "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Price rate",
+        "৳180 per kg"
       ],
       [
         "Drive",
@@ -468,6 +473,7 @@ export const seedProducts: SeedProduct[] = [
     "voltage": "",
     "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
     "highlights": [
+      "Price ৳180 per kg — total depends on this machine's weight",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
@@ -478,6 +484,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Type",
         "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Price rate",
+        "৳180 per kg"
       ],
       [
         "Drive",
@@ -512,6 +522,7 @@ export const seedProducts: SeedProduct[] = [
     "voltage": "",
     "short": "Large, heavy duty channel body power press with a multi-groove pulley and big gear — for high-tonnage punching and forming.",
     "highlights": [
+      "Price ৳180 per kg — total depends on this machine's weight",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
@@ -522,6 +533,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Type",
         "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Price rate",
+        "৳180 per kg"
       ],
       [
         "Drive",
@@ -556,6 +571,7 @@ export const seedProducts: SeedProduct[] = [
     "voltage": "",
     "short": "Heavy duty channel body power press with a large multi-groove pulley and gear drive — built for long production runs.",
     "highlights": [
+      "Price ৳180 per kg — total depends on this machine's weight",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
@@ -566,6 +582,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Type",
         "Channel body (H-frame) mechanical power press"
+      ],
+      [
+        "Price rate",
+        "৳180 per kg"
       ],
       [
         "Drive",
@@ -696,6 +716,7 @@ export const seedProducts: SeedProduct[] = [
     "voltage": "",
     "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
     "highlights": [
+      "Price ৳180 per kg — total depends on this machine's weight",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -706,6 +727,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Type",
         "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Price rate",
+        "৳180 per kg"
       ],
       [
         "Drive",
@@ -788,6 +813,7 @@ export const seedProducts: SeedProduct[] = [
     "voltage": "",
     "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
     "highlights": [
+      "Price ৳180 per kg — total depends on this machine's weight",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -798,6 +824,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Type",
         "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Price rate",
+        "৳180 per kg"
       ],
       [
         "Drive",
@@ -832,6 +862,7 @@ export const seedProducts: SeedProduct[] = [
     "voltage": "",
     "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
     "highlights": [
+      "Price ৳180 per kg — total depends on this machine's weight",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -842,6 +873,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Type",
         "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Price rate",
+        "৳180 per kg"
       ],
       [
         "Drive",
@@ -876,6 +911,7 @@ export const seedProducts: SeedProduct[] = [
     "voltage": "",
     "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
     "highlights": [
+      "Price ৳180 per kg — total depends on this machine's weight",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -886,6 +922,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Type",
         "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Price rate",
+        "৳180 per kg"
       ],
       [
         "Drive",
@@ -920,6 +960,7 @@ export const seedProducts: SeedProduct[] = [
     "voltage": "",
     "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
     "highlights": [
+      "Price ৳180 per kg — total depends on this machine's weight",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -930,6 +971,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Type",
         "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Price rate",
+        "৳180 per kg"
       ],
       [
         "Drive",
@@ -964,6 +1009,7 @@ export const seedProducts: SeedProduct[] = [
     "voltage": "",
     "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
     "highlights": [
+      "Price ৳180 per kg — total depends on this machine's weight",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -974,6 +1020,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Type",
         "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Price rate",
+        "৳180 per kg"
       ],
       [
         "Drive",
@@ -1008,6 +1058,7 @@ export const seedProducts: SeedProduct[] = [
     "voltage": "",
     "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
     "highlights": [
+      "Price ৳180 per kg — total depends on this machine's weight",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -1018,6 +1069,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Type",
         "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Price rate",
+        "৳180 per kg"
       ],
       [
         "Drive",
@@ -1153,6 +1208,7 @@ export const seedProducts: SeedProduct[] = [
     "voltage": "",
     "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
     "highlights": [
+      "Price ৳180 per kg — total depends on this machine's weight",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -1163,6 +1219,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Type",
         "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Price rate",
+        "৳180 per kg"
       ],
       [
         "Drive",
@@ -1197,6 +1257,7 @@ export const seedProducts: SeedProduct[] = [
     "voltage": "",
     "short": "Double gear bou body (C-frame) power press — two gear stages for extra pressing force on heavier punching and forming jobs.",
     "highlights": [
+      "Price ৳180 per kg — total depends on this machine's weight",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -1207,6 +1268,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Type",
         "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Price rate",
+        "৳180 per kg"
       ],
       [
         "Drive",
@@ -1241,6 +1306,7 @@ export const seedProducts: SeedProduct[] = [
     "voltage": "",
     "short": "Double gear bou body (C-frame) power press — two gear stages for extra pressing force on heavier punching and forming jobs.",
     "highlights": [
+      "Price ৳180 per kg — total depends on this machine's weight",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -1251,6 +1317,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Type",
         "Bou body / C-frame mechanical power press"
+      ],
+      [
+        "Price rate",
+        "৳180 per kg"
       ],
       [
         "Drive",

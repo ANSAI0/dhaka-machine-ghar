@@ -151,6 +151,15 @@ function aboutProduct(p: Product, lang: Lang, seed: number) {
       `${open} ${name} — ${priceText(p.price)} per ${unit}.${prices}\nHow many do you need? I can take the order right here.\n${link}`,
     );
   }
+  const rate = spec(p, "Price rate")?.replace(/\s*per kg/i, "");
+  if (rate) {
+    return say(
+      lang,
+      `জি, ${name} আমাদের নিজস্ব কারখানায় তৈরি হয় 👍 দাম প্রতি কেজি ${rate}। এই মেশিনের ওজন দেখে মোট দামটা মালিক জানিয়ে দেবেন — কত টনের লাগবে বা কী কাজে ব্যবহার করবেন বললে ঠিক মেশিনটা বলে দিতে পারব।\n${link}`,
+      `Ji, ${name} amader nijer karkhanay toiri hoy 👍 Dam per kg ${rate}. Ei machine er ojon dekhe mot dam ta malik janiye diben — koto ton lagbe ba ki kaje use korben bolle thik machine ta bole dite parbo.\n${link}`,
+      `Yes, ${name} is built in our own factory 👍 The price is ${rate} per kg; the owner will confirm the total from this machine's weight. Tell me the tonnage or the job and I'll point you to the right one.\n${link}`,
+    );
+  }
   return say(
     lang,
     `জি, ${name} আমাদের নিজস্ব কারখানায় তৈরি হয় 👍 এর দাম টনেজ আর সাইজ অনুযায়ী ঠিক হয়। কত টনের লাগবে আর কী কাজে ব্যবহার করবেন জানালে সঠিক দামটা জানিয়ে দিতে পারব।\n${link}`,
@@ -342,7 +351,7 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
   // 4. Greetings, thanks, goodbye.
   const greeted = GREET.test(text);
   const rest = text.replace(GREET, "").trim();
-  const hello = greeted ? say(lang, "ওয়ালাইকুম আসসালাম 😊 ", "Walaikum assalam 😊 ", "Hello 😊 ") : "";
+  const hello = greeted ? say(lang, "আসসালামু আলাইকুম 😊 ", "Assalamu alaikum 😊 ", "Assalamu alaikum 😊 ") : "";
   if (greeted && rest.length < 2) {
     return out(
       first
