@@ -1781,21 +1781,21 @@ export const seedProducts: SeedProduct[] = [
     "featured": false
   },
   {
-    "slug": "hydraulic-h-frame-press-2500kg",
-    "name": "Heavy Hydraulic H-Frame Press — 2500 kg",
-    "nameBn": "হেভি হাইড্রোলিক এইচ-ফ্রেম প্রেস — ২৫০০ কেজি",
+    "slug": "hydraulic-h-frame-press-800kg",
+    "name": "Hydraulic H-Frame Press — 800 kg",
+    "nameBn": "হাইড্রোলিক এইচ-ফ্রেম প্রেস — ৮০০ কেজি",
     "category": "power-press",
     "subcategory": "hydraulic",
     "condition": "new",
-    "price": 575000,
-    "image": "/products/hydraulic-h-frame-press-2500kg.webp",
+    "price": 184000,
+    "image": "/products/hydraulic-h-frame-press-800kg.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Heavy H-frame hydraulic press with a big cylinder (photo shows it before painting). Weight 2,500 kg, price ৳575,000 (৳230 per kg).",
+    "short": "H-frame hydraulic press with a big cylinder (photo shows it before painting). Weight 800 kg, price ৳1,84,000 (৳230 per kg).",
     "highlights": [
-      "Price ৳575,000 — 2,500 kg × ৳230 per kg",
-      "Weight: 2,500 kg",
+      "Price ৳1,84,000 — 800 kg × ৳230 per kg",
+      "Weight: 800 kg",
       "Rate: ৳230 per kg",
       "Hydraulic cylinder for smooth, controlled force",
       "Strong welded steel frame",
@@ -1809,7 +1809,7 @@ export const seedProducts: SeedProduct[] = [
       ],
       [
         "Weight",
-        "2,500 kg"
+        "800 kg"
       ],
       [
         "Price rate",
@@ -1817,7 +1817,7 @@ export const seedProducts: SeedProduct[] = [
       ],
       [
         "Price",
-        "৳575,000"
+        "৳1,84,000"
       ],
       [
         "Colour",
