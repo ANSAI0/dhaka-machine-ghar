@@ -55,10 +55,6 @@ export const seedCategories: SeedCategory[] = [
       {
         "slug": "floor-stand",
         "name": "Floor Stand"
-      },
-      {
-        "slug": "bulk",
-        "name": "Bulk / By KG"
       }
     ]
   },
@@ -1434,23 +1430,71 @@ export const seedProducts: SeedProduct[] = [
   },
   {
     "slug": "dmg-ac-outdoor-stand",
-    "name": "DMG AC Outdoor Unit Stand (Wall Bracket)",
-    "nameBn": "ডিএমজি এসি আউটডোর স্ট্যান্ড (ওয়াল ব্র্যাকেট)",
+    "name": "Powder Coated Angle AC Stand — 3 mm, 40 inch",
+    "nameBn": "পাউডার কোটিং এঙ্গেল এসি স্ট্যান্ড — ৩ মিমি, ৪০ ইঞ্চি",
     "category": "ac-stand",
     "subcategory": "wall-stand",
     "condition": "new",
-    "price": 0,
+    "price": 700,
     "image": "/products/dmg-ac-outdoor-stand.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Pair of strong DMG wall brackets for the outdoor unit (ODU) of split ACs — supplied with rawal bolts, nuts and washers.",
+    "short": "Heavy 3 mm angle-iron AC outdoor stand with powder coating — 40 inch long, L-arm 12 or 20 inch, free size. ৳700 per set.",
     "highlights": [
-      "Universal — fits split AC outdoor units of all major brands",
-      "Thick steel with powder coating",
-      "Comes with rawal bolts, nuts and washers",
-      "DMG embossed, made in our factory",
-      "Retail and wholesale; also sold by KG"
+      "Price ৳700 per set",
+      "3 mm thick angle iron",
+      "Length 40 inch; L-arm 12 inch or 20 inch",
+      "Free size — fits most outdoor units",
+      "Powder coated, DMG embossed"
+    ],
+    "specs": [
+      [
+        "Material",
+        "3 mm angle iron, powder coated"
+      ],
+      [
+        "Length",
+        "40 inch"
+      ],
+      [
+        "L-arm",
+        "12 inch or 20 inch"
+      ],
+      [
+        "Size",
+        "Free size"
+      ],
+      [
+        "Price",
+        "৳700 per set"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ]
+    ],
+    "featured": true
+  },
+  {
+    "slug": "dmg-ac-stand-box-pack",
+    "name": "China AC Stand Set — with Join Nut & Royal Bolt",
+    "nameBn": "চায়না এসি স্ট্যান্ড সেট — জয়েন নাট ও রয়েল বোল্ট সহ",
+    "category": "ac-stand",
+    "subcategory": "wall-stand",
+    "condition": "new",
+    "price": 500,
+    "image": "/products/dmg-ac-stand-box-pack.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Ready-to-fit AC outdoor unit wall stand set, supplied with join nuts and royal (rawal) bolts — ৳500 per set.",
+    "highlights": [
+      "Price ৳500 per set",
+      "Join nuts and royal bolts included",
+      "Fits split AC outdoor units of all major brands",
+      "Packed in DMG box",
+      "Retail and wholesale"
     ],
     "specs": [
       [
@@ -1458,198 +1502,131 @@ export const seedProducts: SeedProduct[] = [
         "Wall-mount AC outdoor unit stand (pair)"
       ],
       [
-        "Material",
-        "Steel, powder coated"
+        "In the set",
+        "2 stands, join nuts, royal bolts"
       ],
       [
-        "In the pack",
-        "2 brackets, rawal bolts, nuts, washers"
+        "Price",
+        "৳500 per set"
       ],
       [
-        "Made in",
-        "DMG own factory, Keraniganj, Dhaka"
-      ],
-      [
-        "Colour",
-        "Off-white"
-      ]
-    ],
-    "featured": true
-  },
-  {
-    "slug": "dmg-ac-stand-box-pack",
-    "name": "DMG AC Stand — Universal Box Pack",
-    "nameBn": "ডিএমজি এসি স্ট্যান্ড — ইউনিভার্সাল বক্স প্যাক",
-    "category": "ac-stand",
-    "subcategory": "wall-stand",
-    "condition": "new",
-    "price": 0,
-    "image": "/products/dmg-ac-stand-box-pack.webp",
-    "brand": "DMG",
-    "capacity": "",
-    "voltage": "",
-    "short": "DMG universal AC outdoor stand in its retail box — a full set with rawal bolts, nuts and washers, ready for the shop shelf.",
-    "highlights": [
-      "Retail box with full fitting kit",
-      "Universal fit for split AC outdoor units",
-      "Good for dealers and AC installers",
-      "Wholesale prices for bulk orders"
-    ],
-    "specs": [
-      [
-        "Type",
-        "AC outdoor unit stand, boxed set"
-      ],
-      [
-        "In the box",
-        "2 brackets, rawal bolts, nuts, washers"
-      ],
-      [
-        "Made in",
-        "DMG own factory, Keraniganj, Dhaka"
+        "Packing",
+        "DMG universal box"
       ]
     ],
     "featured": false
   },
   {
     "slug": "ac-floor-stand",
-    "name": "AC Floor Stand (Ground Stand)",
-    "nameBn": "এসি ফ্লোর স্ট্যান্ড (গ্রাউন্ড স্ট্যান্ড)",
+    "name": "Roof Chowki AC Stand (Chader Chouki)",
+    "nameBn": "ছাদের চৌকি এসি স্ট্যান্ড",
     "category": "ac-stand",
     "subcategory": "floor-stand",
     "condition": "new",
-    "price": 0,
+    "price": 320,
     "image": "/products/ac-floor-stand.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Pair of U-shaped floor stands that keep the AC outdoor unit off the roof or ground — with rubber pads and fixing bolts.",
+    "short": "Roof-top chowki stand that keeps the AC outdoor unit off the roof floor — ৳320 per set; powder coated ৳400 per set.",
     "highlights": [
-      "For roof-top or ground installation",
-      "Rubber pads reduce vibration",
-      "Rust-resistant powder coating",
-      "Fixing bolts included"
+      "Plain: ৳320 per set",
+      "Powder coated: ৳400 per set",
+      "Keeps the outdoor unit off the roof floor",
+      "Strong steel, for roof or ground",
+      "Retail and wholesale"
     ],
     "specs": [
       [
         "Type",
-        "Floor / ground stand for AC outdoor unit (pair)"
+        "Roof / floor chowki stand for AC outdoor unit (pair)"
       ],
       [
-        "Material",
-        "Steel, powder coated"
+        "Plain",
+        "৳320 per set"
+      ],
+      [
+        "Powder coated",
+        "৳400 per set"
       ],
       [
         "Made in",
         "DMG own factory, Keraniganj, Dhaka"
-      ],
-      [
-        "Colour",
-        "Off-white"
       ]
     ],
     "featured": false
   },
   {
     "slug": "heavy-duty-ac-stand-red",
-    "name": "Heavy Duty AC Stand — Red Oxide",
-    "nameBn": "হেভি ডিউটি এসি স্ট্যান্ড — রেড অক্সাইড",
+    "name": "Red & Black AC Stand (No Powder Coating)",
+    "nameBn": "রেড ও ব্ল্যাক এসি স্ট্যান্ড (পাউডার কোটিং ছাড়া)",
     "category": "ac-stand",
     "subcategory": "wall-stand",
     "condition": "new",
-    "price": 0,
+    "price": 600,
     "image": "/products/heavy-duty-ac-stand-red.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Heavy duty welded AC stand with red oxide primer — for big outdoor units and commercial AC installations.",
+    "short": "Strong AC outdoor unit wall stand in red or black paint, without powder coating — ৳600 per set.",
     "highlights": [
-      "Welded heavy angle frame",
-      "Red oxide anti-rust primer",
-      "For large and commercial AC units",
-      "Size made to order"
+      "Price ৳600 per set",
+      "Red or black paint finish",
+      "No powder coating — lower price",
+      "Strong welded steel",
+      "Retail and wholesale"
     ],
     "specs": [
       [
         "Type",
-        "Heavy duty welded AC stand"
+        "Wall-mount AC outdoor unit stand (pair)"
       ],
       [
         "Finish",
-        "Red oxide primer"
+        "Red or black paint (no powder coating)"
+      ],
+      [
+        "Price",
+        "৳600 per set"
       ],
       [
         "Made in",
         "DMG own factory, Keraniganj, Dhaka"
-      ],
-      [
-        "Colour",
-        "Red oxide"
-      ]
-    ],
-    "featured": false
-  },
-  {
-    "slug": "ac-stand-bulk-by-kg",
-    "name": "AC Stand — Bulk (Sold by KG)",
-    "nameBn": "এসি স্ট্যান্ড — পাইকারি (কেজি হিসেবে)",
-    "category": "ac-stand",
-    "subcategory": "bulk",
-    "condition": "new",
-    "price": 0,
-    "image": "/products/ac-stand-bulk-by-kg.webp",
-    "brand": "DMG",
-    "capacity": "",
-    "voltage": "",
-    "short": "Galvanized AC stand brackets in bulk, sold by weight (KG) — for dealers, AC shops and installers.",
-    "highlights": [
-      "Sold by KG at wholesale price",
-      "Galvanized steel brackets",
-      "Ready stock in our factory",
-      "Delivery all over Bangladesh"
-    ],
-    "specs": [
-      [
-        "Type",
-        "AC stand brackets, bulk"
-      ],
-      [
-        "Sold by",
-        "Weight (KG)"
-      ],
-      [
-        "Made in",
-        "DMG own factory, Keraniganj, Dhaka"
-      ],
-      [
-        "Colour",
-        "Galvanized"
       ]
     ],
     "featured": false
   },
   {
     "slug": "rawal-anchor-bolt",
-    "name": "Rawal Bolt (Anchor Bolt) for AC Stand",
-    "nameBn": "রাওয়াল বোল্ট (অ্যাঙ্কর বোল্ট)",
+    "name": "Royal Bolt (Rawal Anchor Bolt)",
+    "nameBn": "রয়েল বোল্ট (রাওয়াল অ্যাঙ্কর বোল্ট)",
     "category": "hardware",
     "subcategory": "bolts",
     "condition": "new",
-    "price": 0,
+    "price": 11,
     "image": "/products/rawal-anchor-bolt.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Expansion rawal (anchor) bolts with nut and washer for fixing AC stands and brackets to brick or concrete walls.",
+    "short": "Anchor bolt for fixing AC stands to walls — Bangla chaki ৳11 per piece; imported chaki, blackened and tempered ৳13 per piece.",
     "highlights": [
-      "Expansion sleeve grips brick and concrete",
-      "With nut and washer",
-      "Sold per piece or in bulk"
+      "Bangla chaki: ৳11 per piece",
+      "Imported (bideshi) chaki, black and tempered: ৳13 per piece",
+      "For fixing AC stands and brackets to walls",
+      "Wholesale quantity available"
     ],
     "specs": [
       [
         "Type",
-        "Expansion anchor (rawal) bolt"
+        "Expansion anchor (royal / rawal) bolt"
+      ],
+      [
+        "Bangla chaki",
+        "৳11 per piece"
+      ],
+      [
+        "Imported chaki (black, tempered)",
+        "৳13 per piece"
       ],
       [
         "Use",

@@ -28,7 +28,7 @@ function systemPrompt(catalog: Catalog, site: SiteInfo, knowledge: string) {
   const byCat = catalog.categories
     .map((c) => `## ${c.name} (${c.nameBn}) — /category/${c.slug}\n${catalog.products.filter((p) => p.category === c.slug).map(productLine).join("\n")}`)
     .join("\n\n");
-  return `You are "DMG সহকারী", the website assistant of ${site.name} (${site.nameBn}), a Bangladeshi manufacturer of mechanical and hydraulic power presses (channel body / H-frame, bou body / C-frame, hydraulic) built in its own factory, and maker of AC outdoor-unit stands (wall brackets, floor stands; sold per piece, boxed and in bulk by KG) and rawal (anchor) bolts. It also sells shearing and drill machines.
+  return `You are "DMG সহকারী", the website assistant of ${site.name} (${site.nameBn}), a Bangladeshi manufacturer of mechanical and hydraulic power presses (channel body / H-frame, bou body / C-frame, hydraulic) built in its own factory, and maker of AC outdoor-unit stands (wall stands and roof chowki stands, sold per set) and royal / rawal (anchor) bolts (sold per piece). It also sells shearing and drill machines.
 
 Reply in the visitor's language — Bangla by default, English if they write in English. Keep replies short (2–5 sentences), friendly and concrete. Plain text only, no markdown formatting; put site links as bare relative paths like /product/<slug> on their own.
 
@@ -131,7 +131,7 @@ const productTerms: Rule[] = [
   [/কেজি|kg\b|keji|পাইকারি|pikari|wholesale|bulk/i, "kg"],
   [/বক্স|box/i, "box"],
   [/রেড|লাল|red|oxide/i, "red"],
-  [/বোল্ট|bolt|রাওয়াল|রাওল|rawal|rawl|anchor/i, "bolt"],
+  [/বোল্ট|bolt|রাওয়াল|রাওল|রয়েল|royal|rawal|rawl|anchor/i, "bolt"],
   [/ড্রিল|drill/i, "drill"],
   [/শিয়ার|শেয়ার|shear|sheet cut|কাটিং মেশিন|cutting machine/i, "shear"],
   [/সবুজ|green|sobuj/i, "green"],
@@ -164,7 +164,7 @@ const faq = (site: SiteInfo): Rule[] => [
   [/কাস্টম|custom|মাপে|mape|টনেজ|tonnage|বানিয়ে|baniye|অর্ডার দিয়ে বানা/i, `আপনার প্রয়োজনীয় টনেজ ও মাপে পাওয়ার প্রেস নিজস্ব কারখানায় তৈরি করে দিই। কোটেশন নিন: /quotation`],
   [/ফেরত|ferot|refund|return|বদল|change/i, `ফেরত ও রিফান্ডের নিয়ম দেখুন: /refund। প্রশ্ন থাকলে কল করুন ${site.phone}`],
   [/যোগাযোগ|contact|নম্বর|number|phone|ফোন|whatsapp|হোয়াটসঅ্যাপ|imo|email|ইমেইল/i, `কল / WhatsApp: ${site.phone}\nইমেইল: ${site.email}\nযোগাযোগ পেজ: /contact`],
-  [/কেজি|kg\b|keji|পাইকারি|pikari|wholesale|dealer|ডিলার/i, `এসি স্ট্যান্ড পিস হিসেবে, বক্সে এবং পাইকারি কেজি হিসেবেও বিক্রি করি — ডিলার ও ইনস্টলারদের জন্য বিশেষ দাম। দেখুন /product/ac-stand-bulk-by-kg`],
+  [/কেজি|kg\b|keji|পাইকারি|pikari|wholesale|dealer|ডিলার/i, `এসি স্ট্যান্ড সেট হিসেবে বিক্রি হয় — চায়না স্ট্যান্ড (জয়েন নাট ও রয়েল বোল্ট সহ) ৳৫০০, পাউডার কোটিং এঙ্গেল স্ট্যান্ড ৳৭০০, রেড/ব্ল্যাক স্ট্যান্ড ৳৬০০, ছাদের চৌকি ৳৩২০ (পাউডার কোটিং ৳৪০০)। রয়েল বোল্ট প্রতি পিস ৳১১–১৩। বেশি পরিমাণে নিলে কল করুন: ${site.phone}। সব দেখুন /category/ac-stand`],
 ];
 
 const bnDigits = (s: string) => s.replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d)));
@@ -215,7 +215,7 @@ export function basicReply(raw: string, catalog: Catalog, site: SiteInfo, knowle
   }
 
   const cats = catalog.categories.map((c) => `• ${c.nameBn}: /category/${c.slug}`).join("\n");
-  const intro = `ঢাকা মেশিন ঘরে পাবেন নিজস্ব কারখানায় তৈরি পাওয়ার প্রেস (চ্যানেল বডি, বউ বডি, হাইড্রোলিক), এসি স্ট্যান্ড ও রাওয়াল বোল্ট।`;
+  const intro = `ঢাকা মেশিন ঘরে পাবেন নিজস্ব কারখানায় তৈরি পাওয়ার প্রেস (চ্যানেল বডি, বউ বডি, হাইড্রোলিক), এসি স্ট্যান্ড ও রয়েল বোল্ট।`;
   if (asks.greet.test(text)) return reply(`ওয়ালাইকুম আসসালাম! ${intro} কী জানতে চান?\n${cats}`);
   if (asks.thanks.test(text) && text.length < 40) return reply(`আপনাকেও ধন্যবাদ! আর কিছু জানতে চাইলে লিখুন, অথবা কল করুন ${site.phone}।`);
   if (asks.track.test(text)) return reply(`ইনভয়েস বা মোবাইল নম্বর দিয়ে অর্ডারের অবস্থা দেখুন: /track`);
