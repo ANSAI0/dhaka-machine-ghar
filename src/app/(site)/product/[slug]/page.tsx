@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { BadgeCheck, CheckCircle2, Phone, ShieldCheck, Truck, Wallet } from "lucide-react";
 import { discountPercent, findCategory, findProduct } from "@/lib/catalog";
 import { getCatalog } from "@/lib/catalog-server";
-import { formatBDT, priceText } from "@/lib/site";
+import { byWeight, formatBDT, priceText, unitPriceText, weightText } from "@/lib/site";
 import { getSite } from "@/lib/settings";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { ConditionBadge } from "@/components/condition-badge";
@@ -26,8 +26,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const p = findProduct(await getCatalog(), (await params).slug);
   if (!p) return {};
   return {
-    title: p.price > 0 ? `${p.name} — ${formatBDT(p.price)}` : p.name,
-    description: `${p.nameBn}. ${p.short} Price in Bangladesh: ${priceText(p.price)}.`,
+    title: p.price > 0 ? `${p.name} — ${unitPriceText(p)}` : p.name,
+    description: `${p.nameBn}. ${p.short} Price in Bangladesh: ${unitPriceText(p)}${byWeight(p) ? `, weight ${weightText(byWeight(p)!.kg)}` : ""}.`,
     openGraph: { images: p.image ? [p.image] : ["/brand/dmg-logo.jpg"] },
   };
 }
@@ -41,7 +41,7 @@ export default async function ProductPage({ params }: Params) {
   const off = discountPercent(p);
   const advance = Math.round((p.price * site.advancePercent) / 100);
   const related = catalog.products.filter((x) => x.category === p.category && x.slug !== p.slug).slice(0, 5);
-  const waText = encodeURIComponent(`আসসালামু আলাইকুম, আমি "${p.name}" (${formatBDT(p.price)}) সম্পর্কে জানতে চাই।`);
+  const waText = encodeURIComponent(`আসসালামু আলাইকুম, আমি "${p.name}" (${unitPriceText(p)}) সম্পর্কে জানতে চাই।`);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -86,7 +86,8 @@ export default async function ProductPage({ params }: Params) {
           </div>
 
           <div className="flex flex-wrap items-end gap-3 border-b border-gray-100 pb-4">
-            <span className="text-3xl font-bold text-accent-600">{p.price > 0 ? formatBDT(p.price) : "দাম জানতে কল করুন"}</span>
+            <span className="text-3xl font-bold text-accent-600">{byWeight(p) ? <>{formatBDT(byWeight(p)!.rate)}<span className="text-lg font-semibold"> / কেজি</span></> : p.price > 0 ? formatBDT(p.price) : "দাম জানতে কল করুন"}</span>
+            {byWeight(p) && <span className="mb-1 rounded-full bg-brand-50 px-3 py-1 text-sm font-bold text-brand-800">ওজন {weightText(byWeight(p)!.kg)}</span>}
             {p.oldPrice && <span className="pb-1 text-lg text-gray-400 line-through">{formatBDT(p.oldPrice)}</span>}
             {p.offer && (
               <span className="mb-1 rounded-full bg-accent-600 px-3 py-1 text-xs font-bold text-white">
@@ -119,7 +120,15 @@ export default async function ProductPage({ params }: Params) {
             <p className="text-sm text-gray-700">
               {p.price > 0 ? (
                 <>
-                  মাত্র <strong className="text-steel-700">{formatBDT(advance)}</strong> ({site.advancePercent}%) অগ্রিম দিয়ে বুকিং করুন — bKash / Nagad / Bank
+                  {byWeight(p) ? (
+                    <>
+                      মোট দামের মাত্র <strong className="text-steel-700">{site.advancePercent}%</strong> অগ্রিম দিয়ে বুকিং করুন — bKash / Nagad / Bank
+                    </>
+                  ) : (
+                    <>
+                      মাত্র <strong className="text-steel-700">{formatBDT(advance)}</strong> ({site.advancePercent}%) অগ্রিম দিয়ে বুকিং করুন — bKash / Nagad / Bank
+                    </>
+                  )}
                 </>
               ) : (
                 <>দাম ও ডেলিভারির সময় জানতে কল বা WhatsApp করুন — {site.advancePercent}% অগ্রিমে বুকিং (bKash / Nagad / Bank)</>

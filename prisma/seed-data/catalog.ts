@@ -86,11 +86,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal. Weight 1,500 kg, price ৳270,000 (৳180 per kg).",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal. Weight 1,500 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳270,000 — 1,500 kg × ৳180 per kg",
-      "Weight: 1,500 kg",
-      "Rate: ৳180 per kg",
+      "Price ৳180 per kg — weight 1,500 kg",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
@@ -108,10 +106,6 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
-      ],
-      [
-        "Price",
-        "৳270,000"
       ],
       [
         "Drive",
@@ -140,11 +134,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal. Weight 600 kg, price ৳108,000 (৳180 per kg).",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal. Weight 600 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳108,000 — 600 kg × ৳180 per kg",
-      "Weight: 600 kg",
-      "Rate: ৳180 per kg",
+      "Price ৳180 per kg — weight 600 kg",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
@@ -162,10 +154,6 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
-      ],
-      [
-        "Price",
-        "৳108,000"
       ],
       [
         "Drive",
@@ -189,17 +177,17 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "channel-body",
     "condition": "new",
-    "price": 0,
+    "price": 180000,
     "image": "/products/channel-body-power-press-green.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal. Weight 1,000 kg, price ৳180 per kg.",
     "highlights": [
+      "Price ৳180 per kg — weight 1,000 kg",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
-      "Tonnage and size made to your order",
       "Warranty and after-sales service from DMG"
     ],
     "specs": [
@@ -208,12 +196,16 @@ export const seedProducts: SeedProduct[] = [
         "Channel body (H-frame) mechanical power press"
       ],
       [
-        "Drive",
-        "Electric motor, belt, flywheel and gear"
+        "Weight",
+        "1,000 kg"
       ],
       [
-        "Capacity",
-        "Made to order (tonnage as you need)"
+        "Price rate",
+        "৳180 per kg"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
       ],
       [
         "Made in",
@@ -233,17 +225,17 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "channel-body",
     "condition": "new",
-    "price": 0,
+    "price": 90000,
     "image": "/products/channel-body-power-press-teal-orange.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal. Weight 500 kg, price ৳180 per kg.",
     "highlights": [
+      "Price ৳180 per kg — weight 500 kg",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
-      "Tonnage and size made to your order",
       "Warranty and after-sales service from DMG"
     ],
     "specs": [
@@ -252,12 +244,16 @@ export const seedProducts: SeedProduct[] = [
         "Channel body (H-frame) mechanical power press"
       ],
       [
-        "Drive",
-        "Electric motor, belt, flywheel and gear"
+        "Weight",
+        "500 kg"
       ],
       [
-        "Capacity",
-        "Made to order (tonnage as you need)"
+        "Price rate",
+        "৳180 per kg"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
       ],
       [
         "Made in",
@@ -277,17 +273,17 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "channel-body",
     "condition": "new",
-    "price": 0,
+    "price": 126000,
     "image": "/products/channel-body-power-press-bright-green.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal. Weight 700 kg, price ৳180 per kg.",
     "highlights": [
+      "Price ৳180 per kg — weight 700 kg",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
-      "Tonnage and size made to your order",
       "Warranty and after-sales service from DMG"
     ],
     "specs": [
@@ -296,12 +292,16 @@ export const seedProducts: SeedProduct[] = [
         "Channel body (H-frame) mechanical power press"
       ],
       [
-        "Drive",
-        "Electric motor, belt, flywheel and gear"
+        "Weight",
+        "700 kg"
       ],
       [
-        "Capacity",
-        "Made to order (tonnage as you need)"
+        "Price rate",
+        "৳180 per kg"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
       ],
       [
         "Made in",
@@ -326,11 +326,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal. Weight 500 kg, price ৳90,000 (৳180 per kg).",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal. Weight 500 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳90,000 — 500 kg × ৳180 per kg",
-      "Weight: 500 kg",
-      "Rate: ৳180 per kg",
+      "Price ৳180 per kg — weight 500 kg",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
@@ -348,10 +346,6 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
-      ],
-      [
-        "Price",
-        "৳90,000"
       ],
       [
         "Drive",
@@ -419,17 +413,17 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "channel-body",
     "condition": "new",
-    "price": 0,
+    "price": 108000,
     "image": "/products/channel-body-power-press-steel-blue.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal. Weight 600 kg, price ৳180 per kg.",
     "highlights": [
+      "Price ৳180 per kg — weight 600 kg",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
-      "Tonnage and size made to your order",
       "Warranty and after-sales service from DMG"
     ],
     "specs": [
@@ -438,12 +432,16 @@ export const seedProducts: SeedProduct[] = [
         "Channel body (H-frame) mechanical power press"
       ],
       [
-        "Drive",
-        "Electric motor, belt, flywheel and gear"
+        "Weight",
+        "600 kg"
       ],
       [
-        "Capacity",
-        "Made to order (tonnage as you need)"
+        "Price rate",
+        "৳180 per kg"
+      ],
+      [
+        "Drive",
+        "Electric motor, belt, flywheel and gear"
       ],
       [
         "Made in",
@@ -595,17 +593,17 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "channel-body",
     "condition": "new",
-    "price": 0,
+    "price": 108000,
     "image": "/products/channel-body-power-press-motor-top-teal.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Channel body power press with the motor mounted on top and double gear drive — compact, heavy-duty and ready for continuous production work.",
+    "short": "Channel body power press with the motor mounted on top and double gear drive — compact, heavy-duty and ready for continuous production work. Weight 600 kg, price ৳180 per kg.",
     "highlights": [
+      "Price ৳180 per kg — weight 600 kg",
       "Top-mounted motor saves floor space",
       "Double gear drive for higher pressing force",
       "Strong two-pillar channel body frame",
-      "Tonnage made to your order",
       "Warranty and after-sales service from DMG"
     ],
     "specs": [
@@ -614,12 +612,16 @@ export const seedProducts: SeedProduct[] = [
         "Channel body (H-frame) mechanical power press"
       ],
       [
-        "Drive",
-        "Top-mounted motor, double gear and flywheel"
+        "Weight",
+        "600 kg"
       ],
       [
-        "Capacity",
-        "Made to order (tonnage as you need)"
+        "Price rate",
+        "৳180 per kg"
+      ],
+      [
+        "Drive",
+        "Top-mounted motor, double gear and flywheel"
       ],
       [
         "Made in",
@@ -639,17 +641,17 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "channel-body",
     "condition": "new",
-    "price": 0,
+    "price": 108000,
     "image": "/products/channel-body-power-press-motor-top-blue.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Channel body power press with the motor mounted on top and double gear drive — compact, heavy-duty and ready for continuous production work.",
+    "short": "Channel body power press with the motor mounted on top and double gear drive — compact, heavy-duty and ready for continuous production work. Weight 600 kg, price ৳180 per kg.",
     "highlights": [
+      "Price ৳180 per kg — weight 600 kg",
       "Top-mounted motor saves floor space",
       "Double gear drive for higher pressing force",
       "Strong two-pillar channel body frame",
-      "Tonnage made to your order",
       "Warranty and after-sales service from DMG"
     ],
     "specs": [
@@ -658,12 +660,16 @@ export const seedProducts: SeedProduct[] = [
         "Channel body (H-frame) mechanical power press"
       ],
       [
-        "Drive",
-        "Top-mounted motor, double gear and flywheel"
+        "Weight",
+        "600 kg"
       ],
       [
-        "Capacity",
-        "Made to order (tonnage as you need)"
+        "Price rate",
+        "৳180 per kg"
+      ],
+      [
+        "Drive",
+        "Top-mounted motor, double gear and flywheel"
       ],
       [
         "Made in",
@@ -732,11 +738,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts. Weight 600 kg, price ৳108,000 (৳180 per kg).",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts. Weight 600 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳108,000 — 600 kg × ৳180 per kg",
-      "Weight: 600 kg",
-      "Rate: ৳180 per kg",
+      "Price ৳180 per kg — weight 600 kg",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -754,10 +758,6 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
-      ],
-      [
-        "Price",
-        "৳108,000"
       ],
       [
         "Drive",
@@ -1050,11 +1050,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts. Weight 600 kg, price ৳108,000 (৳180 per kg).",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts. Weight 600 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳108,000 — 600 kg × ৳180 per kg",
-      "Weight: 600 kg",
-      "Rate: ৳180 per kg",
+      "Price ৳180 per kg — weight 600 kg",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -1072,10 +1070,6 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
-      ],
-      [
-        "Price",
-        "৳108,000"
       ],
       [
         "Drive",
@@ -1104,11 +1098,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "35 Ton",
     "voltage": "",
-    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts. Weight 1,300 kg, price ৳234,000 (৳180 per kg).",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts. Weight 1,300 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳234,000 — 1,300 kg × ৳180 per kg",
-      "Weight: 1,300 kg",
-      "Rate: ৳180 per kg",
+      "Price ৳180 per kg — weight 1,300 kg",
       "Capacity: 35 Ton",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
@@ -1121,10 +1113,6 @@ export const seedProducts: SeedProduct[] = [
         "Bou body / C-frame mechanical power press"
       ],
       [
-        "Capacity",
-        "35 Ton"
-      ],
-      [
         "Weight",
         "1,300 kg"
       ],
@@ -1133,8 +1121,8 @@ export const seedProducts: SeedProduct[] = [
         "৳180 per kg"
       ],
       [
-        "Price",
-        "৳234,000"
+        "Capacity",
+        "35 Ton"
       ],
       [
         "Drive",
@@ -1339,11 +1327,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "H-frame hydraulic power press with its own power pack and pressure gauge — smooth, controlled force for pressing, bending and forming. Weight 1,000 kg, price ৳2,30,000 (৳230 per kg).",
+    "short": "H-frame hydraulic power press with its own power pack and pressure gauge — smooth, controlled force for pressing, bending and forming. Weight 1,000 kg, price ৳230 per kg.",
     "highlights": [
-      "Price ৳2,30,000 — 1,000 kg × ৳230 per kg",
-      "Weight: 1,000 kg",
-      "Rate: ৳230 per kg",
+      "Price ৳230 per kg — weight 1,000 kg",
       "Rigid H-frame with hydraulic cylinder",
       "Hydraulic power pack with pressure gauge",
       "Smooth, adjustable pressing force",
@@ -1361,10 +1347,6 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳230 per kg"
-      ],
-      [
-        "Price",
-        "৳2,30,000"
       ],
       [
         "Drive",
@@ -1437,11 +1419,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "15 Ton",
     "voltage": "",
-    "short": "15-ton channel body power press in teal with orange fittings. Weight 500 kg, price ৳90,000 (৳180 per kg).",
+    "short": "15-ton channel body power press in teal with orange fittings. Weight 500 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳90,000 — 500 kg × ৳180 per kg",
-      "Weight: 500 kg",
-      "Rate: ৳180 per kg",
+      "Price ৳180 per kg — weight 500 kg",
       "Capacity: 15 Ton",
       "Rigid channel-body (H-frame) steel structure",
       "Flywheel and gear drive with foot-pedal clutch",
@@ -1454,10 +1434,6 @@ export const seedProducts: SeedProduct[] = [
         "Channel body (H-frame) mechanical power press"
       ],
       [
-        "Capacity",
-        "15 Ton"
-      ],
-      [
         "Weight",
         "500 kg"
       ],
@@ -1466,8 +1442,8 @@ export const seedProducts: SeedProduct[] = [
         "৳180 per kg"
       ],
       [
-        "Price",
-        "৳90,000"
+        "Capacity",
+        "15 Ton"
       ],
       [
         "Colour",
@@ -1492,11 +1468,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Channel body power press in bright green with red fittings and a steel ram guide. Weight 700 kg, price ৳126,000 (৳180 per kg).",
+    "short": "Channel body power press in bright green with red fittings and a steel ram guide. Weight 700 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳126,000 — 700 kg × ৳180 per kg",
-      "Weight: 700 kg",
-      "Rate: ৳180 per kg",
+      "Price ৳180 per kg — weight 700 kg",
       "Rigid channel-body (H-frame) steel structure",
       "Flywheel and gear drive with foot-pedal clutch",
       "Made in DMG's own factory, Keraniganj",
@@ -1514,10 +1488,6 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
-      ],
-      [
-        "Price",
-        "৳126,000"
       ],
       [
         "Colour",
@@ -1542,11 +1512,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Compact channel body power press in teal with orange fittings (photo shows two units). Weight 500 kg, price ৳90,000 (৳180 per kg).",
+    "short": "Compact channel body power press in teal with orange fittings (photo shows two units). Weight 500 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳90,000 — 500 kg × ৳180 per kg",
-      "Weight: 500 kg",
-      "Rate: ৳180 per kg",
+      "Price ৳180 per kg — weight 500 kg",
       "Rigid channel-body (H-frame) steel structure",
       "Flywheel and gear drive with foot-pedal clutch",
       "Made in DMG's own factory, Keraniganj",
@@ -1564,10 +1532,6 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
-      ],
-      [
-        "Price",
-        "৳90,000"
       ],
       [
         "Colour",
@@ -1592,11 +1556,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Heavy channel body power press with a large gear wheel (photo shows it before painting). Weight 1,200 kg, price ৳216,000 (৳180 per kg).",
+    "short": "Heavy channel body power press with a large gear wheel (photo shows it before painting). Weight 1,200 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳216,000 — 1,200 kg × ৳180 per kg",
-      "Weight: 1,200 kg",
-      "Rate: ৳180 per kg",
+      "Price ৳180 per kg — weight 1,200 kg",
       "Rigid channel-body (H-frame) steel structure",
       "Flywheel and gear drive with foot-pedal clutch",
       "Made in DMG's own factory, Keraniganj",
@@ -1614,10 +1576,6 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
-      ],
-      [
-        "Price",
-        "৳216,000"
       ],
       [
         "Colour",
@@ -1642,11 +1600,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Channel body power press in dark green with red fittings, double flywheel and gear. Weight 1,000 kg, price ৳180,000 (৳180 per kg).",
+    "short": "Channel body power press in dark green with red fittings, double flywheel and gear. Weight 1,000 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180,000 — 1,000 kg × ৳180 per kg",
-      "Weight: 1,000 kg",
-      "Rate: ৳180 per kg",
+      "Price ৳180 per kg — weight 1,000 kg",
       "Rigid channel-body (H-frame) steel structure",
       "Flywheel and gear drive with foot-pedal clutch",
       "Made in DMG's own factory, Keraniganj",
@@ -1664,10 +1620,6 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
-      ],
-      [
-        "Price",
-        "৳180,000"
       ],
       [
         "Colour",
@@ -1692,11 +1644,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Hydraulic press with mesh safety guards on both sides, for pressing and forming. Weight 800 kg, price ৳144,000 (৳180 per kg).",
+    "short": "Hydraulic press with mesh safety guards on both sides, for pressing and forming. Weight 800 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳144,000 — 800 kg × ৳180 per kg",
-      "Weight: 800 kg",
-      "Rate: ৳180 per kg",
+      "Price ৳180 per kg — weight 800 kg",
       "Hydraulic cylinder for smooth, controlled force",
       "Strong welded steel frame",
       "Made in DMG's own factory, Keraniganj",
@@ -1714,10 +1664,6 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
-      ],
-      [
-        "Price",
-        "৳144,000"
       ],
       [
         "Colour",
@@ -1742,11 +1688,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Heavy multi-cylinder hydraulic press for forming work such as leaf springs. Weight 1,500 kg, price ৳345,000 (৳230 per kg).",
+    "short": "Heavy multi-cylinder hydraulic press for forming work such as leaf springs. Weight 1,500 kg, price ৳230 per kg.",
     "highlights": [
-      "Price ৳345,000 — 1,500 kg × ৳230 per kg",
-      "Weight: 1,500 kg",
-      "Rate: ৳230 per kg",
+      "Price ৳230 per kg — weight 1,500 kg",
       "Hydraulic cylinder for smooth, controlled force",
       "Strong welded steel frame",
       "Made in DMG's own factory, Keraniganj",
@@ -1764,10 +1708,6 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳230 per kg"
-      ],
-      [
-        "Price",
-        "৳345,000"
       ],
       [
         "Colour",
@@ -1792,11 +1732,9 @@ export const seedProducts: SeedProduct[] = [
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "H-frame hydraulic press with a big cylinder (photo shows it before painting). Weight 800 kg, price ৳1,84,000 (৳230 per kg).",
+    "short": "H-frame hydraulic press with a big cylinder (photo shows it before painting). Weight 800 kg, price ৳230 per kg.",
     "highlights": [
-      "Price ৳1,84,000 — 800 kg × ৳230 per kg",
-      "Weight: 800 kg",
-      "Rate: ৳230 per kg",
+      "Price ৳230 per kg — weight 800 kg",
       "Hydraulic cylinder for smooth, controlled force",
       "Strong welded steel frame",
       "Made in DMG's own factory, Keraniganj",
@@ -1814,10 +1752,6 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳230 per kg"
-      ],
-      [
-        "Price",
-        "৳1,84,000"
       ],
       [
         "Colour",

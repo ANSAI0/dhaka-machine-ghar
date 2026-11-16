@@ -4,7 +4,7 @@ import type { ChatTurn, LeadInput } from "./chatbot";
 import { db } from "./db";
 import { isValidBDPhone, normalizePhone } from "./orders";
 import { placeOrder } from "./place-order";
-import { priceText, type SiteInfo } from "./site";
+import { byWeight, priceText, unitPriceText, type SiteInfo } from "./site";
 import { factorySteps } from "./tracking";
 
 // ── Built-in sales assistant (free, no API key) ────────────────────────────────────────────────
@@ -113,7 +113,7 @@ function weightLine(p: Product, lang: Lang) {
   const rate = spec(p, "Price rate")?.replace(/\s*per kg/i, "");
   if (!w) return "";
   const cap = p.capacity ? say(lang, `, ক্ষমতা ${bnNum(p.capacity.replace(/ton/i, "টন"))}`, `, capacity ${p.capacity}`, `, capacity ${p.capacity}`) : "";
-  return say(lang, `ওজন ${bnNum(w.replace(/kg/i, "কেজি"))}${rate ? `, প্রতি কেজি ${rate}` : ""}${cap}`, `ojon ${w}${rate ? `, per kg ${rate}` : ""}${cap}`, `weight ${w}${rate ? `, ${rate} per kg` : ""}${cap}`);
+  return say(lang, `${rate ? `দাম প্রতি কেজি ${rate}, ` : ""}ওজন ${bnNum(w.replace(/kg/i, "কেজি"))}${cap}`, `${rate ? `dam per kg ${rate}, ` : ""}ojon ${w}${cap}`, `${rate ? `${rate} per kg, ` : ""}weight ${w}${cap}`);
 }
 
 // "Plain: ৳320 per set" style lines from the highlights (products with more than one price).
@@ -130,9 +130,9 @@ function aboutProduct(p: Product, lang: Lang, seed: number) {
     const wl = weightLine(p, lang);
     return say(
       lang,
-      `${open} ${name} — দাম ${priceText(p.price)} (${wl})।\nআমাদের কারখানায় এসে চালিয়ে দেখতেও পারেন। নিতে চাইলে বলুন, অর্ডার নিয়ে নিচ্ছি।\n${link}`,
-      `${open} ${name} — dam ${priceText(p.price)} (${wl}).\nAmader karkhanay eshe chaliye dekhteo paren. Nite chaile bolen, order niye nicchi.\n${link}`,
-      `${open} ${name} — ${priceText(p.price)} (${wl}).\nYou're welcome to come and see it run at our factory. Want me to take the order?\n${link}`,
+      `${open} ${name} — ${wl}।\nআমাদের কারখানায় এসে চালিয়ে দেখতেও পারেন। নিতে চাইলে বলুন, অর্ডার নিয়ে নিচ্ছি।\n${link}`,
+      `${open} ${name} — ${wl}.\nAmader karkhanay eshe chaliye dekhteo paren. Nite chaile bolen, order niye nicchi.\n${link}`,
+      `${open} ${name} — ${wl}.\nYou're welcome to come and see it run at our factory. Want me to take the order?\n${link}`,
     );
   }
   if (p.price > 0) {
@@ -412,7 +412,7 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
   if (!clear && PRICE.test(rest) && /প্রেস|press/i.test(rest) && !/হাইড্রোলিক|hydraulic|hidrolik|haidrolik|চ্যানেল|channel|বউ|bou/i.test(rest)) {
     const some = catalog.products.filter((p) => p.category === "power-press" && p.price > 0).sort((a, b) => a.price - b.price);
     const pickd = [some[0], some[Math.floor(some.length / 2)], some[some.length - 1]].filter((x, i, a) => x && a.indexOf(x) === i);
-    const list = pickd.map((p) => `• ${nameOf(p, lang)} — ${priceText(p.price)}`).join("\n");
+    const list = pickd.map((p) => `• ${nameOf(p, lang)} — ${unitPriceText(p)}`).join("\n");
     state.category = "power-press";
     return out(hello + say(lang, `আমাদের পাওয়ার প্রেসের দাম ওজন অনুযায়ী — প্রতি কেজি ৳১৮০ থেকে ৳২৩০। যেমন:\n${list}\nকত টনের বা কী কাজের জন্য লাগবে বললে ঠিক মেশিনটা দেখিয়ে দিই। সব দেখুন: /category/power-press`,
       `Amader power press er dam ojon onujayi — per kg ৳180 theke ৳230. Jemon:\n${list}\nKoto ton er ba ki kaje lagbe bolle thik machine ta dekhiye dei. Shob dekhun: /category/power-press`,
@@ -424,7 +424,7 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
       `Yes, we build these in our own factory 👍 There are a few models and colours — see them here: /category/${found[0].p.category}\nThe price depends on tonnage and size — tell me the tonnage and the job and I'll get you a price.`));
   }
   if (found.length > 1) {
-    const list = [...found].sort((a, b) => b.s - a.s || Number(b.p.price > 0) - Number(a.p.price > 0)).slice(0, 5).map(({ p }) => `• ${nameOf(p, lang)} — ${priceText(p.price)}`).join("\n");
+    const list = [...found].sort((a, b) => b.s - a.s || Number(b.p.price > 0) - Number(a.p.price > 0)).slice(0, 5).map(({ p }) => `• ${nameOf(p, lang)} — ${unitPriceText(p)}`).join("\n");
     return out(hello + say(lang, `এই ধরনের কয়েকটা আছে:\n${list}\nকোনটার কথা জানতে চান?`, `Ei dhoroner koyekta ache:\n${list}\nKonta-r kotha jante chan?`, `We have a few of these:\n${list}\nWhich one would you like to know about?`) + `\n/category/${found[0].p.category}`);
   }
   if (current && /ওজন|কত কেজি|koto kg|koto keji|ojon|weight|kg koto/i.test(rest)) {
@@ -436,7 +436,7 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
   if (!current && (state.category === "power-press" || /প্রেস|press/i.test(rest)) && PRICE.test(rest)) {
     const some = catalog.products.filter((p) => p.category === "power-press" && p.price > 0).sort((a, b) => a.price - b.price);
     const pickd = [some[0], some[Math.floor(some.length / 2)], some[some.length - 1]].filter((x, i, a) => x && a.indexOf(x) === i);
-    const list = pickd.map((p) => `• ${nameOf(p, lang)} — ${priceText(p.price)}`).join("\n");
+    const list = pickd.map((p) => `• ${nameOf(p, lang)} — ${unitPriceText(p)}`).join("\n");
     return out(hello + say(lang, `আমাদের পাওয়ার প্রেসের দাম ওজন অনুযায়ী — প্রতি কেজি ৳১৮০ থেকে ৳২৩০। যেমন:\n${list}\nকত টনের বা কী কাজের জন্য লাগবে বললে ঠিক মেশিনটা দেখিয়ে দিই। সব দেখুন: /category/power-press`,
       `Amader power press er dam ojon onujayi — per kg ৳180 theke ৳230. Jemon:\n${list}\nKoto ton er ba ki kaje lagbe bolle thik machine ta dekhiye dei. Shob dekhun: /category/power-press`,
       `Our power presses are priced by weight — ৳180 to ৳230 per kg. For example:\n${list}\nTell me the tonnage or the job and I'll point you to the right machine. All of them: /category/power-press`));
@@ -458,7 +458,7 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
   // 10. Prices / catalogue in general.
   const priced = catalog.products.filter((p) => p.price > 0);
   if (PRICE.test(rest)) {
-    const list = priced.slice(0, 6).map((p) => `• ${nameOf(p, lang)} — ${priceText(p.price)}/${unitOf(p, lang)}`).join("\n");
+    const list = priced.slice(0, 6).map((p) => `• ${nameOf(p, lang)} — ${byWeight(p) ? unitPriceText(p) : `${priceText(p.price)}/${unitOf(p, lang)}`}`).join("\n");
     return out(hello + say(lang, `কোনটার দাম জানতে চান বলুন তো? কয়েকটার দাম:\n${list}\nপাওয়ার প্রেসের দাম টনেজ অনুযায়ী হয় — কত টনের লাগবে জানালে বলে দেব।`,
       `Kon ta-r dam jante chan bolen to? Koyekta-r dam:\n${list}\nPower press er dam tonnage onujayi hoy — koto ton lagbe janale bole dibo.`,
       `Which one would you like the price for? Some prices:\n${list}\nPower press prices depend on tonnage — tell me the tonnage and I'll let you know.`));
@@ -488,7 +488,7 @@ function nextPrompt(d: OrderDraft, input: AssistantInput, lang: Lang, state: Bot
   if (!p) {
     d.step = "product";
     const listed = (state.candidates ?? []).map((sl) => input.catalog.products.find((x) => x.slug === sl)).filter((x): x is Product => !!x);
-    const opts = (listed.length ? listed : input.catalog.products.filter((x) => x.price > 0)).slice(0, 6).map((x) => `• ${nameOf(x, lang)} — ${priceText(x.price)}`).join("\n");
+    const opts = (listed.length ? listed : input.catalog.products.filter((x) => x.price > 0)).slice(0, 6).map((x) => `• ${nameOf(x, lang)} — ${unitPriceText(x)}`).join("\n");
     return say(lang, `জি, অবশ্যই 😊 কোন প্রোডাক্টটা নিতে চান? নাম লিখুন — যেমন:\n${opts}\nবা "বউ বডি প্রেস", "চ্যানেল বডি প্রেস"।`,
       `Ji, obosshoi 😊 Kon product ta nite chan? Nam likhun — jemon:\n${opts}\nba "bou body press", "channel body press".`,
       `Sure 😊 Which product would you like? Type its name — for example:\n${opts}\nor "bou body press", "channel body press".`);
@@ -559,7 +559,7 @@ async function continueOrder(text: string, raw: string, state: BotState, input: 
       }
       if (!isClear(found)) {
         state.candidates = found.slice(0, 6).map((x) => x.p.slug);
-        const list = found.slice(0, 5).map(({ p }) => `• ${nameOf(p, lang)} — ${priceText(p.price)}`).join("\n");
+        const list = found.slice(0, 5).map(({ p }) => `• ${nameOf(p, lang)} — ${unitPriceText(p)}`).join("\n");
         return out(say(lang, `কোনটা নেবেন?\n${list}`, `Konta niben?\n${list}`, `Which one?\n${list}`));
       }
       d.slug = found[0].p.slug;

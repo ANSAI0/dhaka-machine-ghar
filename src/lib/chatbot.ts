@@ -1,7 +1,7 @@
 import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import type { Catalog, Product } from "./catalog";
-import { priceText, type SiteInfo } from "./site";
+import { byWeight, unitPriceText, type SiteInfo } from "./site";
 import { isValidBDPhone, normalizePhone } from "./orders";
 
 export type ChatTurn = { role: "user" | "assistant"; text: string; at: string };
@@ -24,7 +24,7 @@ export type AiOptions = {
 
 const productLine = (p: Product) =>
   [
-    `- ${p.name} (${p.nameBn}) | ${priceText(p.price)} | /product/${p.slug}`,
+    `- ${p.name} (${p.nameBn}) | ${unitPriceText(p)}${byWeight(p) ? ` (weight ${byWeight(p)!.kg} kg; quote per kg, not a total)` : ""} | /product/${p.slug}`,
     `  ${p.short}`,
     p.highlights.length ? `  Highlights: ${p.highlights.join("; ")}` : "",
     p.specs.length ? `  Specs: ${p.specs.map(([k, v]) => `${k}: ${v}`).join("; ")}` : "",

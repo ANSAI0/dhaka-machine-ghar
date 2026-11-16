@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { Check, Plus } from "lucide-react";
 import { discountPercent, type Product } from "@/lib/catalog";
 import { flyToCart } from "@/lib/fly-to-cart";
-import { formatBDT, priceText } from "@/lib/site";
+import { byWeight, formatBDT, unitPriceText, weightText } from "@/lib/site";
 import { useCart } from "./cart";
 import { ProductImage } from "./product-image";
 
@@ -31,7 +31,8 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="mt-auto flex flex-col gap-2 px-2.5 pb-3 pt-2 sm:flex-row sm:items-end sm:justify-between sm:gap-1.5">
         <div className="min-w-0 text-center leading-tight sm:text-left">
           {product.oldPrice && <p className="text-[10px] text-gray-400 line-through md:text-[11px]">{formatBDT(product.oldPrice)}</p>}
-          <p className="whitespace-nowrap text-[15px] font-bold tracking-tight text-brand-700 md:text-[15px] lux:text-gold-300">{priceText(product.price)}</p>
+          <p className="whitespace-nowrap text-[15px] font-bold tracking-tight text-brand-700 md:text-[15px] lux:text-gold-300">{unitPriceText(product)}</p>
+          {byWeight(product) && <p className="text-[11px] font-medium text-gray-500 lux:text-white/55">ওজন {weightText(byWeight(product)!.kg)}</p>}
         </div>
         <button
           type="button"

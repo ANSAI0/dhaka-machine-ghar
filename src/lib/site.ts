@@ -52,3 +52,21 @@ export function buildSite(e: EditableSite): SiteInfo {
 export const formatBDT = (n: number) => "৳" + n.toLocaleString("en-IN");
 // Products without a set price (0) are quoted on request.
 export const priceText = (n: number) => (n > 0 ? formatBDT(n) : "Call for price");
+
+// Machines sold by weight carry "Weight" and "Price rate" specs (e.g. "500 kg", "৳180 per kg").
+// They are shown per kg everywhere; the total (weight × rate) only appears in cart, checkout and orders.
+const specNumber = (specs: [string, string][], label: string) => {
+  const v = specs.find(([k]) => k === label)?.[1];
+  return v ? Number(v.replace(/[^\d.]/g, "")) || 0 : 0;
+};
+export function byWeight(p: { price: number; specs: [string, string][] }) {
+  const kg = specNumber(p.specs, "Weight");
+  const rate = specNumber(p.specs, "Price rate");
+  return p.price > 0 && kg && rate ? { kg, rate } : null;
+}
+export const weightText = (kg: number) => `${kg.toLocaleString("en-IN")} kg`;
+// "৳180/kg" for machines sold by weight, else the normal price (or "Call for price").
+export const unitPriceText = (p: { price: number; specs: [string, string][] }) => {
+  const w = byWeight(p);
+  return w ? `${formatBDT(w.rate)}/kg` : priceText(p.price);
+};

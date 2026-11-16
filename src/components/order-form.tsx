@@ -5,7 +5,7 @@ import { useState } from "react";
 import { CheckCircle2, Loader2, Minus, Plus } from "lucide-react";
 import type { Product } from "@/lib/catalog";
 import { districts, paymentLabels, validateOrder, type OrderInput, type PaymentPlan } from "@/lib/orders";
-import { formatBDT, priceText } from "@/lib/site";
+import { byWeight, formatBDT, priceText } from "@/lib/site";
 import { useSite } from "./site-provider";
 import { trackConversion } from "@/lib/analytics";
 import { useCustomer } from "./customer-provider";
@@ -215,7 +215,7 @@ export function ProductOrderForm({ product, source = "product-page" }: { product
           <span className="mb-1 block text-sm font-semibold text-gray-700">পরিমাণ</span>
           <div className="flex items-center gap-3">
             <QtyStepper value={qty} onChange={setQty} />
-            <span className="text-sm text-gray-600">মোট: <strong className="text-brand-700">{priceText(product.price * qty)}</strong></span>
+            <span className="text-sm text-gray-600">মোট: <strong className="text-brand-700">{priceText(product.price * qty)}</strong>{byWeight(product) && <span className="block text-[11px] text-gray-500">{byWeight(product)!.kg.toLocaleString("en-IN")} কেজি × {formatBDT(byWeight(product)!.rate)}{qty > 1 ? ` × ${qty}` : ""}</span>}</span>
           </div>
         </div>
       }

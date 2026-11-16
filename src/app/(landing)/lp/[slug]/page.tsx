@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { BadgeCheck, CheckCircle2, ChevronDown, ClipboardCheck, Cog, Factory, PaintBucket, Phone, ShieldCheck, Truck, Wallet, Wrench } from "lucide-react";
 import { discountPercent, findProduct } from "@/lib/catalog";
 import { getCatalog } from "@/lib/catalog-server";
-import { formatBDT, type SiteInfo } from "@/lib/site";
+import { formatBDT, unitPriceText, type SiteInfo } from "@/lib/site";
 import { getSite } from "@/lib/settings";
 import { ConditionBadge } from "@/components/condition-badge";
 import { ProductImage } from "@/components/product-image";
@@ -84,7 +84,7 @@ export default async function LandingPage({ params }: Params) {
             <h1 className="text-2xl font-bold leading-snug sm:text-4xl">{headline}</h1>
             <p className="text-white/85">{sub}</p>
             <div className="flex flex-wrap items-end gap-3">
-              <span className="text-4xl font-bold">{formatBDT(p.price)}</span>
+              <span className="text-4xl font-bold">{unitPriceText(p)}</span>
               {p.oldPrice && <span className="pb-1 text-lg text-white/60 line-through">{formatBDT(p.oldPrice)}</span>}
               {off > 0 && <span className="mb-1 rounded-full bg-accent-600 px-3 py-1 text-sm font-bold">{off}% ছাড়</span>}
             </div>
@@ -199,7 +199,7 @@ export default async function LandingPage({ params }: Params) {
         <section id="order" className="scroll-mt-20 rounded-3xl border-2 border-accent-600 bg-white p-5 shadow-xl sm:p-8">
           <div className="mb-6 text-center">
             <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">অর্ডার করতে নিচের ফর্মটি পূরণ করুন</h2>
-            <p className="mt-1 text-gray-600">{p.nameBn} — <strong className="text-accent-600">{formatBDT(p.price)}</strong></p>
+            <p className="mt-1 text-gray-600">{p.nameBn} — <strong className="text-accent-600">{unitPriceText(p)}</strong></p>
           </div>
           <ProductOrderForm product={p} source={`landing:${p.slug}`} />
         </section>
