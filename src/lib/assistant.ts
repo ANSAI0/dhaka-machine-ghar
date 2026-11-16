@@ -72,16 +72,19 @@ const productTerms: Rule[] = [
 
 function findProducts(text: string, catalog: Catalog) {
   const terms = productTerms.filter(([re]) => re.test(text)).map(([, t]) => t);
-  if (!terms.length) return [];
+  const kg = bnDigits(text).match(/(\d[\d,]*)\s*(?:kg|কেজি|keji)/i)?.[1].replace(/,/g, "");
+  if (!terms.length && !kg) return [];
   const ton = text.match(/(\d+)\s*(?:টন|ton)/i)?.[1];
   const norm = (x: string) => x.toLowerCase().replace(/bou body|c-frame/g, "bou").replace(/h-frame/g, "channel").replace(/chowki|chouki/g, "chowki").replace(/no powder coating/g, "plain paint").replace(/powder coated|angle/g, "powder").replace(/red & black|red oxide/g, "red");
   return catalog.products
     .map((p) => {
       // A term in the product's name / category counts far more than one in its description.
-      const title = norm(`${p.name.replace(/\s*[—-]\s*with\b.*$/i, "")} ${p.slug} ${p.category} ${p.subcategory}`);
+      const title = norm(`${p.name.replace(/\s*[—-]\s*with\b.*$/i, "")} ${p.category} ${p.subcategory}`);
       const body = norm(`${p.capacity} ${p.short}`);
       let s = terms.reduce((sum, t) => sum + (title.includes(t) ? 4 : body.includes(t) ? 1 : 0), 0);
       if (ton && new RegExp(`\\b${ton}\\s*ton`, "i").test(`${p.capacity} ${p.name}`)) s += 3;
+      const w = p.specs.find(([k]) => k === "Weight")?.[1].replace(/[^\d]/g, "");
+      if (kg && w === kg) s += 5;
       return { p, s };
     })
     .filter((x) => x.s >= 4)
@@ -102,15 +105,36 @@ const unitOf = (p: Product, lang: Lang) => {
   if (t.includes("per set")) return say(lang, "সেট", "set", "set");
   return say(lang, "টি", "ta", "unit");
 };
+const spec = (p: Product, label: string) => p.specs.find(([k]) => k.toLowerCase() === label.toLowerCase())?.[1];
+const bnNum = (s: string) => s.replace(/\d/g, (d) => "০১২৩৪৫৬৭৮৯"[Number(d)]);
+// "ওজন ৫০০ কেজি, প্রতি কেজি ৳180" for presses sold by weight.
+function weightLine(p: Product, lang: Lang) {
+  const w = spec(p, "Weight");
+  const rate = spec(p, "Price rate")?.replace(/\s*per kg/i, "");
+  if (!w) return "";
+  const cap = p.capacity ? say(lang, `, ক্ষমতা ${bnNum(p.capacity.replace(/ton/i, "টন"))}`, `, capacity ${p.capacity}`, `, capacity ${p.capacity}`) : "";
+  return say(lang, `ওজন ${bnNum(w.replace(/kg/i, "কেজি"))}${rate ? `, প্রতি কেজি ${rate}` : ""}${cap}`, `ojon ${w}${rate ? `, per kg ${rate}` : ""}${cap}`, `weight ${w}${rate ? `, ${rate} per kg` : ""}${cap}`);
+}
+
 // "Plain: ৳320 per set" style lines from the highlights (products with more than one price).
 function priceLines(p: Product, lang: Lang) {
-  const lines = p.highlights.filter((h) => /৳\s?\d/.test(h) && !/^price\b/i.test(h));
+  const lines = p.highlights.filter((h) => /৳\s?\d/.test(h) && !/^(?:price|rate)\b/i.test(h));
   return lines.map((h) => h.replace(/per set/gi, `/ ${say(lang, "সেট", "set", "set")}`).replace(/per piece/gi, `/ ${say(lang, "পিস", "pis", "piece")}`));
 }
 
 function aboutProduct(p: Product, lang: Lang, seed: number) {
   const name = nameOf(p, lang);
   const link = `/product/${p.slug}`;
+  if (p.price > 0 && spec(p, "Weight")) {
+    const open = pick([say(lang, "জি, আছে 👍", "Ji, ache 👍", "Yes, we have it 👍"), say(lang, "অবশ্যই পাবেন।", "Obosshoi paben.", "Sure, it's available.")], seed);
+    const wl = weightLine(p, lang);
+    return say(
+      lang,
+      `${open} ${name} — দাম ${priceText(p.price)} (${wl})।\nআমাদের কারখানায় এসে চালিয়ে দেখতেও পারেন। নিতে চাইলে বলুন, অর্ডার নিয়ে নিচ্ছি।\n${link}`,
+      `${open} ${name} — dam ${priceText(p.price)} (${wl}).\nAmader karkhanay eshe chaliye dekhteo paren. Nite chaile bolen, order niye nicchi.\n${link}`,
+      `${open} ${name} — ${priceText(p.price)} (${wl}).\nYou're welcome to come and see it run at our factory. Want me to take the order?\n${link}`,
+    );
+  }
   if (p.price > 0) {
     const unit = unitOf(p, lang);
     const extra = priceLines(p, lang);
@@ -345,6 +369,13 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
   const pressTalk = current?.price === 0 || state.category === "power-press" || /প্রেস|press/i.test(rest);
 
   // Tonnage for a press → the owner prices it: take name and number (a call-back with the details).
+  const tonAsked = rest.match(/(\d+)\s*(?:টন|ton)/i)?.[1];
+  const tonMatch = tonAsked ? catalog.products.filter((p) => p.category === "power-press" && p.price > 0 && new RegExp(`^${tonAsked}\\s*ton`, "i").test(p.capacity)) : [];
+  if (tonMatch.length && !ORDER.test(rest.replace(/লাগবে|lagbe/gi, ""))) {
+    state.product = tonMatch[0].slug;
+    state.category = "power-press";
+    return out(hello + aboutProduct(tonMatch[0], lang, seed));
+  }
   if (pressTalk && /\d+\s*(?:টন|ton)/i.test(rest)) {
     const slug = (current?.price === 0 ? current.slug : undefined) ?? state.candidates?.[0] ?? catalog.products.find((p) => p.category === "power-press")?.slug;
     state.order = { step: "name", slug, qty: 1, note: raw.slice(0, 160), phone: ph?.phone, generic: current?.price !== 0 };
@@ -378,21 +409,37 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
 
   // 8. About a product.
   if (clear) return out(hello + aboutProduct(found[0].p, lang, seed));
+  if (!clear && PRICE.test(rest) && /প্রেস|press/i.test(rest) && !/হাইড্রোলিক|hydraulic|hidrolik|haidrolik|চ্যানেল|channel|বউ|bou/i.test(rest)) {
+    const some = catalog.products.filter((p) => p.category === "power-press" && p.price > 0).sort((a, b) => a.price - b.price);
+    const pickd = [some[0], some[Math.floor(some.length / 2)], some[some.length - 1]].filter((x, i, a) => x && a.indexOf(x) === i);
+    const list = pickd.map((p) => `• ${nameOf(p, lang)} — ${priceText(p.price)}`).join("\n");
+    state.category = "power-press";
+    return out(hello + say(lang, `আমাদের পাওয়ার প্রেসের দাম ওজন অনুযায়ী — প্রতি কেজি ৳১৮০ থেকে ৳২৩০। যেমন:\n${list}\nকত টনের বা কী কাজের জন্য লাগবে বললে ঠিক মেশিনটা দেখিয়ে দিই। সব দেখুন: /category/power-press`,
+      `Amader power press er dam ojon onujayi — per kg ৳180 theke ৳230. Jemon:\n${list}\nKoto ton er ba ki kaje lagbe bolle thik machine ta dekhiye dei. Shob dekhun: /category/power-press`,
+      `Our power presses are priced by weight — ৳180 to ৳230 per kg. For example:\n${list}\nTell me the tonnage or the job and I'll point you to the right machine. All of them: /category/power-press`));
+  }
   if (found.length > 1 && found.every((x) => x.p.price === 0)) {
     return out(hello + say(lang, `জি, এগুলো আমাদের নিজস্ব কারখানায় তৈরি হয় 👍 কয়েকটা মডেল ও রঙে আছে, ছবি দেখুন: /category/${found[0].p.category}\nদাম টনেজ আর সাইজ অনুযায়ী ঠিক হয় — কত টনের লাগবে আর কী কাজে ব্যবহার করবেন বললে দামটা জানিয়ে দেব।`,
       `Ji, egula amader nijer karkhanay toiri hoy 👍 Koyekta model o rong e ache, chobi dekhun: /category/${found[0].p.category}\nDam tonnage ar size onujayi thik hoy — koto ton lagbe ar ki kaje use korben bolle dam ta janiye dibo.`,
       `Yes, we build these in our own factory 👍 There are a few models and colours — see them here: /category/${found[0].p.category}\nThe price depends on tonnage and size — tell me the tonnage and the job and I'll get you a price.`));
   }
   if (found.length > 1) {
-    const list = found.slice(0, 5).map(({ p }) => `• ${nameOf(p, lang)} — ${priceText(p.price)}`).join("\n");
+    const list = [...found].sort((a, b) => b.s - a.s || Number(b.p.price > 0) - Number(a.p.price > 0)).slice(0, 5).map(({ p }) => `• ${nameOf(p, lang)} — ${priceText(p.price)}`).join("\n");
     return out(hello + say(lang, `এই ধরনের কয়েকটা আছে:\n${list}\nকোনটার কথা জানতে চান?`, `Ei dhoroner koyekta ache:\n${list}\nKonta-r kotha jante chan?`, `We have a few of these:\n${list}\nWhich one would you like to know about?`) + `\n/category/${found[0].p.category}`);
+  }
+  if (current && /ওজন|কত কেজি|koto kg|koto keji|ojon|weight|kg koto/i.test(rest)) {
+    const wl = weightLine(current, lang);
+    if (wl) return out(hello + say(lang, `${nameOf(current, lang)} — ${wl}।`, `${nameOf(current, lang)} — ${wl}.`, `${nameOf(current, lang)} — ${wl}.`));
   }
   // Follow-up on the product we were discussing ("dam koto?", "details?").
   if (current && (PRICE.test(rest) || /বিস্তারিত|details?|ডিটেইল|আর কি|ar ki|spec/i.test(rest))) return out(hello + aboutProduct(current, lang, seed + 1));
-  if (!current && state.category === "power-press" && PRICE.test(rest)) {
-    return out(hello + say(lang, `পাওয়ার প্রেসের দাম টনেজ আর সাইজ অনুযায়ী আলাদা হয়। কত টনের লাগবে আর কী কাজে ব্যবহার করবেন জানালে সঠিক দামটা বলে দিতে পারব।`,
-      `Power press er dam tonnage ar size onujayi alada hoy. Koto ton lagbe ar ki kaje use korben janale exact dam ta bole dite parbo.`,
-      `Power press prices vary with tonnage and size. Tell me the tonnage and what you'll use it for, and I'll get you the exact price.`));
+  if (!current && (state.category === "power-press" || /প্রেস|press/i.test(rest)) && PRICE.test(rest)) {
+    const some = catalog.products.filter((p) => p.category === "power-press" && p.price > 0).sort((a, b) => a.price - b.price);
+    const pickd = [some[0], some[Math.floor(some.length / 2)], some[some.length - 1]].filter((x, i, a) => x && a.indexOf(x) === i);
+    const list = pickd.map((p) => `• ${nameOf(p, lang)} — ${priceText(p.price)}`).join("\n");
+    return out(hello + say(lang, `আমাদের পাওয়ার প্রেসের দাম ওজন অনুযায়ী — প্রতি কেজি ৳১৮০ থেকে ৳২৩০। যেমন:\n${list}\nকত টনের বা কী কাজের জন্য লাগবে বললে ঠিক মেশিনটা দেখিয়ে দিই। সব দেখুন: /category/power-press`,
+      `Amader power press er dam ojon onujayi — per kg ৳180 theke ৳230. Jemon:\n${list}\nKoto ton er ba ki kaje lagbe bolle thik machine ta dekhiye dei. Shob dekhun: /category/power-press`,
+      `Our power presses are priced by weight — ৳180 to ৳230 per kg. For example:\n${list}\nTell me the tonnage or the job and I'll point you to the right machine. All of them: /category/power-press`));
   }
   // Tonnage / use for a press we're discussing → ask for a number to give the exact price.
   if (current && current.price === 0 && /\d+\s*(?:টন|ton)|কাজে|kaje|বানাব|banabo|কাটব|katbo|use/i.test(rest)) {
@@ -446,10 +493,12 @@ function nextPrompt(d: OrderDraft, input: AssistantInput, lang: Lang, state: Bot
       `Ji, obosshoi 😊 Kon product ta nite chan? Nam likhun — jemon:\n${opts}\nba "bou body press", "channel body press".`,
       `Sure 😊 Which product would you like? Type its name — for example:\n${opts}\nor "bou body press", "channel body press".`);
   }
-  if (!d.qty && p.price === 0) d.qty = 1; // presses: one at a time, priced by the owner
+  if (!d.qty && (p.price === 0 || p.category === "power-press")) d.qty = 1; // machines: one unless the customer says more
   if (!d.qty) {
     d.step = "qty";
-    return say(lang, `${nameOf(p, lang)} — কয়টা ${unitOf(p, lang)} লাগবে?`, `${nameOf(p, lang)} — koyta ${unitOf(p, lang)} lagbe?`, `${nameOf(p, lang)} — how many ${unitOf(p, lang)}s do you need?`);
+    const u = unitOf(p, lang);
+    const unitWord = ["টি", "ta", "unit"].includes(u) ? "" : ` ${u}`;
+    return say(lang, `${nameOf(p, lang)} — কয়টা${unitWord} লাগবে?`, `${nameOf(p, lang)} — koyta${unitWord} lagbe?`, `${nameOf(p, lang)} — how many${unitWord ? `${unitWord}s` : ""} do you need?`);
   }
   if (!d.name) {
     d.step = "name";
