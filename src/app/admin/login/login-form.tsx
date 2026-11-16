@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
 import { Loader2, LogIn } from "lucide-react";
 import { login, type LoginState } from "../auth-actions";
 
@@ -15,7 +16,10 @@ export function LoginForm({ next }: { next: string }) {
         <input key={state.email} id="email" name="email" type="email" autoComplete="username" required defaultValue={state.email} className={field} />
       </div>
       <div>
-        <label htmlFor="password" className="mb-1 block text-sm font-semibold text-gray-700">Password</label>
+        <div className="mb-1 flex items-center justify-between">
+          <label htmlFor="password" className="text-sm font-semibold text-gray-700">Password</label>
+          <Link href="/admin/forgot" className="text-xs font-semibold text-brand-700 hover:underline">পাসওয়ার্ড ভুলে গেছেন?</Link>
+        </div>
         <input id="password" name="password" type="password" autoComplete="current-password" required className={field} />
       </div>
       {state.error && <p className="rounded-lg bg-accent-50 p-3 text-sm font-medium text-accent-700" role="alert">{state.error}</p>}
