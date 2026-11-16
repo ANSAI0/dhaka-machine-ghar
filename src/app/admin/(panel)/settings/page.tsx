@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { aiConfigured } from "@/lib/chatbot";
-import { getBotSettings, getEditableSite, getEmailSettings, getMarketing, getSmsSettings, getTheme } from "@/lib/settings";
+import { headers } from "next/headers";
+import { getBotSettings, getEditableSite, getEmailSettings, getMarketing, getMessengerSettings, getSmsSettings, getTheme } from "@/lib/settings";
+import { verifyTokenFor } from "@/lib/messenger";
 import { newsletterAudience } from "@/lib/newsletter";
 import { ConfirmButton } from "@/components/admin/confirm-button";
 import { Badge, Card, PageHeader, shortDate } from "@/components/admin/ui";
 import { removeAdmin } from "./actions";
-import { AddAdminForm, BotForm, EmailForm, MarketingForm, PasswordForm, SiteSettingsForm, SmsForm, ThemeForm } from "./forms";
+import { AddAdminForm, BotForm, EmailForm, MarketingForm, MessengerForm, PasswordForm, SiteSettingsForm, SmsForm, ThemeForm } from "./forms";
 
 export const metadata: Metadata = { title: "Settings" };
 export const dynamic = "force-dynamic";
@@ -18,7 +20,7 @@ export default async function SettingsPage() {
   const [email, audience, runs] = owner
     ? await Promise.all([getEmailSettings(), newsletterAudience(), db.newsletterRun.findMany({ orderBy: { createdAt: "desc" }, take: 5 })])
     : [null, [], []];
-  const [site, marketing, theme, bot, sms, smsLog, admins] = await Promise.all([
+  const [site, marketing, theme, bot, sms, smsLog, admins, messenger, h] = await Promise.all([
     getEditableSite(),
     getMarketing(),
     getTheme(),
@@ -26,7 +28,10 @@ export default async function SettingsPage() {
     getSmsSettings(),
     owner ? db.smsLog.findMany({ orderBy: { createdAt: "desc" }, take: 15 }) : Promise.resolve([]),
     owner ? db.adminUser.findMany({ orderBy: { createdAt: "asc" } }) : Promise.resolve([]),
+    getMessengerSettings(),
+    headers(),
   ]);
+  const origin = `${h.get("x-forwarded-proto") ?? "https"}://${h.get("host")}`;
 
   return (
     <>
@@ -67,7 +72,21 @@ export default async function SettingsPage() {
                 </details>
               )}
             </Card>
-            <Card title="Chat assistant"><BotForm enabled={bot.enabled} knowledge={bot.knowledge} aiReady={aiConfigured()} /></Card>
+            <Card title="Chat assistant"><BotForm enabled={bot.enabled} knowledge={bot.knowledge} aiReady={aiConfigured(messenger.geminiKey)} /></Card>
+            <Card title="Facebook Messenger & AI">
+              <MessengerForm
+                v={{
+                  enabled: messenger.enabled,
+                  hasSecret: !!messenger.appSecret,
+                  hasToken: !!messenger.pageToken,
+                  hasGemini: !!messenger.geminiKey,
+                  geminiModel: messenger.geminiModel,
+                  pauseHours: messenger.pauseHours,
+                  webhookUrl: `${origin}/api/messenger`,
+                  verifyToken: verifyTokenFor(messenger.verifyToken),
+                }}
+              />
+            </Card>
             <Card title="Theme colours"><ThemeForm theme={theme} /></Card>
             <Card title="Marketing — Meta Pixel, Conversions API & GTM">
               <MarketingForm pixelId={marketing.pixelId} gtmId={marketing.gtmId} hasToken={!!marketing.capiToken} capiTestCode={marketing.capiTestCode} />

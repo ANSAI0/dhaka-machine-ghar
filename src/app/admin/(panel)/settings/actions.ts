@@ -7,7 +7,7 @@ import { db } from "@/lib/db";
 import { isValidBDPhone } from "@/lib/orders";
 import { hashPassword, verifyPassword } from "@/lib/password";
 import { resolveMapQuery } from "@/lib/maps";
-import { getEmailSettings, getMarketing, getSmsSettings, SETTINGS_TAG } from "@/lib/settings";
+import { getEmailSettings, getMarketing, getMessengerSettings, getSmsSettings, SETTINGS_TAG, type MessengerSettings } from "@/lib/settings";
 import { mailerReady, sendMail } from "@/lib/mailer";
 import { sendWeekly } from "@/lib/newsletter";
 import { sendSms } from "@/lib/sms";
@@ -98,6 +98,38 @@ export async function saveBot(_: FormState, fd: FormData): Promise<FormState> {
   await requireAdmin("owner");
   await put("bot", { enabled: fd.get("enabled") === "on", knowledge: s(fd, "knowledge").slice(0, 4000) });
   return { ok: "Saved." };
+}
+
+export async function saveMessenger(_: FormState, fd: FormData): Promise<FormState> {
+  await requireAdmin("owner");
+  const cur = await getMessengerSettings();
+  // Secret fields: blank keeps the saved value, "clear" removes it.
+  const keep = (k: string, old: string) => {
+    const v = s(fd, k);
+    return v === "clear" ? "" : v || old;
+  };
+  const v: MessengerSettings = {
+    enabled: fd.get("enabled") === "on",
+    appSecret: keep("appSecret", cur.appSecret),
+    pageToken: keep("pageToken", cur.pageToken),
+    verifyToken: cur.verifyToken,
+    geminiKey: keep("geminiKey", cur.geminiKey),
+    geminiModel: s(fd, "geminiModel").replace(/[^a-z0-9.-]/gi, "") || "gemini-2.5-flash",
+    pauseHours: Math.min(72, Math.max(1, Number(s(fd, "pauseHours")) || 12)),
+  };
+  if (v.enabled && (!v.pageToken || !v.appSecret)) return { error: "To turn the Messenger reply on, add the Page access token and the App secret first." };
+  if (v.geminiKey && (v.geminiKey !== cur.geminiKey || v.geminiModel !== cur.geminiModel)) {
+    // Check the key with a tiny request so a typo shows up here, not as silent fallbacks later.
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${v.geminiModel}:generateContent`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-goog-api-key": v.geminiKey },
+      body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: "Reply with OK" }] }] }),
+      signal: AbortSignal.timeout(20_000),
+    }).catch(() => null);
+    if (!res?.ok) return { error: `Gemini key didn't work (${res ? res.status : "no response"}). Check the key and model name.` };
+  }
+  await put("messenger", v);
+  return { ok: v.enabled ? "Saved — Messenger replies are on." : "Saved." };
 }
 
 export async function saveSms(_: FormState, fd: FormData): Promise<FormState> {

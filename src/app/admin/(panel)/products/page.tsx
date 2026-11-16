@@ -9,6 +9,7 @@ import { formatBDT } from "@/lib/site";
 import { CategoryIcon } from "@/components/category-icon";
 import { Badge, PageHeader } from "@/components/admin/ui";
 import { toggleProduct } from "./actions";
+import { PriceCell } from "./price-cell";
 
 export const metadata: Metadata = { title: "Products" };
 export const dynamic = "force-dynamic";
@@ -52,7 +53,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: SP 
       <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white">
         <table className="w-full min-w-[900px] text-sm">
           <thead className="bg-gray-50 text-left text-xs uppercase tracking-wider text-gray-500">
-            <tr><th className="px-4 py-3">Product</th><th className="px-3 py-3">Category</th><th className="px-3 py-3 text-right">Price</th><th className="px-3 py-3 text-center">Active</th><th className="px-3 py-3 text-center">Featured</th><th className="px-3 py-3 text-center">Landing page</th><th className="px-4 py-3" /></tr>
+            <tr><th className="px-4 py-3">Product</th><th className="px-3 py-3">Category</th><th className="px-3 py-3 text-right">Price (Enter to save)</th><th className="px-3 py-3 text-center">Active</th><th className="px-3 py-3 text-center">Featured</th><th className="px-3 py-3 text-center">Landing page</th><th className="px-4 py-3" /></tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {products.map((p) => (
@@ -72,7 +73,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: SP 
                   </div>
                 </td>
                 <td className="px-3 py-2.5 text-xs text-gray-600">{p.category.name}{p.subcategory && <span className="block text-gray-400">{p.subcategory.name}</span>}</td>
-                <td className="px-3 py-2.5 text-right font-semibold">{formatBDT(p.price)}{p.oldPrice && <span className="block text-xs font-normal text-gray-400 line-through">{formatBDT(p.oldPrice)}</span>}</td>
+                <td className="px-3 py-2.5 text-right"><PriceCell slug={p.slug} price={p.price} oldPrice={p.oldPrice} />{p.oldPrice && <span className="block text-xs text-gray-400 line-through">{formatBDT(p.oldPrice)}</span>}</td>
                 {(["active", "featured", "landing"] as const).map((f) => (
                   <td key={f} className="px-3 py-2.5 text-center">
                     <form action={toggleProduct.bind(null, p.slug, f)} className="inline">

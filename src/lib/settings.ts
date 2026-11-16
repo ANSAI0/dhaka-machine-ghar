@@ -42,10 +42,22 @@ export type EmailSettings = {
 };
 const emailDefaults: EmailSettings = { enabled: false, host: "", port: 587, secure: false, user: "", pass: "", fromEmail: "", fromName: "Dhaka Machine Ghar", weekday: 6, weeklyNote: "", onOrder: true, onPayment: true, onStep: false, onDelivery: true, alertTo: "" };
 
+// Facebook Messenger auto-reply and the free Gemini AI key (also used by the website chat).
+export type MessengerSettings = {
+  enabled: boolean;
+  appSecret: string; // checks that webhook calls really come from Meta
+  pageToken: string; // Page access token used to send replies
+  verifyToken: string; // shared secret for Meta's webhook verification
+  geminiKey: string;
+  geminiModel: string;
+  pauseHours: number; // bot stays quiet in a thread for this long after a person replies
+};
+export const messengerDefaults: MessengerSettings = { enabled: false, appSecret: "", pageToken: "", verifyToken: "", geminiKey: "", geminiModel: "gemini-2.5-flash", pauseHours: 12 };
+
 const smsDefaults: SmsSettings = { provider: "none", apiKey: "", senderId: "", customUrl: "", onOrder: true, onStep: true, language: "bn" };
 
 async function readFromDb() {
-  const rows = await db.setting.findMany({ where: { key: { in: ["site", "marketing", "theme", "bot", "sms", "email"] } } });
+  const rows = await db.setting.findMany({ where: { key: { in: ["site", "marketing", "theme", "bot", "sms", "email", "messenger"] } } });
   const get = (k: string) => (rows.find((r) => r.key === k)?.value ?? {}) as Record<string, unknown>;
   return {
     site: { ...siteDefaults, ...get("site") } as EditableSite,
@@ -54,6 +66,7 @@ async function readFromDb() {
     bot: { ...botDefaults, ...get("bot") } as BotSettings,
     sms: { ...smsDefaults, ...get("sms") } as SmsSettings,
     email: { ...emailDefaults, ...get("email") } as EmailSettings,
+    messenger: { ...messengerDefaults, ...get("messenger") } as MessengerSettings,
   };
 }
 
@@ -82,6 +95,8 @@ export const getBotSettings = async () => (await read()).bot;
 export const getSmsSettings = async () => (await read()).sms;
 // Includes the SMTP password — server only.
 export const getEmailSettings = async () => (await read()).email;
+// Includes the page token, app secret and Gemini key — server only.
+export const getMessengerSettings = async () => (await read()).messenger;
 
 // Includes the CAPI token — never pass the whole object to the browser.
 export const getMarketing = async () => (await read()).marketing;

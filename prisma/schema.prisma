@@ -239,6 +239,9 @@ model ChatSession {
   messages  Json // [{ role: "user" | "assistant", text, at }]
   page      String? // page the chat started on
   ip        String?
+  channel    String   @default("web") // web | messenger
+  externalId String?  @unique // "fb:<page-scoped id>" for Messenger threads
+  meta       Json? // Messenger: { pausedUntil, ad, lastMid }
   leads     Lead[]
 }
 

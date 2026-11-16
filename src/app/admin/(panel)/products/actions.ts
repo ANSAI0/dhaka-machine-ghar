@@ -130,6 +130,24 @@ export async function toggleProduct(slug: string, field: "active" | "featured" |
   revalidatePath("/admin/products");
 }
 
+export type PriceState = { ok?: number; error?: string };
+
+// Inline price edit from the product list. Empty or 0 = "Call for price".
+export async function setPrice(slug: string, _: PriceState, fd: FormData): Promise<PriceState> {
+  await requireAdmin();
+  const v = int(fd, "price");
+  if (v !== null && (Number.isNaN(v) || v < 0 || v > 100_000_000)) return { error: "Numbers only" };
+  const price = v ?? 0;
+  const p = await db.product.findUnique({ where: { slug }, select: { oldPrice: true } });
+  if (!p) return { error: "Product not found" };
+  // A "was" price only makes sense above the new price.
+  const oldPrice = p.oldPrice && price > 0 && p.oldPrice > price ? p.oldPrice : null;
+  await db.product.update({ where: { slug }, data: { price, oldPrice } });
+  refreshCatalog();
+  revalidatePath("/admin/products");
+  return { ok: Date.now() };
+}
+
 export async function deleteProduct(slug: string) {
   await requireAdmin("owner");
   // Order lines and warranties keep their name/slug snapshot; their product link becomes null.

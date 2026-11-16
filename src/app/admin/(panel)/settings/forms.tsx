@@ -4,7 +4,7 @@ import { startTransition, useActionState, useState } from "react";
 import { Loader2 } from "lucide-react";
 import type { EditableSite } from "@/lib/site";
 import { contrastWithWhite, isHex, themeDefaults, type Theme } from "@/lib/theme";
-import { addAdmin, changePassword, saveBot, saveEmail, saveMarketing, saveSiteSettings, saveSms, saveTheme, sendNewsletterNow, sendTestEmail, sendTestSms, type FormState } from "./actions";
+import { addAdmin, changePassword, saveBot, saveEmail, saveMarketing, saveMessenger, saveSiteSettings, saveSms, saveTheme, sendNewsletterNow, sendTestEmail, sendTestSms, type FormState } from "./actions";
 
 const input = "w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100";
 
@@ -344,5 +344,37 @@ export function EmailForm({ v, audience }: { v: EmailView; audience: number }) {
       </div>
       {[t.state, now.state].map((st, i) => (st.error || st.ok ? <p key={i} role="status" className={`text-sm ${st.error ? "text-accent-600" : "text-brand-700"}`}>{st.error ?? st.ok}</p> : null))}
     </div>
+  );
+}
+
+type MessengerView = { enabled: boolean; hasSecret: boolean; hasToken: boolean; hasGemini: boolean; geminiModel: string; pauseHours: number; webhookUrl: string; verifyToken: string };
+
+export function MessengerForm({ v }: { v: MessengerView }) {
+  const f = useForm(saveMessenger);
+  const saved = (has: boolean, help: string) => (has ? "Saved. Leave blank to keep it, or type clear to remove it." : help);
+  return (
+    <form onSubmit={f.onSubmit} className="grid gap-4 sm:grid-cols-2">
+      <div className="space-y-2 rounded-lg bg-gray-50 p-3 text-sm sm:col-span-2">
+        <p className="font-semibold text-gray-700">For Meta → your app → Messenger → Webhooks:</p>
+        <p>Callback URL: <code className="select-all rounded bg-white px-1.5 py-0.5 text-xs">{v.webhookUrl}</code></p>
+        <p>Verify token: <code className="select-all rounded bg-white px-1.5 py-0.5 text-xs">{v.verifyToken}</code></p>
+        <p className="text-xs text-gray-500">Subscribe the page to: messages, messaging_postbacks, messaging_referrals, message_echoes.</p>
+      </div>
+      <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 sm:col-span-2"><input type="checkbox" name="enabled" defaultChecked={v.enabled} className="h-4 w-4 accent-brand-600" /> Reply to Facebook Messenger automatically</label>
+      <Row label="Page access token" hint={saved(v.hasToken, "Meta app → Messenger → Generate token for the page")}>
+        <input name="pageToken" type="password" autoComplete="off" placeholder={v.hasToken ? "••••••••  (saved)" : ""} className={input} />
+      </Row>
+      <Row label="App secret" hint={saved(v.hasSecret, "Meta app → App settings → Basic → App secret")}>
+        <input name="appSecret" type="password" autoComplete="off" placeholder={v.hasSecret ? "••••••••  (saved)" : ""} className={input} />
+      </Row>
+      <Row label="Gemini API key (free AI)" hint={saved(v.hasGemini, "aistudio.google.com → Get API key. Makes Messenger and website chat replies sound natural.")}>
+        <input name="geminiKey" type="password" autoComplete="off" placeholder={v.hasGemini ? "••••••••  (saved)" : ""} className={input} />
+      </Row>
+      <Row label="Gemini model" hint="Leave as is unless Google retires it"><input name="geminiModel" defaultValue={v.geminiModel} className={input} /></Row>
+      <Row label="Stay quiet after a person replies (hours)" hint="When someone from the business answers a chat in the inbox, the bot steps back from that chat for this long">
+        <input name="pauseHours" type="number" min={1} max={72} defaultValue={v.pauseHours} className={input} />
+      </Row>
+      <Footer {...f} label="Save Messenger settings" />
+    </form>
   );
 }

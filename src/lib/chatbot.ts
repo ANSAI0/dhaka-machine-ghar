@@ -10,8 +10,17 @@ export type BotReply = { text: string; lead?: LeadInput; mode: "ai" | "basic" };
 
 const MODEL = "claude-opus-5-5";
 
-// The API key comes from the ANTHROPIC_API_KEY environment variable (never stored in the DB).
-export const aiConfigured = () => !!process.env.ANTHROPIC_API_KEY;
+// AI replies use Claude when ANTHROPIC_API_KEY is set, otherwise Google Gemini with the free key saved
+// in Admin → Settings → Messenger & AI. Without either, the built-in assistant answers.
+export const aiConfigured = (geminiKey?: string) => !!process.env.ANTHROPIC_API_KEY || !!geminiKey;
+
+export type AiOptions = {
+  geminiKey?: string;
+  geminiModel?: string;
+  channel?: "web" | "messenger";
+  baseUrl?: string; // full site address, for links sent outside the website
+  adTitle?: string; // Messenger: the Facebook ad the customer clicked
+};
 
 const productLine = (p: Product) =>
   [
@@ -24,17 +33,17 @@ const productLine = (p: Product) =>
     .join("\n");
 
 // Stable prefix (catalog + business info) so prompt caching applies across visitors.
-function systemPrompt(catalog: Catalog, site: SiteInfo, knowledge: string) {
+function systemPrompt(catalog: Catalog, site: SiteInfo, knowledge: string, opts: AiOptions = {}) {
   const byCat = catalog.categories
     .map((c) => `## ${c.name} (${c.nameBn}) — /category/${c.slug}\n${catalog.products.filter((p) => p.category === c.slug).map(productLine).join("\n")}`)
     .join("\n\n");
   return `You are "DMG সহকারী", the website assistant of ${site.name} (${site.nameBn}), a Bangladeshi manufacturer of mechanical and hydraulic power presses (channel body / H-frame, bou body / C-frame, hydraulic) built in its own factory, and maker of AC outdoor-unit stands (wall stands and roof chowki stands, sold per set) and royal / rawal (anchor) bolts (sold per piece). It also sells shearing and drill machines.
 
-Reply in the visitor's language — Bangla by default, English if they write in English. Keep replies short (2–5 sentences), friendly and concrete. Plain text only, no markdown formatting; put site links as bare relative paths like /product/<slug> on their own.
+${opts.channel === "messenger" ? messengerStyle(site, opts) : "Reply in the visitor's language — Bangla by default, English if they write in English. Keep replies short (2–5 sentences), friendly and concrete. Plain text only, no markdown formatting; put site links as bare relative paths like /product/<slug> on their own."}
 
 What you can do:
 - Answer any question about the business, the website and the products from the catalog and info below: what a product is, what it is used for, its specs, which one suits the visitor's work, and its link. Never invent machines, prices, tonnage or specs that are not listed. Where the price is "Call for price", explain that it depends on the tonnage/size and offer a call back or a quotation. Power presses are built to order in the tonnage the buyer needs (/quotation).
-- AC stands are sold per piece, in a box with the fitting kit, and in bulk by KG for dealers and installers.
+- AC stands are sold per set (prices listed); royal bolts per piece. For big quantities the owner confirms the price.
 - Machines carry a serial-based warranty with after-sales service; it can be checked at /warranty.
 - Explain ordering: ${site.advancePercent}% advance booking by bKash/Nagad/Bank, the rest at delivery; delivery all over Bangladesh; order progress is visible at /track.
 - When a visitor shows buying interest or asks for a call back, ask for their name and mobile number. When you have both, call the save_lead tool once, then tell them the team will call soon.
@@ -45,6 +54,20 @@ Website pages: all products /shop, custom quotation /quotation, order tracking /
 ${knowledge ? `\nNotes from the owner:\n${knowledge}\n` : ""}
 # Catalog (prices in BDT)
 ${byCat}`;
+}
+
+function messengerStyle(site: SiteInfo, opts: AiOptions) {
+  const base = (opts.baseUrl ?? "").replace(/\/$/, "");
+  return `You are chatting with a customer on the Facebook Messenger inbox of the business page.
+- Write like a friendly, helpful salesperson of ${site.name} texting a customer: warm, natural and short — usually 1–3 short sentences. Never sound like a form or a robot.
+- Match the customer's language and style: Bangla script if they write Bangla, Banglish (Bangla in English letters) if they write Banglish, English if English. Use "আপনি" / "apni".
+- Say salam only in your first reply. Don't greet or thank again in every message.
+- Understand the need before pitching: ask one question at a time (what work, what size or tonnage, how many, which district for delivery).
+- Plain text only: no markdown, no *, #, or bullet lists. At most one emoji in a message.
+- Links must be full addresses, e.g. ${base}/product/<slug> or ${base}/shop. Share a link only when it helps.
+- If the customer sends a photo or file you can't see, say thanks and ask what they need, or ask them to describe it.
+- Never claim to be a human. If asked whether this is a bot or a person, say honestly that you are ${site.name}'s assistant and that a team member can also talk (hotline ${site.phone}). Don't promise to call or visit yourself.
+- Quote listed prices exactly. Never promise discounts or delivery dates; for bargaining, bulk deals or anything unsure, say the owner will confirm and ask for their name and mobile number.${opts.adTitle ? `\n- The customer came from the Facebook ad "${opts.adTitle}". Assume they are asking about that product unless they say otherwise.` : ""}`;
 }
 
 const saveLeadTool: Anthropic.Beta.BetaTool = {
@@ -65,7 +88,18 @@ const saveLeadTool: Anthropic.Beta.BetaTool = {
 
 let client: Anthropic | null = null;
 
-export async function aiReply(history: ChatTurn[], catalog: Catalog, site: SiteInfo, knowledge: string): Promise<BotReply> {
+export async function aiReply(history: ChatTurn[], catalog: Catalog, site: SiteInfo, knowledge: string, opts: AiOptions = {}): Promise<BotReply> {
+  if (process.env.ANTHROPIC_API_KEY) return claudeReply(history, catalog, site, knowledge, opts);
+  if (opts.geminiKey) return geminiReply(history, catalog, site, knowledge, opts);
+  throw new Error("No AI key configured");
+}
+
+const leadFrom = (input: Partial<LeadInput>): LeadInput | null =>
+  typeof input.name === "string" && input.name.trim().length > 1 && typeof input.phone === "string" && isValidBDPhone(input.phone)
+    ? { name: input.name.trim().slice(0, 80), phone: normalizePhone(input.phone), interest: String(input.interest ?? "").slice(0, 200) }
+    : null;
+
+async function claudeReply(history: ChatTurn[], catalog: Catalog, site: SiteInfo, knowledge: string, opts: AiOptions): Promise<BotReply> {
   client ??= new Anthropic();
   const messages: Anthropic.Beta.BetaMessageParam[] = history.map((t) => ({ role: t.role, content: t.text }));
   let lead: LeadInput | undefined;
@@ -78,7 +112,7 @@ export async function aiReply(history: ChatTurn[], catalog: Catalog, site: SiteI
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
       output_config: { effort: "low" },
-      system: [{ type: "text", text: systemPrompt(catalog, site, knowledge), cache_control: { type: "ephemeral" } }],
+      system: [{ type: "text", text: systemPrompt(catalog, site, knowledge, opts), cache_control: { type: "ephemeral" } }],
       tools: [saveLeadTool],
       messages,
     });
@@ -97,9 +131,9 @@ export async function aiReply(history: ChatTurn[], catalog: Catalog, site: SiteI
 
     messages.push({ role: "assistant", content: res.content });
     const results: Anthropic.Beta.BetaToolResultBlockParam[] = toolUses.map((tu) => {
-      const input = tu.input as Partial<LeadInput>;
-      const ok = tu.name === "save_lead" && typeof input.name === "string" && input.name.trim().length > 1 && typeof input.phone === "string" && isValidBDPhone(input.phone);
-      if (ok) lead = { name: input.name!.trim().slice(0, 80), phone: normalizePhone(input.phone!), interest: String(input.interest ?? "").slice(0, 200) };
+      const found = tu.name === "save_lead" ? leadFrom(tu.input as Partial<LeadInput>) : null;
+      const ok = !!found;
+      if (found) lead = found;
       return {
         type: "tool_result",
         tool_use_id: tu.id,
@@ -112,150 +146,65 @@ export async function aiReply(history: ChatTurn[], catalog: Catalog, site: SiteI
   return { text: `ধন্যবাদ! আরও জানতে কল করুন ${site.phone}`, lead, mode: "ai" };
 }
 
-// ── Built-in assistant (free, no API key): understands Bangla and Banglish, answers from the catalog,
-// business info and the owner's notes, remembers the product talked about last, and captures phones ──
+// Google Gemini over REST (free tier key from aistudio.google.com). Same prompt and save_lead tool.
+type GeminiPart = { text?: string; functionCall?: { name: string; args?: Record<string, unknown> }; functionResponse?: { name: string; response: Record<string, unknown> }; thought?: boolean };
+type GeminiContent = { role: "user" | "model"; parts: GeminiPart[] };
 
-type Rule = [RegExp, string];
+async function geminiReply(history: ChatTurn[], catalog: Catalog, site: SiteInfo, knowledge: string, opts: AiOptions): Promise<BotReply> {
+  const model = (opts.geminiModel || "gemini-2.5-flash").replace(/[^a-z0-9.-]/gi, "");
+  const contents: GeminiContent[] = history.map((t) => ({ role: t.role === "assistant" ? "model" : "user", parts: [{ text: t.text }] }));
+  const tools = [
+    {
+      functionDeclarations: [
+        {
+          name: saveLeadTool.name,
+          description: saveLeadTool.description,
+          parameters: {
+            type: "OBJECT",
+            properties: {
+              name: { type: "STRING", description: "Customer's name" },
+              phone: { type: "STRING", description: "Mobile number, e.g. 01712345678" },
+              interest: { type: "STRING", description: "Product or need, short" },
+            },
+            required: ["name", "phone", "interest"],
+          },
+        },
+      ],
+    },
+  ];
+  let lead: LeadInput | undefined;
 
-// Words visitors use (Bangla, Banglish, English) → a token found in product names / categories.
-const productTerms: Rule[] = [
-  [/প্রেস|press|pres\b|preess/i, "press"],
-  [/চ্যানেল|channel|chanel|chenel|h.?frame/i, "channel"],
-  [/বউ|বো বডি|bou|bow|c.?frame|সি ফ্রেম/i, "bou"],
-  [/হাইড্রোলিক|hydraulic|hydrolic|haidrolik|hidrolik/i, "hydraulic"],
-  [/মোটর|motor/i, "motor"],
-  [/হেভি|heavy/i, "heavy"],
-  [/ডাবল|double|dabol/i, "double"],
-  [/এসি|ac\b|a\.c|air ?con|স্ট্যান্ড|stand|ষ্ট্যান্ড|ব্র্যাকেট|bracket/i, "stand"],
-  [/ফ্লোর|floor|ground|গ্রাউন্ড|মাটিতে|chade|ছাদে/i, "floor"],
-  [/কেজি|kg\b|keji|পাইকারি|pikari|wholesale|bulk/i, "kg"],
-  [/বক্স|box/i, "box"],
-  [/রেড|লাল|red|oxide/i, "red"],
-  [/বোল্ট|bolt|রাওয়াল|রাওল|রয়েল|royal|rawal|rawl|anchor/i, "bolt"],
-  [/ড্রিল|drill/i, "drill"],
-  [/শিয়ার|শেয়ার|shear|sheet cut|কাটিং মেশিন|cutting machine/i, "shear"],
-  [/সবুজ|green|sobuj/i, "green"],
-  [/আকাশি|sky/i, "sky"],
-  [/নীল|blue|nil\b/i, "blue"],
-  [/টিল|teal/i, "teal"],
-  [/হলুদ|yellow|holud/i, "yellow"],
-  [/কমলা|orange|komla/i, "orange"],
-  [/ধূসর|grey|gray/i, "grey"],
-  [/লাইম|lime/i, "lime"],
-  [/মিন্ট|mint/i, "mint"],
-  [/জলপাই|olive/i, "olive"],
-];
-
-const asks = {
-  greet: /^(?:\s*(?:hi+|hello|hey|salam|assalamu ?alaikum|আসসালামু আলাইকুম|সালাম|হাই|হ্যালো|হেলো)\W*)+$/i,
-  thanks: /ধন্যবাদ|থ্যাংক|thanks?|thank you|tnx|thx|ok thanks/i,
-  detail: /বিস্তারিত|ডিটেইল|details?|spec|স্পেসিফিকেশন|কি কাজ|কী কাজ|কাজ কি|ব্যবহার|use\b|সম্পর্কে|about|জানতে চাই|janate|jante|bolen|বলুন/i,
-  price: /দাম|price|কত টাকা|koto taka|dam\b|rate|মূল্য|cost/i,
-  list: /কি কি|কী কী|ki ki|কি পাওয়া|কী পাওয়া|ki pawa|ki ase|কি আছে|কী আছে|products?|পণ্য|catalog|সব মেশিন/i,
-  track: /ট্র্যাক|track|অর্ডার কোথায়|order kothay|অর্ডারের অবস্থা/i,
-};
-
-const faq = (site: SiteInfo): Rule[] => [
-  [/ঠিকানা|কোথায়|লোকেশন|location|address|thikana|kothay|শোরুম|showroom|কারখানা|factory|ম্যাপ|map/i, `${site.showroom ? `কারখানা: ${site.address}\nশোরুম: ${site.showroom}` : `কারখানা ও শোরুম: ${site.address}`}\nম্যাপ ও যোগাযোগ: /contact\nকল: ${site.phone}`],
-  [/সময়|খোলা|বন্ধ|hours|open|time|somoy|kokhon|কখন/i, `আমাদের সময়: ${site.hours}। কল: ${site.phone}`],
-  [/ওয়ারেন্টি|গ্যারান্টি|warranty|waranty|guarantee|garanti|সার্ভিস|service/i, `আমাদের মেশিনে সিরিয়াল নম্বর ভিত্তিক ওয়ারেন্টি ও বিক্রয়-পরবর্তী সার্ভিস আছে। মেশিনের সিরিয়াল দিয়ে যাচাই ও সার্ভিস অনুরোধ: /warranty`],
-  [/ডেলিভারি|delivery|deliveri|পাঠান|pathan|কুরিয়ার|courier|সারা দেশ|jela|জেলা/i, `সারা বাংলাদেশে ট্রান্সপোর্ট/কুরিয়ারে ডেলিভারি দেওয়া হয়। অর্ডারের প্রতিটি ধাপ দেখুন /track এ।`],
-  [/পেমেন্ট|payment|বিকাশ|bkash|bikash|নগদ|nagad|অগ্রিম|advance|ogrim|ব্যাংক|bank|কিস্তি|kisti/i, `মোট মূল্যের ${site.advancePercent}% অগ্রিম (bKash / Nagad / Bank বা অনলাইনে) দিয়ে অর্ডার কনফার্ম, বাকি টাকা ডেলিভারির সময়।`],
-  [/কাস্টম|custom|মাপে|mape|টনেজ|tonnage|বানিয়ে|baniye|অর্ডার দিয়ে বানা/i, `আপনার প্রয়োজনীয় টনেজ ও মাপে পাওয়ার প্রেস নিজস্ব কারখানায় তৈরি করে দিই। কোটেশন নিন: /quotation`],
-  [/ফেরত|ferot|refund|return|বদল|change/i, `ফেরত ও রিফান্ডের নিয়ম দেখুন: /refund। প্রশ্ন থাকলে কল করুন ${site.phone}`],
-  [/যোগাযোগ|contact|নম্বর|number|phone|ফোন|whatsapp|হোয়াটসঅ্যাপ|imo|email|ইমেইল/i, `কল / WhatsApp: ${site.phone}\nইমেইল: ${site.email}\nযোগাযোগ পেজ: /contact`],
-  [/কেজি|kg\b|keji|পাইকারি|pikari|wholesale|dealer|ডিলার/i, `এসি স্ট্যান্ড সেট হিসেবে বিক্রি হয় — চায়না স্ট্যান্ড (জয়েন নাট ও রয়েল বোল্ট সহ) ৳৫০০, পাউডার কোটিং এঙ্গেল স্ট্যান্ড ৳৭০০, রেড/ব্ল্যাক স্ট্যান্ড ৳৬০০, ছাদের চৌকি ৳৩২০ (পাউডার কোটিং ৳৪০০)। রয়েল বোল্ট প্রতি পিস ৳১১–১৩। বেশি পরিমাণে নিলে কল করুন: ${site.phone}। সব দেখুন /category/ac-stand`],
-];
-
-const bnDigits = (s: string) => s.replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d)));
-const fillerWords = /\b(?:my|name|is|number|phone|call me|amar|nam|nambar)\b|আমার|আমি|নাম|নম্বর|নাম্বার|মোবাইল|ফোন|কল দিন|কল করুন|দিন|হলো|হল/gi;
-const callBack = "কল ব্যাক চাইলে আপনার নাম ও মোবাইল নম্বর লিখুন।";
-const words = (s: string) => s.toLowerCase().split(/[^\p{L}\p{M}\p{N}]+/u).filter((w) => w.length > 2);
-
-function describe(p: Product) {
-  const hl = p.highlights.slice(0, 3).map((h) => `• ${h}`).join("\n");
-  return `${p.nameBn}\n${p.short}\n${hl}\nদাম: ${p.price > 0 ? priceText(p.price) : p.category === "power-press" ? "টনেজ/সাইজ অনুযায়ী — কল করে জেনে নিন" : "পরিমাণ অনুযায়ী — কল করে জেনে নিন"}\n/product/${p.slug}`;
-}
-
-// The product linked in the assistant's last reply, for follow-ups like "details?" or "দাম কত?".
-function lastProduct(history: ChatTurn[], catalog: Catalog) {
-  for (let i = history.length - 1; i >= 0; i--) {
-    if (history[i].role !== "assistant") continue;
-    const slugs = [...history[i].text.matchAll(/\/product\/([\w-]+)/g)].map((m) => m[1]);
-    if (slugs.length === 1) return catalog.products.find((p) => p.slug === slugs[0]);
-    return undefined;
+  for (let round = 0; round < 3; round++) {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-goog-api-key": opts.geminiKey! },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: systemPrompt(catalog, site, knowledge, opts) }] },
+        contents,
+        tools,
+        generationConfig: { temperature: 0.7, maxOutputTokens: 2048 },
+      }),
+      signal: AbortSignal.timeout(25_000),
+    });
+    if (!res.ok) throw new Error(`Gemini ${res.status}: ${(await res.text()).slice(0, 300)}`);
+    const data = (await res.json()) as { candidates?: { content?: { parts?: GeminiPart[] } }[] };
+    const parts = (data.candidates?.[0]?.content?.parts ?? []).filter((x) => !x.thought);
+    const calls = parts.filter((x) => x.functionCall);
+    if (calls.length === 0) {
+      const text = parts.map((x) => x.text ?? "").join("").trim();
+      return { text: text || `আরও জানতে কল করুন ${site.phone}`, lead, mode: "ai" };
+    }
+    contents.push({ role: "model", parts });
+    contents.push({
+      role: "user",
+      parts: calls.map((c) => {
+        const call = c.functionCall!;
+        const found = call.name === "save_lead" ? leadFrom((call.args ?? {}) as Partial<LeadInput>) : null;
+        if (found) lead = found;
+        const result = found ? "Saved. The sales team will call the customer." : "Not saved: need the customer's name and a valid Bangladeshi mobile number (01XXXXXXXXX). Ask again.";
+        return { functionResponse: { name: call.name, response: { result } } };
+      }),
+    });
   }
-  return undefined;
-}
-
-// Best paragraph of the owner's notes (Admin → Settings → Chat assistant) for this question.
-function fromNotes(text: string, knowledge: string) {
-  const q = new Set(words(text));
-  if (!q.size || !knowledge.trim()) return null;
-  const best = knowledge
-    .split(/\n\s*\n|\n(?=[-•*])/)
-    .map((para) => ({ para: para.trim(), hits: words(para).filter((w) => q.has(w)).length }))
-    .sort((a, b) => b.hits - a.hits)[0];
-  return best && best.hits >= 2 ? best.para : null;
-}
-
-export function basicReply(raw: string, catalog: Catalog, site: SiteInfo, knowledge = "", history: ChatTurn[] = []): BotReply {
-  const text = bnDigits(raw);
-  const reply = (t: string): BotReply => ({ text: t, mode: "basic" });
-
-  const phoneMatch = text.match(/(?:\+?88)?01[3-9][\d\s-]{8,12}/);
-  if (phoneMatch && isValidBDPhone(phoneMatch[0])) {
-    const name = text.replace(phoneMatch[0], "").replace(fillerWords, " ").replace(/[^\p{L}\p{M}\s.]/gu, " ").trim().split(/\s+/).slice(0, 4).join(" ");
-    const about = lastProduct(history, catalog);
-    return {
-      text: `ধন্যবাদ! আপনার নম্বর ${normalizePhone(phoneMatch[0])} সংরক্ষণ করা হয়েছে। আমাদের টিম শীঘ্রই কল করবে। জরুরি হলে কল করুন ${site.phone}।`,
-      lead: { name: name || "Chat visitor", phone: normalizePhone(phoneMatch[0]), interest: (about ? `${about.name} — ` : "") + raw.slice(0, 160) },
-      mode: "basic",
-    };
-  }
-
-  const cats = catalog.categories.map((c) => `• ${c.nameBn}: /category/${c.slug}`).join("\n");
-  const intro = `ঢাকা মেশিন ঘরে পাবেন নিজস্ব কারখানায় তৈরি পাওয়ার প্রেস (চ্যানেল বডি, বউ বডি, হাইড্রোলিক), এসি স্ট্যান্ড ও রয়েল বোল্ট।`;
-  if (asks.greet.test(text)) return reply(`ওয়ালাইকুম আসসালাম! ${intro} কী জানতে চান?\n${cats}`);
-  if (asks.thanks.test(text) && text.length < 40) return reply(`আপনাকেও ধন্যবাদ! আর কিছু জানতে চাইলে লিখুন, অথবা কল করুন ${site.phone}।`);
-  if (asks.track.test(text)) return reply(`ইনভয়েস বা মোবাইল নম্বর দিয়ে অর্ডারের অবস্থা দেখুন: /track`);
-
-  const terms = productTerms.filter(([re]) => re.test(text)).map(([, t]) => t);
-  const ton = text.match(/(\d+)\s*(?:টন|ton)/i)?.[1];
-  const norm = (x: string) => x.toLowerCase().replace(/bou body|c-frame/g, "bou").replace(/h-frame/g, "channel");
-  const scored = catalog.products
-    .map((p) => {
-      // A term in the product's name / category counts far more than one in its description.
-      const title = norm(`${p.name} ${p.category} ${p.subcategory}`);
-      const body = norm(`${p.capacity} ${p.short} ${p.specs.map(([, v]) => v).join(" ")}`);
-      let s = terms.reduce((sum, t) => sum + (title.includes(t) ? 4 : body.includes(t) ? 1 : 0), 0);
-      if (ton && new RegExp(`\\b${ton}\\s*ton`, "i").test(`${p.capacity} ${p.name}`)) s += 3;
-      return { p, s };
-    })
-    .filter((x) => x.s > 0)
-    .sort((a, b) => b.s - a.s);
-
-  // Follow-up about the product we just talked about.
-  const prev = lastProduct(history, catalog);
-  if (!scored.length && prev && (asks.detail.test(text) || asks.price.test(text))) return reply(`${describe(prev)}\n\n${callBack}`);
-
-  if (scored.length) {
-    const top = scored[0];
-    const clear = scored.length === 1 || top.s > scored[1].s;
-    if (clear || asks.detail.test(text)) return reply(`${describe(top.p)}\n\n${callBack}`);
-    const list = scored.slice(0, 4).map(({ p }) => `• ${p.nameBn} — ${priceText(p.price)}\n/product/${p.slug}`).join("\n");
-    const more = scored.length > 4 ? `\nআরও ${scored.length - 4}টি: /category/${scored[0].p.category}` : "";
-    const note = asks.price.test(text) ? "\nদাম টনেজ/সাইজ অনুযায়ী আলাদা — কল করে জেনে নিন।" : "";
-    return reply(`এই পণ্যগুলো দেখতে পারেন:\n${list}${more}${note}\n\n${callBack}`);
-  }
-
-  const notes = fromNotes(text, knowledge);
-  if (notes) return reply(`${notes}\n\nআরও জানতে কল করুন ${site.phone}।`);
-
-  const hit = faq(site).find(([re]) => re.test(text));
-  if (hit) return reply(`${hit[1]}\n\n${callBack}`);
-  if (asks.price.test(text)) return reply(`দাম মেশিনের টনেজ/সাইজ অনুযায়ী আলাদা। কোন মেশিনের দাম জানতে চান লিখুন, অথবা আপনার নাম ও মোবাইল নম্বর দিন — আমরা কল করে জানাব। সব পণ্য: /shop`);
-  if (asks.list.test(text)) return reply(`${intro}\n${cats}\nসব পণ্য: /shop`);
-
-  return reply(`দুঃখিত, প্রশ্নটা ঠিক বুঝিনি। ${intro}\nযেমন লিখুন: "চ্যানেল বডি প্রেস", "এসি স্ট্যান্ড", "ঠিকানা", "ওয়ারেন্টি"।\n${cats}\nসরাসরি কথা বলতে: ${site.phone}`);
+  return { text: `ধন্যবাদ! আরও জানতে কল করুন ${site.phone}`, lead, mode: "ai" };
 }
