@@ -66,7 +66,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: SP 
                     <div className="min-w-0">
                       <Link href={`/admin/products/${p.slug}`} className="font-semibold text-gray-900 hover:text-brand-700">{p.name}</Link>
                       <p className="flex items-center gap-2 text-xs text-gray-500">
-                        {p.capacity} · <Badge tone={p.condition === "new" ? "green" : "blue"}>{p.condition === "new" ? "New" : "Reconditioned"}</Badge>
+                        {p.capacity && <>{p.capacity} · </>}<Badge tone={p.condition === "new" ? "green" : "blue"}>{p.condition === "new" ? "New" : "Reconditioned"}</Badge>
                         {!p.image && <Badge tone="amber">no photo</Badge>}
                       </p>
                     </div>
