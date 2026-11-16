@@ -1140,50 +1140,6 @@ export const seedProducts: SeedProduct[] = [
     "featured": false
   },
   {
-    "slug": "bou-body-power-press-big-gear",
-    "name": "Bou Body Power Press — Big Gear",
-    "nameBn": "বউ বডি পাওয়ার প্রেস — বড় গিয়ার",
-    "category": "power-press",
-    "subcategory": "bou-body",
-    "condition": "new",
-    "price": 0,
-    "image": "/products/bou-body-power-press-big-gear.webp",
-    "brand": "DMG",
-    "capacity": "",
-    "voltage": "",
-    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
-    "highlights": [
-      "Open-front C-frame for easy die setting and loading",
-      "Heavy flywheel and gear drive",
-      "Large working table with T-slots",
-      "Tonnage made to your order",
-      "Warranty and after-sales service from DMG"
-    ],
-    "specs": [
-      [
-        "Type",
-        "Bou body / C-frame mechanical power press"
-      ],
-      [
-        "Drive",
-        "Electric motor, belt, flywheel and gear"
-      ],
-      [
-        "Capacity",
-        "Made to order (tonnage as you need)"
-      ],
-      [
-        "Made in",
-        "DMG own factory, Keraniganj, Dhaka"
-      ],
-      [
-        "Colour",
-        "Green with red parts"
-      ]
-    ],
-    "featured": false
-  },
-  {
     "slug": "bou-body-power-press-olive",
     "name": "Bou Body Power Press — Olive",
     "nameBn": "বউ বডি পাওয়ার প্রেস — জলপাই",
