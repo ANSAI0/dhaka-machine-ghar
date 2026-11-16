@@ -1334,15 +1334,15 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "hydraulic",
     "condition": "new",
-    "price": 184000,
+    "price": 230000,
     "image": "/products/hydraulic-h-frame-press.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "H-frame hydraulic power press with its own power pack and pressure gauge — smooth, controlled force for pressing, bending and forming. Weight 800 kg, price ৳184,000 (৳230 per kg).",
+    "short": "H-frame hydraulic power press with its own power pack and pressure gauge — smooth, controlled force for pressing, bending and forming. Weight 1,000 kg, price ৳2,30,000 (৳230 per kg).",
     "highlights": [
-      "Price ৳184,000 — 800 kg × ৳230 per kg",
-      "Weight: 800 kg",
+      "Price ৳2,30,000 — 1,000 kg × ৳230 per kg",
+      "Weight: 1,000 kg",
       "Rate: ৳230 per kg",
       "Rigid H-frame with hydraulic cylinder",
       "Hydraulic power pack with pressure gauge",
@@ -1356,7 +1356,7 @@ export const seedProducts: SeedProduct[] = [
       ],
       [
         "Weight",
-        "800 kg"
+        "1,000 kg"
       ],
       [
         "Price rate",
@@ -1364,7 +1364,7 @@ export const seedProducts: SeedProduct[] = [
       ],
       [
         "Price",
-        "৳184,000"
+        "৳2,30,000"
       ],
       [
         "Drive",
