@@ -12,6 +12,7 @@ import { ProductOrderForm } from "@/components/order-form";
 import { ProductActions } from "@/components/product-actions";
 import { ProductCard } from "@/components/product-card";
 import { ProductImage } from "@/components/product-image";
+import { ProductGallery } from "@/components/product-gallery";
 import { ProductTabs } from "@/components/product-tabs";
 import { RoiCalculator } from "@/components/roi-calculator";
 import { WhatsappIcon, YoutubeIcon } from "@/components/brand-icons";
@@ -40,6 +41,14 @@ export default async function ProductPage({ params }: Params) {
   const sub = cat.subcategories.find((s) => s.slug === p.subcategory);
   const off = discountPercent(p);
   const advance = Math.round((p.price * site.advancePercent) / 100);
+  // Gallery: this product's photo, then up to three look-alikes (same kind first) so there are always 2+ to swipe.
+  const lookAlikes = catalog.products
+    .filter((x) => x.slug !== p.slug && x.image && x.image !== p.image && x.category === p.category)
+    .sort((a, b) => Number(b.subcategory === p.subcategory) - Number(a.subcategory === p.subcategory))
+    .slice(0, 3);
+  const slides = p.image
+    ? [{ src: p.image, alt: p.name }, ...lookAlikes.map((x) => ({ src: x.image!, alt: x.name, similar: { name: x.name, href: `/product/${x.slug}` } }))]
+    : [];
   const related = catalog.products.filter((x) => x.category === p.category && x.slug !== p.slug).slice(0, 5);
   const waText = encodeURIComponent(`আসসালামু আলাইকুম, আমি "${p.name}" (${unitPriceText(p)}) সম্পর্কে জানতে চাই।`);
 
@@ -62,10 +71,13 @@ export default async function ProductPage({ params }: Params) {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Image */}
         <div className="lg:sticky lg:top-40 lg:self-start">
-          <div data-product-image className="group relative aspect-square overflow-hidden rounded-2xl border border-gray-100 bg-studio shadow-sm">
-            {off > 0 && <span className="absolute left-3 top-3 z-10 rounded-full bg-accent-600 px-3 py-1 text-xs font-bold text-white">{off}% ছাড়</span>}
-            <ProductImage product={p} sizes="(max-width: 1024px) 100vw, 600px" priority />
-          </div>
+          {slides.length ? (
+            <ProductGallery slides={slides} badge={off > 0 ? <span className="absolute left-3 top-3 z-10 rounded-full bg-accent-600 px-3 py-1 text-xs font-bold text-white">{off}% ছাড়</span> : undefined} />
+          ) : (
+            <div data-product-image className="group relative aspect-square overflow-hidden rounded-2xl border border-gray-100 bg-studio shadow-sm">
+              <ProductImage product={p} sizes="(max-width: 1024px) 100vw, 600px" priority />
+            </div>
+          )}
           {p.imageCredit && (
             <p className="mt-2 text-[11px] leading-snug text-gray-400">
               প্রতীকী ছবি — মেশিনের ধরন বোঝাতে। ছবি:{" "}
