@@ -52,7 +52,7 @@ function SearchBox({ onDone }: { onDone?: () => void }) {
 }
 
 // Header action icons: bare line icons that turn brand green on hover / when active.
-const iconBox = "relative flex h-9 w-9 items-center justify-center text-gray-800 transition-colors group-hover:text-brand-700 lux:text-white/90";
+const iconBox = "relative flex h-9 w-9 items-center justify-center text-gray-800 transition-colors group-hover:text-brand-700 phone:text-brand-700 lux:text-white/90";
 const iconBoxOn = "!text-brand-700 lux:!text-gold-300";
 
 export function Header({ categories }: { categories: Category[] }) {
@@ -85,7 +85,7 @@ export function Header({ categories }: { categories: Category[] }) {
           md+: logo, search, hotline, track, cart. */}
       <div className="border-b border-gray-100 phone:border-transparent lux:border-white/[0.06]">
         <div className={`container mx-auto grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 transition-all duration-300 md:flex md:gap-6 md:px-4 ${scrolled ? "py-1.5" : "py-2 md:py-3"}`}>
-          <button onClick={() => setDrawer(true)} className="justify-self-start rounded-full border border-gray-200 bg-white p-2 text-gray-800 shadow-sm active:bg-gray-100 md:hidden lux:border-white/15 lux:bg-white/[0.04] lux:text-white/90 lux:active:bg-white/10" aria-label="Open menu">
+          <button onClick={() => setDrawer(true)} className="justify-self-start rounded-full border border-gray-200 bg-white p-2 text-gray-800 shadow-sm active:bg-gray-100 md:hidden phone:text-brand-700 lux:border-white/15 lux:bg-white/[0.04] lux:text-white/90 lux:active:bg-white/10" aria-label="Open menu">
             <Menu className="h-5 w-5" />
           </button>
           <Logo variant="mark" className={scrolled ? "h-7 md:h-8" : "h-8 md:h-10"} />
