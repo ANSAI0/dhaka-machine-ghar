@@ -1932,7 +1932,7 @@ export const seedProducts: SeedProduct[] = [
     "subcategory": "wall-stand",
     "condition": "new",
     "price": 700,
-    "image": "/products/dmg-ac-outdoor-stand.webp",
+    "image": "/products/powder-coated-angle-ac-stand.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
