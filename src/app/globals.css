@@ -9,6 +9,15 @@
   }
 }
 
+/* phone: = phone screens in the normal (light) mobile style — used for the dark green phone header. */
+@custom-variant phone {
+  @media (width < 48rem) {
+    :where(html:not(.mobile-lux)) & {
+      @slot;
+    }
+  }
+}
+
 /* Dhaka Machine Ghar brand palette — taken from the DMG logo */
 @theme {
   --color-brand-50: #eef6f1;
