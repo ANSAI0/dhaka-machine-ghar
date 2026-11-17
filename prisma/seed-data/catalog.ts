@@ -2211,5 +2211,45 @@ export const seedProducts: SeedProduct[] = [
       ]
     ],
     "featured": false
+  },
+  {
+    "slug": "join-nut",
+    "name": "Join Nut (By KG)",
+    "nameBn": "জয়েন নাট (কেজি দরে)",
+    "category": "hardware",
+    "subcategory": "bolts",
+    "condition": "new",
+    "price": 200,
+    "image": "/products/join-nut.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Join nuts with washers for fixing AC stands and brackets — sold loose by weight, ৳200 per kg.",
+    "highlights": [
+      "Price ৳200 per kg",
+      "Comes with washers",
+      "For AC stands, brackets and frames",
+      "Order any amount — by the kilo",
+      "Wholesale quantity available"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Join nut with washer"
+      ],
+      [
+        "Price",
+        "৳200 per kg"
+      ],
+      [
+        "Sold by",
+        "Kilogram — any amount"
+      ],
+      [
+        "Use",
+        "AC stands, brackets and frames"
+      ]
+    ],
+    "featured": false
   }
 ];

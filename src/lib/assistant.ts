@@ -59,6 +59,7 @@ const productTerms: Rule[] = [
   [/বাংলা চাকি|bangla chaki|bangla caki|(?<!বি)দেশি|\bdeshi\b|\bbangla\b/i, "bangla"],
   [/বিদেশি|bideshi|imported|ইমপোর্ট|টেম্পার|temper/i, "imported"],
   [/সাধারণ|সাধারন|plain|normal|নরমাল/i, "plain"],
+  [/জয়েন|জয়েন|জইন|join|joint nut/i, "join"],
   [/ড্রিল|drill/i, "drill"],
   [/শিয়ার|শেয়ার|shear|sheet cut|কাটিং মেশিন|cutting machine/i, "shear"],
   [/সবুজ|green|sobuj/i, "green"],
@@ -144,12 +145,13 @@ function aboutProduct(p: Product, lang: Lang, seed: number) {
     const unit = unitOf(p, lang);
     const extra = priceLines(p, lang);
     const prices = extra.length > 1 ? `\n${extra.join("\n")}` : "";
+    const byKilo = unit === "কেজি" || unit === "kg";
     const open = pick([say(lang, "জি, আছে 👍", "Ji, ache 👍", "Yes, we have it 👍"), say(lang, "অবশ্যই পাবেন।", "Obosshoi paben.", "Sure, it's available.")], seed);
     return say(
       lang,
-      `${open} ${name} — দাম ${priceText(p.price)} প্রতি ${unit}।${prices}\nকয়টা লাগবে বলুন, এখনই অর্ডার নিয়ে নিচ্ছি।\n${link}`,
-      `${open} ${name} — dam ${priceText(p.price)} per ${unit}.${prices}\nKoyta lagbe bolen, ekhoni order niye nicchi.\n${link}`,
-      `${open} ${name} — ${priceText(p.price)} per ${unit}.${prices}\nHow many do you need? I can take the order right here.\n${link}`,
+      `${open} ${name} — দাম ${priceText(p.price)} প্রতি ${unit}।${prices}\n${byKilo ? "কত কেজি" : "কয়টা"} লাগবে বলুন, এখনই অর্ডার নিয়ে নিচ্ছি।\n${link}`,
+      `${open} ${name} — dam ${priceText(p.price)} per ${unit}.${prices}\n${byKilo ? "Koto kg" : "Koyta"} lagbe bolen, ekhoni order niye nicchi.\n${link}`,
+      `${open} ${name} — ${priceText(p.price)} per ${unit}.${prices}\n${byKilo ? "How many kg" : "How many"} do you need? I can take the order right here.\n${link}`,
     );
   }
   const rate = spec(p, "Price rate")?.replace(/\s*per kg/i, "");
