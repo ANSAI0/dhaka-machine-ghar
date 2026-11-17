@@ -80,7 +80,7 @@ export function Header({ categories }: { categories: Category[] }) {
 
   return (
     <>
-    <header className={`sticky top-0 z-40 rounded-b-2xl bg-white phone:bg-brand-900 transition-shadow max-md:flex max-md:flex-col lux:bg-lux-950 md:bg-white/80 md:backdrop-blur-xl ${scrolled ? "shadow-md lux:shadow-black/60" : "shadow-sm lux:shadow-none"}`}>
+    <header className={`sticky top-0 z-40 rounded-b-2xl bg-white phone:rounded-b-none phone:bg-brand-900 transition-shadow max-md:flex max-md:flex-col lux:bg-lux-950 md:bg-white/80 md:backdrop-blur-xl ${scrolled ? "shadow-md lux:shadow-black/60" : "shadow-sm lux:shadow-none"}`}>
       {/* Main row. Phones: menu | centred logo | account + cart on dark green (the search bar sits below and scrolls away).
           md+: logo, search, hotline, track, cart. */}
       <div className="border-b border-gray-100 phone:border-transparent lux:border-white/[0.06]">
@@ -142,9 +142,12 @@ export function Header({ categories }: { categories: Category[] }) {
 
       <MobileDrawer open={drawer} onClose={closeDrawer} categories={categories} me={me} />
     </header>
-    {/* Phones: search sits under the header and scrolls away with the page. */}
-    <div className="px-3 pt-2.5 md:hidden">
-      <SearchBox />
+    {/* Phones: the green runs on below the header and the page sits on it like a floating sheet with
+        rounded top corners; the search bar is the top of that sheet and scrolls away with the page. */}
+    <div className="md:hidden phone:bg-brand-900">
+      <div className="rounded-t-[1.75rem] bg-[#f4f6f5] px-3 pt-4 shadow-[0_-10px_24px_-14px_rgba(0,0,0,0.6)] lux:rounded-none lux:bg-transparent lux:pt-2.5 lux:shadow-none">
+        <SearchBox />
+      </div>
     </div>
     </>
   );
