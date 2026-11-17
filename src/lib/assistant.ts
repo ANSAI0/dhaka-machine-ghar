@@ -107,6 +107,7 @@ const unitOf = (p: Product, lang: Lang) => {
   const t = `${p.short} ${p.highlights.join(" ")}`.toLowerCase();
   if (t.includes("per piece")) return say(lang, "পিস", "pis", "piece");
   if (t.includes("per set")) return say(lang, "সেট", "set", "set");
+  if (t.includes("per kg") && !p.specs.some(([k]) => k === "Price rate")) return say(lang, "কেজি", "kg", "kg");
   return say(lang, "টি", "ta", "unit");
 };
 const spec = (p: Product, label: string) => p.specs.find(([k]) => k.toLowerCase() === label.toLowerCase())?.[1];
@@ -521,6 +522,7 @@ function nextPrompt(d: OrderDraft, input: AssistantInput, lang: Lang, state: Bot
     d.step = "qty";
     const u = unitOf(p, lang);
     const unitWord = ["টি", "ta", "unit"].includes(u) ? "" : ` ${u}`;
+    if (u === "কেজি" || u === "kg") return say(lang, `${nameOf(p, lang)} — কত কেজি লাগবে?`, `${nameOf(p, lang)} — koto kg lagbe?`, `${nameOf(p, lang)} — how many kg do you need?`);
     return say(lang, `${nameOf(p, lang)} — কয়টা${unitWord} লাগবে?`, `${nameOf(p, lang)} — koyta${unitWord} lagbe?`, `${nameOf(p, lang)} — how many${unitWord ? `${unitWord}s` : ""} do you need?`);
   }
   if (!d.name) {
