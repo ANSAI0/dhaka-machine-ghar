@@ -80,7 +80,7 @@ export function Header({ categories }: { categories: Category[] }) {
 
   return (
     <>
-    <header className={`sticky top-0 z-40 rounded-b-2xl bg-white phone:rounded-b-none transition-shadow max-md:flex max-md:flex-col lux:bg-lux-950 md:bg-white/80 md:backdrop-blur-xl ${scrolled ? "shadow-md lux:shadow-black/60" : "shadow-sm lux:shadow-none"}`}>
+    <header className={`sticky top-0 z-40 rounded-b-2xl bg-white phone:rounded-b-none transition-shadow max-md:flex max-md:flex-col lux:bg-lux-950 md:bg-white/80 md:backdrop-blur-xl ${scrolled ? "shadow-md lux:shadow-black/60" : "shadow-sm phone:shadow-none lux:shadow-none"}`}>
       {/* Main row. Phones: menu | centred logo | account + cart on dark green (the search bar sits below and scrolls away).
           md+: logo, search, hotline, track, cart. */}
       <div className="border-b border-gray-100 phone:border-transparent lux:border-white/[0.06]">
@@ -145,7 +145,7 @@ export function Header({ categories }: { categories: Category[] }) {
     {/* Phones: under the white header the page sits like a raised sheet with rounded top corners
         (a soft shadow lifts it off the header); the search bar is the top of that sheet and scrolls away with the page. */}
     <div className="md:hidden phone:bg-white">
-      <div className="relative rounded-t-[1.75rem] bg-gradient-to-b from-white via-white to-[#f4f6f5] px-3 pb-1 pt-4 shadow-[0_-10px_22px_-8px_rgba(16,37,27,0.28),0_-1px_0_rgba(16,37,27,0.06),inset_0_1.5px_0_rgba(255,255,255,1)] lux:rounded-none lux:bg-none lux:pb-0 lux:pt-2.5 lux:shadow-none">
+      <div className="relative rounded-t-[1.75rem] bg-gradient-to-b from-white via-white to-[#f4f6f5] px-3 pb-1 pt-4 shadow-[0_-7px_12px_-9px_rgba(16,37,27,0.45),inset_0_1.5px_0_rgba(255,255,255,1)] lux:rounded-none lux:bg-none lux:pb-0 lux:pt-2.5 lux:shadow-none">
         <SearchBox />
       </div>
     </div>
