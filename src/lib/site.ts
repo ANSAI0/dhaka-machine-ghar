@@ -78,6 +78,16 @@ export const unitPriceText = (p: { price: number; specs: [string, string][] }) =
   const rate = specNumber(p.specs, "Price rate");
   return rate ? `${formatBDT(rate)}/kg` : priceText(p.price);
 };
+export const rateOf = (p: { specs: [string, string][] }) => specNumber(p.specs, "Price rate");
+// Machines priced per kg can be ordered at the weight the buyer wants (built to order).
+export const KG_MIN = 50;
+export const KG_MAX = 20000;
+export const defaultKg = (p: { price: number; specs: [string, string][] }) => byWeight(p)?.kg ?? 0;
+// Price of one unit: a per-kg machine at the chosen weight, otherwise the listed price.
+export const unitPrice = (p: { price: number; specs: [string, string][] }, kg?: number) => {
+  const r = rateOf(p);
+  return r && kg ? r * kg : p.price;
+};
 // Per-kg rate known but the machine's weight (and so its total) is not yet: priced on a call.
 export const rateOnly = (p: { price: number; specs: [string, string][] }) => {
   const rate = specNumber(p.specs, "Price rate");

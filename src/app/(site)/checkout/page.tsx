@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Loader2, ShoppingCart, Trash2 } from "lucide-react";
-import { formatBDT, priceText, saleUnit } from "@/lib/site";
+import { defaultKg, formatBDT, priceText, rateOf, saleUnit, unitPrice } from "@/lib/site";
 import { useSite } from "@/components/site-provider";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { PageHero } from "@/components/page-hero";
 import { useCart } from "@/components/cart";
 import { useCatalog } from "@/components/catalog-provider";
 import { ConditionBadge } from "@/components/condition-badge";
-import { OrderForm, OrderSuccess, QtyStepper, type OrderLine } from "@/components/order-form";
+import { KgInput, OrderForm, OrderSuccess, QtyStepper, type OrderLine } from "@/components/order-form";
 import { ProductImage } from "@/components/product-image";
 
 export default function CheckoutPage() {
@@ -22,9 +22,9 @@ export default function CheckoutPage() {
   // Drop slugs that no longer exist in the catalog.
   const lines: OrderLine[] = cart.items.flatMap((i) => {
     const product = getProduct(i.slug);
-    return product ? [{ product, qty: i.qty }] : [];
+    return product ? [{ product, qty: i.qty, ...(rateOf(product) ? { kg: i.kg ?? defaultKg(product) } : {}) }] : [];
   });
-  const total = lines.reduce((s, l) => s + l.product.price * l.qty, 0);
+  const total = lines.reduce((s, l) => s + unitPrice(l.product, l.kg) * l.qty, 0);
 
   return (
     <div className="container mx-auto px-3 pt-4 sm:px-4 lg:pt-6">
@@ -49,7 +49,7 @@ export default function CheckoutPage() {
         <div className="grid gap-6 lg:grid-cols-5">
           {/* Cart lines */}
           <section className="space-y-3 lg:col-span-2">
-            {lines.map(({ product: p, qty }) => (
+            {lines.map(({ product: p, qty, kg }) => (
               <article key={p.slug} className="flex gap-3 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm">
                 <Link href={`/product/${p.slug}`} className="group relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-white">
                   <ProductImage product={p} sizes="96px" />
@@ -62,9 +62,15 @@ export default function CheckoutPage() {
                     </button>
                   </div>
                   <ConditionBadge condition={p.condition} className="w-fit" />
+                  {rateOf(p) > 0 && (
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                      <KgInput value={kg ?? 0} onChange={(n) => cart.setKg(p.slug, n)} label={`${p.name} weight`} />
+                      <span>× {formatBDT(rateOf(p))}/কেজি</span>
+                    </div>
+                  )}
                   <div className="mt-auto flex items-center justify-between gap-2">
                     <QtyStepper value={qty} onChange={(n) => cart.setQty(p.slug, n)} label={`${p.name} quantity`} unit={saleUnit(p)} />
-                    <span className="text-sm font-bold text-brand-700">{priceText(p.price * qty)}</span>
+                    <span className="text-sm font-bold text-brand-700">{rateOf(p) && !kg ? "ওজন লিখুন" : priceText(unitPrice(p, kg) * qty)}</span>
                   </div>
                 </div>
               </article>

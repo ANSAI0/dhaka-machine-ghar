@@ -2,13 +2,14 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-export type CartItem = { slug: string; qty: number };
+export type CartItem = { slug: string; qty: number; kg?: number }; // kg: chosen weight (per-kg machines)
 
 type CartCtx = {
   items: CartItem[];
   count: number;
   add: (slug: string, qty?: number) => void;
   setQty: (slug: string, qty: number) => void;
+  setKg: (slug: string, kg: number) => void;
   remove: (slug: string) => void;
   clear: () => void;
   has: (slug: string) => boolean;
@@ -45,6 +46,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       save(found ? items.map((i) => (i.slug === slug ? { ...i, qty: i.qty + qty } : i)) : [...items, { slug, qty }]);
     },
     setQty: (slug, qty) => save(qty <= 0 ? items.filter((i) => i.slug !== slug) : items.map((i) => (i.slug === slug ? { ...i, qty } : i))),
+    setKg: (slug, kg) => save(items.map((i) => (i.slug === slug ? { ...i, kg } : i))),
     remove: (slug) => save(items.filter((i) => i.slug !== slug)),
     clear: () => save([]),
     has: (slug) => items.some((i) => i.slug === slug),

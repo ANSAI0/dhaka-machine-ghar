@@ -10,7 +10,7 @@ export type OrderInput = {
   district: string;
   note?: string;
   payment: PaymentPlan;
-  items: { slug: string; qty: number }[];
+  items: { slug: string; qty: number; kg?: number }[]; // kg: chosen weight for machines priced per kg
   source?: string; // e.g. "product-page", "landing", "checkout"
 };
 
@@ -38,6 +38,7 @@ export function validateOrder(o: Partial<OrderInput>): Partial<Record<keyof Orde
   if (!o.district) e.district = "জেলা নির্বাচন করুন";
   if (!o.payment || !(o.payment in paymentLabels)) e.payment = "পেমেন্ট পদ্ধতি নির্বাচন করুন";
   if (!o.items?.length || o.items.some((i) => !i.slug || !Number.isInteger(i.qty) || i.qty < 1)) e.items = "অন্তত একটি মেশিন নির্বাচন করুন";
+  else if (o.items.some((i) => i.kg !== undefined && (!Number.isInteger(i.kg) || i.kg < 50 || i.kg > 20000))) e.items = "মেশিনের ওজন ৫০ থেকে ২০,০০০ কেজির মধ্যে লিখুন";
   return e;
 }
 

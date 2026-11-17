@@ -16,7 +16,7 @@ export async function POST(req: Request) {
   const input = body as OrderInput;
 
   const placed = await placeOrder(input);
-  if (!placed) return NextResponse.json({ errors: { items: "Unknown product" } }, { status: 422 });
+  if ("error" in placed) return NextResponse.json({ errors: { items: placed.error } }, { status: 422 });
   const { id, total, payNow } = placed;
   return NextResponse.json({ id, total, payNow, payOnline: onlinePaymentEnabled() && payNow > 0 }, { status: 201 });
 }

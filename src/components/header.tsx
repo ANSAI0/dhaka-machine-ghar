@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Menu, PackageSearch, Search, ShoppingBag, UserRound } from "lucide-react";
 import type { Category } from "@/lib/catalog";
-import { formatBDT } from "@/lib/site";
+import { defaultKg, formatBDT, rateOf, unitPrice } from "@/lib/site";
 import { useCart } from "./cart";
 import { useCatalog } from "./catalog-provider";
 import { useCustomer } from "./customer-provider";
@@ -63,7 +63,10 @@ export function Header({ categories }: { categories: Category[] }) {
   const [drawer, setDrawer] = useState(false);
   const closeDrawer = useCallback(() => setDrawer(false), []);
   const [scrolled, setScrolled] = useState(false);
-  const cartTotal = items.reduce((s, i) => s + (getProduct(i.slug)?.price ?? 0) * i.qty, 0);
+  const cartTotal = items.reduce((s, i) => {
+    const p = getProduct(i.slug);
+    return s + (p ? unitPrice(p, rateOf(p) ? (i.kg ?? defaultKg(p)) : undefined) : 0) * i.qty;
+  }, 0);
 
   // Shrink the header once the page is scrolled (hysteresis avoids flicker at the threshold).
   useEffect(() => {

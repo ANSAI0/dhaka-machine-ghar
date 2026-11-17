@@ -5,14 +5,14 @@ import { useEffect, useState } from "react";
 import { CheckCircle2, Loader2, Minus, Plus } from "lucide-react";
 import type { Product } from "@/lib/catalog";
 import { districts, paymentLabels, validateOrder, type OrderInput, type PaymentPlan } from "@/lib/orders";
-import { byWeight, formatBDT, priceText, saleUnit } from "@/lib/site";
+import { defaultKg, formatBDT, KG_MAX, KG_MIN, priceText, rateOf, saleUnit, unitPrice } from "@/lib/site";
 import { useSite } from "./site-provider";
 import { trackConversion } from "@/lib/analytics";
 import { useCustomer } from "./customer-provider";
 import { PayOnlineButton } from "./pay-online-button";
 
 type Errors = Partial<Record<keyof OrderInput | "form", string>>;
-export type OrderLine = { product: Product; qty: number };
+export type OrderLine = { product: Product; qty: number; kg?: number }; // kg: chosen weight for per-kg machines
 type Placed = { id: string; total: number; payNow: number; payOnline?: boolean };
 
 export const fieldClass = "w-full rounded-xl border bg-white px-4 py-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100";
@@ -32,7 +32,7 @@ export function OrderForm({ lines, source, qtySlot, onPlaced }: Props) {
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<Placed | null>(null);
 
-  const total = lines.reduce((s, l) => s + l.product.price * l.qty, 0);
+  const total = lines.reduce((s, l) => s + unitPrice(l.product, l.kg) * l.qty, 0);
   const payNow = payment === "full" ? total : payment === "advance" ? Math.round((total * site.advancePercent) / 100) : 0;
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
@@ -46,10 +46,12 @@ export function OrderForm({ lines, source, qtySlot, onPlaced }: Props) {
       district: String(fd.get("district") ?? ""),
       note: String(fd.get("note") ?? ""),
       payment,
-      items: lines.map((l) => ({ slug: l.product.slug, qty: l.qty })),
+      items: lines.map((l) => ({ slug: l.product.slug, qty: l.qty, ...(rateOf(l.product) && l.kg ? { kg: l.kg } : {}) })),
       source,
     };
     const v = validateOrder(input);
+    const noKg = lines.find((l) => rateOf(l.product) && (!l.kg || l.kg < KG_MIN || l.kg > KG_MAX));
+    if (noKg) v.items = `"${noKg.product.name}" — মেশিনের ওজন ${KG_MIN}–${KG_MAX.toLocaleString("en-IN")} কেজির মধ্যে লিখুন।`;
     setErrors(v);
     if (Object.keys(v).length) return;
 
@@ -142,8 +144,8 @@ export function OrderForm({ lines, source, qtySlot, onPlaced }: Props) {
       <div className="space-y-1 rounded-xl bg-gray-50 p-4 text-sm">
         {lines.map((l) => (
           <p key={l.product.slug} className="flex justify-between gap-3">
-            <span className="text-gray-600">{l.product.name} × {l.qty} {saleUnit(l.product)}</span>
-            <strong className="shrink-0">{priceText(l.product.price * l.qty)}</strong>
+            <span className="text-gray-600">{l.product.name}{l.kg && rateOf(l.product) ? ` (${l.kg.toLocaleString("en-IN")} কেজি)` : ""} × {l.qty} {saleUnit(l.product)}</span>
+            <strong className="shrink-0">{priceText(unitPrice(l.product, l.kg) * l.qty)}</strong>
           </p>
         ))}
         {lines.length > 1 && (
@@ -219,18 +221,58 @@ export function QtyStepper({ value, onChange, label = "পরিমাণ", unit
   );
 }
 
+// Weight in kg for a machine priced per kg (built to the weight the buyer wants).
+export function KgInput({ value, onChange, label = "ওজন (কেজি)" }: { value: number; onChange: (n: number) => void; label?: string }) {
+  const [text, setText] = useState(value ? String(value) : "");
+  useEffect(() => setText(value ? String(value) : ""), [value]);
+  return (
+    <div className="flex w-fit items-center gap-1.5 rounded-xl border border-gray-200 bg-gray-50 p-1">
+      <input
+        value={text}
+        inputMode="numeric"
+        placeholder="যেমন 800"
+        aria-label={label}
+        onChange={(e) => {
+          const t = e.target.value.replace(/[^\d]/g, "").slice(0, 5);
+          setText(t);
+          onChange(Number(t) || 0);
+        }}
+        className="w-24 rounded-md bg-transparent px-2 py-1.5 text-center font-bold outline-none focus:bg-white focus:ring-2 focus:ring-brand-100"
+      />
+      <span className="pr-2 text-sm font-semibold text-gray-600">কেজি</span>
+    </div>
+  );
+}
+
 export function ProductOrderForm({ product, source = "product-page" }: { product: Product; source?: string }) {
   const [qty, setQty] = useState(1);
+  const rate = rateOf(product);
+  const [kg, setKg] = useState(defaultKg(product));
+  const lineTotal = unitPrice(product, kg) * qty;
   return (
     <OrderForm
-      lines={[{ product, qty }]}
+      lines={[{ product, qty, ...(rate ? { kg } : {}) }]}
       source={source}
       qtySlot={
-        <div>
-          <span className="mb-1 block text-sm font-semibold text-gray-700">পরিমাণ</span>
-          <div className="flex items-center gap-3">
-            <QtyStepper value={qty} onChange={setQty} unit={saleUnit(product)} />
-            <span className="text-sm text-gray-600">মোট: <strong className="text-brand-700">{priceText(product.price * qty)}</strong>{byWeight(product) && <span className="block text-[11px] text-gray-500">{byWeight(product)!.kg.toLocaleString("en-IN")} কেজি × {formatBDT(byWeight(product)!.rate)}{qty > 1 ? ` × ${qty}` : ""}</span>}</span>
+        <div className="space-y-3">
+          {rate > 0 && (
+            <div>
+              <span className="mb-1 block text-sm font-semibold text-gray-700">মেশিনের ওজন</span>
+              <KgInput value={kg} onChange={setKg} />
+              <span className="mt-1 block text-xs text-gray-500">
+                প্রতি কেজি {formatBDT(rate)}{defaultKg(product) ? ` · এই মডেল ${defaultKg(product).toLocaleString("en-IN")} কেজি` : " · যত কেজির মেশিন চান লিখুন"}
+              </span>
+            </div>
+          )}
+          <div>
+            <span className="mb-1 block text-sm font-semibold text-gray-700">পরিমাণ</span>
+            <div className="flex items-center gap-3">
+              <QtyStepper value={qty} onChange={setQty} unit={saleUnit(product)} />
+              <span className="text-sm text-gray-600">
+                মোট: <strong className="text-brand-700">{rate && !kg ? "ওজন লিখুন" : priceText(lineTotal)}</strong>
+                {rate > 0 && kg > 0 && <span className="block text-[11px] text-gray-500">{kg.toLocaleString("en-IN")} কেজি × {formatBDT(rate)}{qty > 1 ? ` × ${qty}` : ""}</span>}
+              </span>
+            </div>
           </div>
         </div>
       }

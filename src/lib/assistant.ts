@@ -4,7 +4,7 @@ import type { ChatTurn, LeadInput } from "./chatbot";
 import { db } from "./db";
 import { isValidBDPhone, normalizePhone } from "./orders";
 import { placeOrder } from "./place-order";
-import { byWeight, priceText, unitPriceText, type SiteInfo } from "./site";
+import { byWeight, KG_MAX, KG_MIN, priceText, rateOf, unitPrice, unitPriceText, type SiteInfo } from "./site";
 import { factorySteps } from "./tracking";
 
 // ── Built-in sales assistant (free, no API key) ────────────────────────────────────────────────
@@ -15,8 +15,8 @@ import { factorySteps } from "./tracking";
 // Used by the website chat and the Facebook Messenger webhook.
 
 export type Lang = "bn" | "bl" | "en";
-type Step = "product" | "qty" | "name" | "phone" | "address" | "district" | "confirm";
-export type OrderDraft = { step: Step; slug?: string; qty?: number; name?: string; phone?: string; address?: string; district?: string; note?: string; generic?: boolean };
+type Step = "product" | "kg" | "qty" | "name" | "phone" | "address" | "district" | "confirm";
+export type OrderDraft = { step: Step; slug?: string; kg?: number; noKg?: boolean; qty?: number; name?: string; phone?: string; address?: string; district?: string; note?: string; generic?: boolean };
 export type BotState = { lang?: Lang; product?: string; candidates?: string[]; category?: string; terms?: string[]; order?: OrderDraft; awaitTrack?: boolean; misses?: number };
 export type AssistantReply = { text: string; state: BotState; lead?: LeadInput; orderId?: string; handover?: boolean };
 export type AssistantInput = { text: string; history: ChatTurn[]; state?: BotState | null; catalog: Catalog; site: SiteInfo; knowledge: string; channel: "web" | "messenger"; adTitle?: string };
@@ -221,6 +221,13 @@ function qtyIn(t: string) {
   return NUM_WORDS.find(([re]) => re.test(s))?.[1];
 }
 
+function kgIn(t: string) {
+  const m = bnDigits(t).replace(/(?:\+?88)?01[3-9][\d\s-]{8,12}/g, " ").match(/(\d[\d,]*)\s*(?:kg|কেজি|keji|kgs)?/i);
+  const n = m ? Number(m[1].replace(/,/g, "")) : 0;
+  return n >= KG_MIN && n <= KG_MAX ? n : undefined;
+}
+const DONT_KNOW = /জানি না|জানিনা|jani na|janina|don'?t know|not sure|শিওর না/i;
+
 function nameIn(t: string) {
   const n = t
     .replace(/(?:\+?88)?01[3-9][\d\s-]{8,12}/g, " ")
@@ -395,7 +402,7 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
   }
   if (pressTalk && /\d+\s*(?:টন|ton)/i.test(rest)) {
     const slug = (current?.price === 0 ? current.slug : undefined) ?? state.candidates?.[0] ?? catalog.products.find((p) => p.category === "power-press")?.slug;
-    state.order = { step: "name", slug, qty: 1, note: raw.slice(0, 160), phone: ph?.phone, generic: current?.price !== 0 };
+    state.order = { step: "name", slug, qty: 1, note: raw.slice(0, 160), phone: ph?.phone, generic: current?.price !== 0, noKg: true };
     return out(hello + say(lang, `বুঝেছি, ধন্যবাদ 👍 এই টনেজের জন্য সঠিক দামটা মালিক নিজে হিসাব করে জানাবেন। আপনার নামটা বলবেন?`,
       `Bujhechi, dhonnobad 👍 Ei tonnage er jonno exact dam ta malik nije hishab kore janaben. Apnar nam ta bolben?`,
       `Got it, thanks 👍 The owner will work out the exact price for that tonnage. May I have your name?`));
@@ -452,7 +459,7 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
   if (current && (PRICE.test(rest) || /বিস্তারিত|details?|ডিটেইল|আর কি|ar ki|spec/i.test(rest))) return out(hello + aboutProduct(current, lang, seed + 1));
   if (!current && state.candidates?.length && PRICE.test(rest) && !found.length) {
     const listed = state.candidates.map((sl) => bySlug(sl)).filter((x): x is Product => !!x);
-    const list = listed.map((p) => `• ${nameOf(p, lang)} — ${byWeight(p) ? unitPriceText(p) : `${priceText(p.price)}/${unitOf(p, lang)}`}`).join("\n");
+    const list = listed.map((p) => `• ${nameOf(p, lang)} — ${rateOf(p) ? unitPriceText(p) : `${priceText(p.price)}/${unitOf(p, lang)}`}`).join("\n");
     return out(hello + say(lang, `দামগুলো হলো:\n${list}\nকোনটা নেবেন বলুন?`, `Dam gula holo:\n${list}\nKonta niben bolen?`, `Here are the prices:\n${list}\nWhich one would you like?`));
   }
   if (!current && (state.category === "power-press" || /প্রেস|press/i.test(rest)) && PRICE.test(rest)) {
@@ -480,7 +487,7 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
   // 10. Prices / catalogue in general.
   const priced = catalog.products.filter((p) => p.price > 0);
   if (PRICE.test(rest)) {
-    const list = priced.slice(0, 6).map((p) => `• ${nameOf(p, lang)} — ${byWeight(p) ? unitPriceText(p) : `${priceText(p.price)}/${unitOf(p, lang)}`}`).join("\n");
+    const list = priced.slice(0, 6).map((p) => `• ${nameOf(p, lang)} — ${rateOf(p) ? unitPriceText(p) : `${priceText(p.price)}/${unitOf(p, lang)}`}`).join("\n");
     return out(hello + say(lang, `কোনটার দাম জানতে চান বলুন তো? কয়েকটার দাম:\n${list}\nপাওয়ার প্রেসের দাম টনেজ অনুযায়ী হয় — কত টনের লাগবে জানালে বলে দেব।`,
       `Kon ta-r dam jante chan bolen to? Koyekta-r dam:\n${list}\nPower press er dam tonnage onujayi hoy — koto ton lagbe janale bole dibo.`,
       `Which one would you like the price for? Some prices:\n${list}\nPower press prices depend on tonnage — tell me the tonnage and I'll let you know.`));
@@ -517,6 +524,13 @@ function nextPrompt(d: OrderDraft, input: AssistantInput, lang: Lang, state: Bot
       `Ji, obosshoi 😊 Kon product ta nite chan? Number ba nam likhun:\n${opts}\nba "bou body press", "channel body press".`,
       `Sure 😊 Which product would you like? Type its name — for example:\n${opts}\nor "bou body press", "channel body press".`);
   }
+  if (rateOf(p) && p.price === 0 && !d.kg && !d.noKg) {
+    d.step = "kg";
+    const rate = priceText(rateOf(p));
+    return say(lang, `${nameOf(p, lang)} — কত কেজি ওজনের মেশিন চান? দাম প্রতি কেজি ${rate}। না জানলে লিখুন "জানি না", মালিক কল করে জানিয়ে দেবেন।`,
+      `${nameOf(p, lang)} — koto kg ojoner machine chan? Dam per kg ${rate}. Na janle likhun "jani na", malik call kore janiye diben.`,
+      `${nameOf(p, lang)} — what weight (kg) do you want? It's ${rate} per kg. If you're not sure, type "don't know" and the owner will call you.`);
+  }
   if (!d.qty && (p.price === 0 || p.category === "power-press")) d.qty = 1; // machines: one unless the customer says more
   if (!d.qty) {
     d.step = "qty";
@@ -533,7 +547,7 @@ function nextPrompt(d: OrderDraft, input: AssistantInput, lang: Lang, state: Bot
     d.step = "phone";
     return say(lang, `আপনার মোবাইল নম্বরটা দিন — আমাদের টিম এই নম্বরে কল করে কনফার্ম করবে।`, `Apnar mobile number ta din — amader team ei number e call kore confirm korbe.`, `Your mobile number, please — our team will call it to confirm.`);
   }
-  if (p.price === 0) return ""; // call-for-price: name + phone is enough (saved as a lead)
+  if (p.price === 0 && !d.kg) return ""; // call-for-price: name + phone is enough (saved as a lead)
   if (!d.address) {
     d.step = "address";
     return say(lang, `ডেলিভারির ঠিকানাটা লিখুন (এলাকা, থানা, জেলা)।`, `Delivery r thikana ta likhun (elaka, thana, jela).`, `Your delivery address, please (area, thana, district).`);
@@ -543,11 +557,12 @@ function nextPrompt(d: OrderDraft, input: AssistantInput, lang: Lang, state: Bot
     return say(lang, `কোন জেলায় পাঠাতে হবে?`, `Kon jelay pathate hobe?`, `Which district should we deliver to?`);
   }
   d.step = "confirm";
-  const total = p.price * d.qty;
+  const total = unitPrice(p, d.kg) * d.qty;
+  const kgNote = d.kg ? ` (${d.kg.toLocaleString("en-IN")} ${say(lang, "কেজি", "kg", "kg")})` : "";
   return say(lang,
-    `একবার মিলিয়ে নিন 👇\n📦 ${p.nameBn} × ${d.qty} ${unitOf(p, lang)}\n💰 মোট: ${priceText(total)}\n👤 ${d.name}\n📞 ${d.phone}\n📍 ${placeOf(d)}\n\nসব ঠিক থাকলে "হ্যাঁ" লিখুন। কিছু বদলাতে চাইলে বলুন (যেমন "নম্বর বদলাব")।`,
-    `Ekbar miliye nin 👇\n📦 ${p.name} × ${d.qty} ${unitOf(p, lang)}\n💰 Mot: ${priceText(total)}\n👤 ${d.name}\n📞 ${d.phone}\n📍 ${placeOf(d)}\n\nShob thik thakle "ha" likhun. Kichu bodlate chaile bolen (jemon "number bodlabo").`,
-    `Please check 👇\n📦 ${p.name} × ${d.qty} ${unitOf(p, lang)}\n💰 Total: ${priceText(total)}\n👤 ${d.name}\n📞 ${d.phone}\n📍 ${placeOf(d)}\n\nIf everything is right, type "yes". To change something, tell me (e.g. "change number").`);
+    `একবার মিলিয়ে নিন 👇\n📦 ${p.nameBn}${kgNote} × ${d.qty} ${unitOf(p, lang)}\n💰 মোট: ${priceText(total)}\n👤 ${d.name}\n📞 ${d.phone}\n📍 ${placeOf(d)}\n\nসব ঠিক থাকলে "হ্যাঁ" লিখুন। কিছু বদলাতে চাইলে বলুন (যেমন "নম্বর বদলাব")।`,
+    `Ekbar miliye nin 👇\n📦 ${p.name}${kgNote} × ${d.qty} ${unitOf(p, lang)}\n💰 Mot: ${priceText(total)}\n👤 ${d.name}\n📞 ${d.phone}\n📍 ${placeOf(d)}\n\nShob thik thakle "ha" likhun. Kichu bodlate chaile bolen (jemon "number bodlabo").`,
+    `Please check 👇\n📦 ${p.name}${kgNote} × ${d.qty} ${unitOf(p, lang)}\n💰 Total: ${priceText(total)}\n👤 ${d.name}\n📞 ${d.phone}\n📍 ${placeOf(d)}\n\nIf everything is right, type "yes". To change something, tell me (e.g. "change number").`);
 }
 
 async function continueOrder(text: string, raw: string, state: BotState, input: AssistantInput, lang: Lang, seed: number): Promise<AssistantReply | null> {
@@ -564,7 +579,7 @@ async function continueOrder(text: string, raw: string, state: BotState, input: 
   const p0 = catalog.products.find((x) => x.slug === d.slug);
   const sideFaq = faqs(site).find(([re]) => re.test(text));
   const answersStep =
-    (d.step === "qty" && qtyIn(text)) || (d.step === "phone" && phoneIn(text)) || (d.step === "district" && districtIn(text)) ||
+    (d.step === "qty" && qtyIn(text)) || (d.step === "kg" && (kgIn(text) || DONT_KNOW.test(text))) || (d.step === "phone" && phoneIn(text)) || (d.step === "district" && districtIn(text)) ||
     (d.step === "confirm" && (YES.test(text) || NO.test(text))) || (d.step === "product" && findProducts(text, catalog).length);
   if (!answersStep && (QUESTION.test(text) || sideFaq) && d.step !== "address" && d.step !== "name") {
     const ans = sideFaq ? sideFaq[1](lang) : PRICE.test(text) && p0 ? aboutProduct(p0, lang, seed) : null;
@@ -600,6 +615,16 @@ async function continueOrder(text: string, raw: string, state: BotState, input: 
       state.candidates = undefined;
       const q = qtyIn(text);
       if (q) d.qty = q;
+      break;
+    }
+    case "kg": {
+      if (DONT_KNOW.test(text)) {
+        d.noKg = true;
+        break;
+      }
+      const kg = kgIn(text);
+      if (!kg) return out(say(lang, `ওজনটা কেজিতে লিখুন (যেমন 800), বা "জানি না" লিখুন।`, `Ojon ta kg te likhun (jemon 800), ba "jani na" likhun.`, `Please type the weight in kg (e.g. 800), or "don't know".`));
+      d.kg = kg;
       break;
     }
     case "qty": {
@@ -661,7 +686,7 @@ async function continueOrder(text: string, raw: string, state: BotState, input: 
 
   const p = catalog.products.find((x) => x.slug === d.slug);
   // Call-for-price product: once we have a name and number, it's a call-back request with the details.
-  if (p && p.price === 0 && d.name && d.phone) {
+  if (p && p.price === 0 && !d.kg && d.name && d.phone) {
     state.order = undefined;
     const lead: LeadInput = { name: d.name, phone: d.phone, interest: `${d.generic ? "Power press" : p.name}${d.qty && d.qty > 1 ? ` × ${d.qty}` : ""}${d.note ? ` — ${d.note}` : ""} — দাম জানতে চেয়েছেন`.slice(0, 200) };
     return out(say(lang, `ধন্যবাদ ${d.name} 🙏 আপনার তথ্য নিয়ে নিলাম। ${d.generic ? "আপনার দরকারি প্রেসের" : `${p.nameBn}-এর`} সঠিক দাম জানাতে আমাদের টিম শিগগিরই ${d.phone} নম্বরে কল করবে।`,
@@ -675,14 +700,14 @@ async function finishOrder(state: BotState, input: AssistantInput, lang: Lang, p
   const d = state.order!;
   const out = (t: string, extra: Partial<AssistantReply> = {}): AssistantReply => ({ text: t, state, ...extra });
   const placed = await placeOrder(
-    { name: d.name!, phone: d.phone!, address: d.address!, district: d.district!, payment: "cod_booking", items: [{ slug: p.slug, qty: d.qty! }], note: input.channel === "messenger" ? "Facebook Messenger থেকে অর্ডার" : "ওয়েবসাইট চ্যাট থেকে অর্ডার", source: input.channel === "messenger" ? "messenger" : "chatbot" },
+    { name: d.name!, phone: d.phone!, address: d.address!, district: d.district!, payment: "cod_booking", items: [{ slug: p.slug, qty: d.qty!, ...(d.kg ? { kg: d.kg } : {}) }], note: input.channel === "messenger" ? "Facebook Messenger থেকে অর্ডার" : "ওয়েবসাইট চ্যাট থেকে অর্ডার", source: input.channel === "messenger" ? "messenger" : "chatbot" },
     { withCustomer: input.channel === "web" },
   ).catch((e) => {
     console.error("Chat order failed", e instanceof Error ? e.message : e);
     return null;
   });
   state.order = undefined;
-  if (!placed) {
+  if (!placed || "error" in placed) {
     const lead: LeadInput = { name: d.name!, phone: d.phone!, interest: `অর্ডার: ${p.name} × ${d.qty} — ${d.address}, ${d.district}` };
     return out(say(lang, `দুঃখিত, এই মুহূর্তে অর্ডারটা সিস্টেমে তুলতে পারলাম না 🙏 তবে আপনার তথ্য রেখে দিয়েছি, আমাদের টিম ${d.phone} নম্বরে কল করে অর্ডার নিয়ে নেবে।`,
       `Dukkhito, ei muhurte order ta system e tulte parlam na 🙏 Tobe apnar tottho rekhe diyechi, amader team ${d.phone} number e call kore order niye nibe.`,
