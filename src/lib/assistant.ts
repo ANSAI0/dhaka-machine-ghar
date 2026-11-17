@@ -54,7 +54,9 @@ const productTerms: Rule[] = [
   [/চায়না|চাইনা|china|chaina|চীন|বক্স|box/i, "china"],
   [/পাউডার|powder|এঙ্গেল|অ্যাঙ্গেল|angle|angel/i, "powder"],
   [/চৌকি|চৌকী|chouki|chowki|couki|ছাদ|chad|roof|floor|ফ্লোর/i, "chowki"],
-  [/রেড|লাল|red|ব্ল্যাক|কালো|black/i, "red"],
+  [/রেড|লাল|\bred\b|\blal\b/i, "red"],
+  [/ব্ল্যাক|কালো|black|\bkalo\b/i, "black"],
+  [/সিলভার|সিলবার|silver|রুপালি|galvan/i, "silver"],
   [/বোল্ট|bolt|রাওয়াল|রাওল|রয়েল|royal|rawal|rawl|anchor/i, "bolt"],
   [/বাংলা চাকি|bangla chaki|bangla caki|(?<!বি)দেশি|\bdeshi\b|\bbangla\b/i, "bangla"],
   [/বিদেশি|bideshi|imported|ইমপোর্ট|টেম্পার|temper/i, "imported"],
@@ -87,6 +89,8 @@ function findProducts(text: string, catalog: Catalog, context: string[] = [], by
       const body = norm(`${p.capacity} ${p.short}`);
       let s = terms.reduce((sum, t) => sum + (title.includes(t) ? 4 : body.includes(t) ? 1 : 0), 0);
       if (s > 0) s += context.filter((t) => !terms.includes(t) && title.includes(t)).length * 2;
+      // A named finish (colour, coating, chaki) is what tells look-alike products apart: weigh it more.
+      s += terms.filter((t) => ["red", "black", "silver", "powder", "plain", "bangla", "imported", "china", "chowki"].includes(t) && title.includes(t)).length * 3;
       if (ton && new RegExp(`\\b${ton}\\s*ton`, "i").test(`${p.capacity} ${p.name}`)) s += 3;
       const w = p.specs.find(([k]) => k === "Weight")?.[1].replace(/[^\d]/g, "");
       if (kg && w === kg) s += 5;

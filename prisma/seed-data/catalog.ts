@@ -2094,23 +2094,23 @@ export const seedProducts: SeedProduct[] = [
   },
   {
     "slug": "heavy-duty-ac-stand-red",
-    "name": "Red & Black AC Stand (No Powder Coating)",
-    "nameBn": "রেড ও ব্ল্যাক এসি স্ট্যান্ড (পাউডার কোটিং ছাড়া)",
+    "name": "AC Stand — Red (No Powder Coating)",
+    "nameBn": "এসি স্ট্যান্ড — লাল (পাউডার কোটিং ছাড়া)",
     "category": "ac-stand",
     "subcategory": "wall-stand",
     "condition": "new",
     "price": 600,
-    "image": "/products/heavy-duty-ac-stand-red.webp",
+    "image": "/products/ac-stand-red.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Strong AC outdoor unit wall stand in red or black paint, without powder coating — ৳600 per set.",
+    "short": "Strong AC outdoor unit wall stand in red paint, without powder coating — ৳600 per set.",
     "highlights": [
       "Price ৳600 per set",
-      "Red or black paint finish",
+      "Red paint finish",
       "No powder coating — lower price",
       "Strong welded steel",
-      "Retail and wholesale"
+      "Also in black and silver"
     ],
     "specs": [
       [
@@ -2119,7 +2119,87 @@ export const seedProducts: SeedProduct[] = [
       ],
       [
         "Finish",
-        "Red or black paint (no powder coating)"
+        "Red paint (no powder coating)"
+      ],
+      [
+        "Price",
+        "৳600 per set"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ]
+    ],
+    "featured": false
+  },
+  {
+    "slug": "ac-stand-black",
+    "name": "AC Stand — Black (No Powder Coating)",
+    "nameBn": "এসি স্ট্যান্ড — কালো (পাউডার কোটিং ছাড়া)",
+    "category": "ac-stand",
+    "subcategory": "wall-stand",
+    "condition": "new",
+    "price": 600,
+    "image": "/products/ac-stand-black.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Strong AC outdoor unit wall stand in black paint, without powder coating — ৳600 per set.",
+    "highlights": [
+      "Price ৳600 per set",
+      "Black paint finish",
+      "No powder coating — lower price",
+      "Strong welded steel",
+      "Also in red and silver"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Wall-mount AC outdoor unit stand (pair)"
+      ],
+      [
+        "Finish",
+        "Black paint (no powder coating)"
+      ],
+      [
+        "Price",
+        "৳600 per set"
+      ],
+      [
+        "Made in",
+        "DMG own factory, Keraniganj, Dhaka"
+      ]
+    ],
+    "featured": false
+  },
+  {
+    "slug": "ac-stand-silver",
+    "name": "AC Stand — Silver (No Powder Coating)",
+    "nameBn": "এসি স্ট্যান্ড — সিলভার (পাউডার কোটিং ছাড়া)",
+    "category": "ac-stand",
+    "subcategory": "wall-stand",
+    "condition": "new",
+    "price": 600,
+    "image": "/products/ac-stand-silver.webp",
+    "brand": "DMG",
+    "capacity": "",
+    "voltage": "",
+    "short": "Strong AC outdoor unit wall stand in silver (galvanized look), without powder coating — ৳600 per set.",
+    "highlights": [
+      "Price ৳600 per set",
+      "Silver finish",
+      "No powder coating — lower price",
+      "Strong welded steel",
+      "Also in red and black"
+    ],
+    "specs": [
+      [
+        "Type",
+        "Wall-mount AC outdoor unit stand (pair)"
+      ],
+      [
+        "Finish",
+        "Silver (no powder coating)"
       ],
       [
         "Price",
