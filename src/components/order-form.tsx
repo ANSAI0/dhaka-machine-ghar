@@ -247,7 +247,11 @@ export function KgInput({ value, onChange, label = "ওজন (কেজি)" }:
 export function ProductOrderForm({ product, source = "product-page" }: { product: Product; source?: string }) {
   const [qty, setQty] = useState(1);
   const rate = rateOf(product);
-  const [kg, setKg] = useState(defaultKg(product));
+  const listed = defaultKg(product);
+  // Buy the machine as it is (its own weight), or order it built to a weight of your choice.
+  const [mode, setMode] = useState<"unit" | "kg">(listed ? "unit" : "kg");
+  const [customKg, setCustomKg] = useState(listed);
+  const kg = mode === "unit" ? listed : customKg;
   const lineTotal = unitPrice(product, kg) * qty;
   return (
     <OrderForm
@@ -257,11 +261,26 @@ export function ProductOrderForm({ product, source = "product-page" }: { product
         <div className="space-y-3">
           {rate > 0 && (
             <div>
-              <span className="mb-1 block text-sm font-semibold text-gray-700">মেশিনের ওজন</span>
-              <KgInput value={kg} onChange={setKg} />
-              <span className="mt-1 block text-xs text-gray-500">
-                প্রতি কেজি {formatBDT(rate)}{defaultKg(product) ? ` · এই মডেল ${defaultKg(product).toLocaleString("en-IN")} কেজি` : " · যত কেজির মেশিন চান লিখুন"}
-              </span>
+              <span className="mb-1 block text-sm font-semibold text-gray-700">কীভাবে নেবেন</span>
+              {listed > 0 && (
+                <div className="mb-2 grid grid-cols-2 gap-2" role="radiogroup" aria-label="Order by">
+                  {([["unit", "মেশিন হিসেবে", `${listed.toLocaleString("en-IN")} কেজি · ${priceText(unitPrice(product, listed))}`], ["kg", "ওজন অনুযায়ী", "যত কেজি চান"]] as const).map(([m, title, sub]) => (
+                    <button
+                      key={m}
+                      type="button"
+                      role="radio"
+                      aria-checked={mode === m}
+                      onClick={() => setMode(m)}
+                      className={`rounded-xl border-2 p-2.5 text-left ${mode === m ? "border-brand-600 bg-brand-50" : "border-gray-200 bg-white"}`}
+                    >
+                      <span className="block text-sm font-bold text-gray-900">{title}</span>
+                      <span className="block text-[11px] text-gray-500">{sub}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+              {mode === "kg" && <KgInput value={customKg} onChange={setCustomKg} />}
+              <span className="mt-1 block text-xs text-gray-500">প্রতি কেজি {formatBDT(rate)}{mode === "kg" ? " · যত কেজির মেশিন চান লিখুন, আমরা সেই ওজনে বানিয়ে দেব" : ""}</span>
             </div>
           )}
           <div>

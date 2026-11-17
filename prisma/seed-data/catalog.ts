@@ -369,14 +369,14 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "channel-body",
     "condition": "new",
-    "price": 0,
+    "price": 108000,
     "image": "/products/channel-body-power-press-mint.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal. Weight 600 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180 per kg — total depends on this machine's weight",
+      "Price ৳180 per kg — weight 600 kg",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
@@ -391,6 +391,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
+      ],
+      [
+        "Weight",
+        "600 kg"
       ],
       [
         "Drive",
@@ -466,14 +470,14 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "channel-body",
     "condition": "new",
-    "price": 0,
+    "price": 108000,
     "image": "/products/channel-body-power-press-green-orange-gear.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal.",
+    "short": "Heavy channel body (H-frame) mechanical power press, built in our own factory — for punching, blanking, bending and forming sheet metal. Weight 600 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180 per kg — total depends on this machine's weight",
+      "Price ৳180 per kg — weight 600 kg",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
@@ -488,6 +492,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
+      ],
+      [
+        "Weight",
+        "600 kg"
       ],
       [
         "Drive",
@@ -515,14 +523,14 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "channel-body",
     "condition": "new",
-    "price": 0,
+    "price": 108000,
     "image": "/products/heavy-duty-channel-body-power-press.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Large, heavy duty channel body power press with a multi-groove pulley and big gear — for high-tonnage punching and forming.",
+    "short": "Large, heavy duty channel body power press with a multi-groove pulley and big gear — for high-tonnage punching and forming. Weight 600 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180 per kg — total depends on this machine's weight",
+      "Price ৳180 per kg — weight 600 kg",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
@@ -537,6 +545,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
+      ],
+      [
+        "Weight",
+        "600 kg"
       ],
       [
         "Drive",
@@ -564,14 +576,14 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "channel-body",
     "condition": "new",
-    "price": 0,
+    "price": 180000,
     "image": "/products/heavy-duty-channel-body-power-press-grey.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Heavy duty channel body power press with a large multi-groove pulley and gear drive — built for long production runs.",
+    "short": "Heavy duty channel body power press with a large multi-groove pulley and gear drive — built for long production runs. Weight 1,000 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180 per kg — total depends on this machine's weight",
+      "Price ৳180 per kg — weight 1,000 kg",
       "Strong two-pillar channel body frame",
       "Heavy flywheel with gear drive",
       "Adjustable stroke and ram for different dies",
@@ -586,6 +598,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
+      ],
+      [
+        "Weight",
+        "1,000 kg"
       ],
       [
         "Drive",
@@ -709,14 +725,14 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "bou-body",
     "condition": "new",
-    "price": 0,
+    "price": 234000,
     "image": "/products/bou-body-power-press-green-red.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts. Weight 1,300 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180 per kg — total depends on this machine's weight",
+      "Price ৳180 per kg — weight 1,300 kg",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -731,6 +747,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
+      ],
+      [
+        "Weight",
+        "1,300 kg"
       ],
       [
         "Drive",
@@ -806,14 +826,14 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "bou-body",
     "condition": "new",
-    "price": 0,
+    "price": 234000,
     "image": "/products/bou-body-power-press-green-black.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts. Weight 1,300 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180 per kg — total depends on this machine's weight",
+      "Price ৳180 per kg — weight 1,300 kg",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -828,6 +848,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
+      ],
+      [
+        "Weight",
+        "1,300 kg"
       ],
       [
         "Drive",
@@ -855,14 +879,14 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "bou-body",
     "condition": "new",
-    "price": 0,
+    "price": 234000,
     "image": "/products/bou-body-power-press-lime.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts. Weight 1,300 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180 per kg — total depends on this machine's weight",
+      "Price ৳180 per kg — weight 1,300 kg",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -877,6 +901,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
+      ],
+      [
+        "Weight",
+        "1,300 kg"
       ],
       [
         "Drive",
@@ -904,14 +932,14 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "bou-body",
     "condition": "new",
-    "price": 0,
+    "price": 234000,
     "image": "/products/bou-body-power-press-open-table.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts. Weight 1,300 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180 per kg — total depends on this machine's weight",
+      "Price ৳180 per kg — weight 1,300 kg",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -926,6 +954,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
+      ],
+      [
+        "Weight",
+        "1,300 kg"
       ],
       [
         "Drive",
@@ -953,14 +985,14 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "bou-body",
     "condition": "new",
-    "price": 0,
+    "price": 234000,
     "image": "/products/bou-body-power-press-teal-yellow.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts. Weight 1,300 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180 per kg — total depends on this machine's weight",
+      "Price ৳180 per kg — weight 1,300 kg",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -975,6 +1007,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
+      ],
+      [
+        "Weight",
+        "1,300 kg"
       ],
       [
         "Drive",
@@ -1002,14 +1038,14 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "bou-body",
     "condition": "new",
-    "price": 0,
+    "price": 234000,
     "image": "/products/bou-body-power-press-sky-blue.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts. Weight 1,300 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180 per kg — total depends on this machine's weight",
+      "Price ৳180 per kg — weight 1,300 kg",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -1024,6 +1060,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
+      ],
+      [
+        "Weight",
+        "1,300 kg"
       ],
       [
         "Drive",
@@ -1051,14 +1091,14 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "bou-body",
     "condition": "new",
-    "price": 0,
+    "price": 234000,
     "image": "/products/bou-body-power-press-blue.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts. Weight 1,300 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180 per kg — total depends on this machine's weight",
+      "Price ৳180 per kg — weight 1,300 kg",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -1073,6 +1113,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
+      ],
+      [
+        "Weight",
+        "1,300 kg"
       ],
       [
         "Drive",
@@ -1201,14 +1245,14 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "bou-body",
     "condition": "new",
-    "price": 0,
+    "price": 234000,
     "image": "/products/bou-body-power-press-olive.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts.",
+    "short": "Bou body (C-frame) mechanical power press with an open front — easy loading for punching, cutting and pressing small and medium parts. Weight 1,300 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180 per kg — total depends on this machine's weight",
+      "Price ৳180 per kg — weight 1,300 kg",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -1223,6 +1267,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
+      ],
+      [
+        "Weight",
+        "1,300 kg"
       ],
       [
         "Drive",
@@ -1250,14 +1298,14 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "bou-body",
     "condition": "new",
-    "price": 0,
+    "price": 234000,
     "image": "/products/double-gear-bou-body-power-press.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Double gear bou body (C-frame) power press — two gear stages for extra pressing force on heavier punching and forming jobs.",
+    "short": "Double gear bou body (C-frame) power press — two gear stages for extra pressing force on heavier punching and forming jobs. Weight 1,300 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180 per kg — total depends on this machine's weight",
+      "Price ৳180 per kg — weight 1,300 kg",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -1272,6 +1320,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
+      ],
+      [
+        "Weight",
+        "1,300 kg"
       ],
       [
         "Drive",
@@ -1299,14 +1351,14 @@ export const seedProducts: SeedProduct[] = [
     "category": "power-press",
     "subcategory": "bou-body",
     "condition": "new",
-    "price": 0,
+    "price": 234000,
     "image": "/products/double-gear-bou-body-power-press-green.webp",
     "brand": "DMG",
     "capacity": "",
     "voltage": "",
-    "short": "Double gear bou body (C-frame) power press — two gear stages for extra pressing force on heavier punching and forming jobs.",
+    "short": "Double gear bou body (C-frame) power press — two gear stages for extra pressing force on heavier punching and forming jobs. Weight 1,300 kg, price ৳180 per kg.",
     "highlights": [
-      "Price ৳180 per kg — total depends on this machine's weight",
+      "Price ৳180 per kg — weight 1,300 kg",
       "Open-front C-frame for easy die setting and loading",
       "Heavy flywheel and gear drive",
       "Large working table with T-slots",
@@ -1321,6 +1373,10 @@ export const seedProducts: SeedProduct[] = [
       [
         "Price rate",
         "৳180 per kg"
+      ],
+      [
+        "Weight",
+        "1,300 kg"
       ],
       [
         "Drive",

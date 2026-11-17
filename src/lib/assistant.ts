@@ -16,7 +16,7 @@ import { factorySteps } from "./tracking";
 
 export type Lang = "bn" | "bl" | "en";
 type Step = "product" | "kg" | "qty" | "name" | "phone" | "address" | "district" | "confirm";
-export type OrderDraft = { step: Step; slug?: string; kg?: number; noKg?: boolean; qty?: number; name?: string; phone?: string; address?: string; district?: string; note?: string; generic?: boolean };
+export type OrderDraft = { step: Step; slug?: string; kg?: number; noKg?: boolean; lead?: boolean; qty?: number; name?: string; phone?: string; address?: string; district?: string; note?: string; generic?: boolean };
 export type BotState = { lang?: Lang; product?: string; candidates?: string[]; category?: string; terms?: string[]; order?: OrderDraft; awaitTrack?: boolean; misses?: number };
 export type AssistantReply = { text: string; state: BotState; lead?: LeadInput; orderId?: string; handover?: boolean };
 export type AssistantInput = { text: string; history: ChatTurn[]; state?: BotState | null; catalog: Catalog; site: SiteInfo; knowledge: string; channel: "web" | "messenger"; adTitle?: string };
@@ -73,9 +73,9 @@ const productTerms: Rule[] = [
   [/জলপাই|olive/i, "olive"],
 ];
 
-function findProducts(text: string, catalog: Catalog, context: string[] = []) {
+function findProducts(text: string, catalog: Catalog, context: string[] = [], byKg = true) {
   const terms = productTerms.filter(([re]) => re.test(text)).map(([, t]) => t);
-  const kg = bnDigits(text).match(/(\d[\d,]*)\s*(?:kg|কেজি|keji)/i)?.[1].replace(/,/g, "");
+  const kg = !byKg ? undefined : bnDigits(text).match(/(\d[\d,]*)\s*(?:kg|কেজি|keji)/i)?.[1].replace(/,/g, "");
   if (!terms.length && !kg) return [];
   const ton = text.match(/(\d+)\s*(?:টন|ton)/i)?.[1];
   const norm = (x: string) => x.toLowerCase().replace(/bou body|c-frame/g, "bou").replace(/h-frame/g, "channel").replace(/chowki|chouki/g, "chowki").replace(/no powder coating/g, "plain paint").replace(/powder coated|angle/g, "powder").replace(/red & black|red oxide/g, "red");
@@ -376,7 +376,8 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
   if (BYE.test(rest)) return out(say(lang, "আল্লাহ হাফেজ 🙏 ভালো থাকবেন।", "Allah hafez 🙏 Bhalo thakben.", "Goodbye 🙏 Take care."));
 
   // 5. Which product is this about?
-  const found = narrow(findProducts(rest, catalog, state.terms), state);
+  // A weight picks from a list we just showed; while talking about one machine it is that machine's weight.
+  const found = narrow(findProducts(rest, catalog, state.terms, !!state.candidates?.length || !state.product), state);
   const clear = isClear(found);
   const topGroup = found.filter((x) => x.s === found[0]?.s);
   const newTerms = productTerms.filter(([re]) => re.test(rest)).map(([, t]) => t);
@@ -402,7 +403,7 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
   }
   if (pressTalk && /\d+\s*(?:টন|ton)/i.test(rest)) {
     const slug = (current?.price === 0 ? current.slug : undefined) ?? state.candidates?.[0] ?? catalog.products.find((p) => p.category === "power-press")?.slug;
-    state.order = { step: "name", slug, qty: 1, note: raw.slice(0, 160), phone: ph?.phone, generic: current?.price !== 0, noKg: true };
+    state.order = { step: "name", slug, qty: 1, note: raw.slice(0, 160), phone: ph?.phone, generic: current?.price !== 0, noKg: true, lead: true };
     return out(hello + say(lang, `বুঝেছি, ধন্যবাদ 👍 এই টনেজের জন্য সঠিক দামটা মালিক নিজে হিসাব করে জানাবেন। আপনার নামটা বলবেন?`,
       `Bujhechi, dhonnobad 👍 Ei tonnage er jonno exact dam ta malik nije hishab kore janaben. Apnar nam ta bolben?`,
       `Got it, thanks 👍 The owner will work out the exact price for that tonnage. May I have your name?`));
@@ -412,8 +413,14 @@ export async function converse(input: AssistantInput): Promise<AssistantReply> {
   if (ORDER.test(rest) && !QUESTION.test(rest.replace(/order\s*korte\s*chai|অর্ডার করতে চাই/i, ""))) {
     const draft: OrderDraft = { step: "product" };
     if (clear || (found.length === 0 && current)) draft.slug = current!.slug;
-    const q = qtyIn(rest);
-    if (q) draft.qty = q;
+    // "800 kg er ta chai": a per-kg machine built to that weight (the number is a weight, not a quantity).
+    const askedKg = bnDigits(rest).match(/(\d[\d,]*)\s*(?:kg|কেজি|keji)/i)?.[1].replace(/,/g, "");
+    const target = draft.slug ? bySlug(draft.slug) : undefined;
+    if (askedKg && target && rateOf(target) && Number(askedKg) >= KG_MIN && Number(askedKg) <= KG_MAX) draft.kg = Number(askedKg);
+    else {
+      const q = qtyIn(rest);
+      if (q) draft.qty = q;
+    }
     if (ph) draft.phone = ph.phone;
     state.order = draft;
     return out(hello + nextPrompt(state.order, input, lang, state));
@@ -547,7 +554,7 @@ function nextPrompt(d: OrderDraft, input: AssistantInput, lang: Lang, state: Bot
     d.step = "phone";
     return say(lang, `আপনার মোবাইল নম্বরটা দিন — আমাদের টিম এই নম্বরে কল করে কনফার্ম করবে।`, `Apnar mobile number ta din — amader team ei number e call kore confirm korbe.`, `Your mobile number, please — our team will call it to confirm.`);
   }
-  if (p.price === 0 && !d.kg) return ""; // call-for-price: name + phone is enough (saved as a lead)
+  if ((p.price === 0 && !d.kg) || d.lead) return ""; // call-back: name + phone is enough (saved as a lead)
   if (!d.address) {
     d.step = "address";
     return say(lang, `ডেলিভারির ঠিকানাটা লিখুন (এলাকা, থানা, জেলা)।`, `Delivery r thikana ta likhun (elaka, thana, jela).`, `Your delivery address, please (area, thana, district).`);
@@ -686,7 +693,7 @@ async function continueOrder(text: string, raw: string, state: BotState, input: 
 
   const p = catalog.products.find((x) => x.slug === d.slug);
   // Call-for-price product: once we have a name and number, it's a call-back request with the details.
-  if (p && p.price === 0 && !d.kg && d.name && d.phone) {
+  if (p && ((p.price === 0 && !d.kg) || d.lead) && d.name && d.phone) {
     state.order = undefined;
     const lead: LeadInput = { name: d.name, phone: d.phone, interest: `${d.generic ? "Power press" : p.name}${d.qty && d.qty > 1 ? ` × ${d.qty}` : ""}${d.note ? ` — ${d.note}` : ""} — দাম জানতে চেয়েছেন`.slice(0, 200) };
     return out(say(lang, `ধন্যবাদ ${d.name} 🙏 আপনার তথ্য নিয়ে নিলাম। ${d.generic ? "আপনার দরকারি প্রেসের" : `${p.nameBn}-এর`} সঠিক দাম জানাতে আমাদের টিম শিগগিরই ${d.phone} নম্বরে কল করবে।`,
