@@ -52,8 +52,8 @@ function SearchBox({ onDone }: { onDone?: () => void }) {
 }
 
 // Header action icons: bare line icons that turn brand green on hover / when active.
-const iconBox = "relative flex h-9 w-9 items-center justify-center text-gray-800 transition-colors group-hover:text-brand-700 phone:text-white phone:group-hover:text-white lux:text-white/90";
-const iconBoxOn = "!text-brand-700 phone:!text-brand-200 lux:!text-gold-300";
+const iconBox = "relative flex h-9 w-9 items-center justify-center text-gray-800 transition-colors group-hover:text-brand-700 lux:text-white/90";
+const iconBoxOn = "!text-brand-700 lux:!text-gold-300";
 
 export function Header({ categories }: { categories: Category[] }) {
   const path = usePathname();
@@ -80,12 +80,12 @@ export function Header({ categories }: { categories: Category[] }) {
 
   return (
     <>
-    <header className={`sticky top-0 z-40 rounded-b-2xl bg-white phone:rounded-b-none phone:bg-brand-900 transition-shadow max-md:flex max-md:flex-col lux:bg-lux-950 md:bg-white/80 md:backdrop-blur-xl ${scrolled ? "shadow-md lux:shadow-black/60" : "shadow-sm lux:shadow-none"}`}>
+    <header className={`sticky top-0 z-40 rounded-b-2xl bg-white phone:rounded-b-none transition-shadow max-md:flex max-md:flex-col lux:bg-lux-950 md:bg-white/80 md:backdrop-blur-xl ${scrolled ? "shadow-md lux:shadow-black/60" : "shadow-sm lux:shadow-none"}`}>
       {/* Main row. Phones: menu | centred logo | account + cart on dark green (the search bar sits below and scrolls away).
           md+: logo, search, hotline, track, cart. */}
       <div className="border-b border-gray-100 phone:border-transparent lux:border-white/[0.06]">
         <div className={`container mx-auto grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 transition-all duration-300 md:flex md:gap-6 md:px-4 ${scrolled ? "py-1.5" : "py-2 md:py-3"}`}>
-          <button onClick={() => setDrawer(true)} className="justify-self-start rounded-full border border-gray-200 bg-white p-2 text-gray-800 shadow-sm active:bg-gray-100 md:hidden phone:border-white/15 phone:bg-white/10 phone:text-white phone:shadow-none phone:active:bg-white/20 lux:border-white/15 lux:bg-white/[0.04] lux:text-white/90 lux:active:bg-white/10" aria-label="Open menu">
+          <button onClick={() => setDrawer(true)} className="justify-self-start rounded-full border border-gray-200 bg-white p-2 text-gray-800 shadow-sm active:bg-gray-100 md:hidden lux:border-white/15 lux:bg-white/[0.04] lux:text-white/90 lux:active:bg-white/10" aria-label="Open menu">
             <Menu className="h-5 w-5" />
           </button>
           <Logo variant="mark" className={scrolled ? "h-7 md:h-8" : "h-8 md:h-10"} />
@@ -111,7 +111,7 @@ export function Header({ categories }: { categories: Category[] }) {
             <Link prefetch={false} href={me ? "/account" : "/account/login"} aria-label={me ? "My account" : "Sign in or register"} className="group flex items-center gap-2 px-1 py-1 lg:px-2">
               <span className={`relative ${iconBox} ${me ? iconBoxOn : ""}`}>
                 <UserRound className="h-6 w-6" strokeWidth={1.6} />
-                {me && <span className="absolute right-1 top-1 h-2 w-2 rounded-full border-2 border-white bg-emerald-500 phone:border-brand-900 lux:border-lux-950" />}
+                {me && <span className="absolute right-1 top-1 h-2 w-2 rounded-full border-2 border-white bg-emerald-500 lux:border-lux-950" />}
               </span>
               <span className="hidden max-w-[110px] leading-tight lg:block">
                 <span className="block text-[11px] font-medium text-gray-500">{me ? "Welcome" : "Sign In"}</span>
@@ -123,7 +123,7 @@ export function Header({ categories }: { categories: Category[] }) {
               {/* data-cart-target: where "add to cart" items fly to */}
               <span className={`relative ${iconBox} `} data-cart-target>
                 <ShoppingBag className="h-6 w-6" strokeWidth={1.6} />
-                <span className={`absolute -right-1.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-white px-1 text-[10px] font-bold text-white phone:border-brand-900 lux:border-lux-950 ${count ? "bg-accent-600" : "bg-gray-400 lux:bg-white/25"}`}>{count}</span>
+                <span className={`absolute -right-1.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-white px-1 text-[10px] font-bold text-white lux:border-lux-950 ${count ? "bg-accent-600" : "bg-gray-400 lux:bg-white/25"}`}>{count}</span>
               </span>
               <span className="hidden leading-tight lg:block">
                 <span className="block text-[11px] font-medium text-gray-500">My Cart</span>
@@ -142,10 +142,10 @@ export function Header({ categories }: { categories: Category[] }) {
 
       <MobileDrawer open={drawer} onClose={closeDrawer} categories={categories} me={me} />
     </header>
-    {/* Phones: the green runs on below the header and the page sits on it like a floating sheet with
-        rounded top corners; the search bar is the top of that sheet and scrolls away with the page. */}
-    <div className="md:hidden phone:bg-brand-900">
-      <div className="relative rounded-t-[1.75rem] bg-gradient-to-b from-white via-white to-[#f4f6f5] px-3 pb-1 pt-4 shadow-[0_-14px_30px_-12px_rgba(0,0,0,0.75),inset_0_1.5px_0_rgba(255,255,255,1),0_-1px_0_rgba(255,255,255,0.35)] lux:rounded-none lux:bg-none lux:pb-0 lux:pt-2.5 lux:shadow-none">
+    {/* Phones: under the white header the page sits like a raised sheet with rounded top corners
+        (a soft shadow lifts it off the header); the search bar is the top of that sheet and scrolls away with the page. */}
+    <div className="md:hidden phone:bg-white">
+      <div className="relative rounded-t-[1.75rem] bg-gradient-to-b from-white via-white to-[#f4f6f5] px-3 pb-1 pt-4 shadow-[0_-10px_22px_-8px_rgba(16,37,27,0.28),0_-1px_0_rgba(16,37,27,0.06),inset_0_1.5px_0_rgba(255,255,255,1)] lux:rounded-none lux:bg-none lux:pb-0 lux:pt-2.5 lux:shadow-none">
         <SearchBox />
       </div>
     </div>
