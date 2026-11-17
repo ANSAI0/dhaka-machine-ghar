@@ -13,6 +13,7 @@ import { ProductActions } from "@/components/product-actions";
 import { ProductCard } from "@/components/product-card";
 import { ProductImage } from "@/components/product-image";
 import { ProductGallery } from "@/components/product-gallery";
+import { productGallery } from "@/lib/gallery";
 import { ProductTabs } from "@/components/product-tabs";
 import { RoiCalculator } from "@/components/roi-calculator";
 import { WhatsappIcon, YoutubeIcon } from "@/components/brand-icons";
@@ -41,14 +42,8 @@ export default async function ProductPage({ params }: Params) {
   const sub = cat.subcategories.find((s) => s.slug === p.subcategory);
   const off = discountPercent(p);
   const advance = Math.round((p.price * site.advancePercent) / 100);
-  // Gallery: this product's photo, then up to three look-alikes (same kind first) so there are always 2+ to swipe.
-  const lookAlikes = catalog.products
-    .filter((x) => x.slug !== p.slug && x.image && x.image !== p.image && x.category === p.category)
-    .sort((a, b) => Number(b.subcategory === p.subcategory) - Number(a.subcategory === p.subcategory))
-    .slice(0, 3);
-  const slides = p.image
-    ? [{ src: p.image, alt: p.name }, ...lookAlikes.map((x) => ({ src: x.image!, alt: x.name, similar: { name: x.name, href: `/product/${x.slug}` } }))]
-    : [];
+  // Gallery: only photos of this very product (its own photo plus any extra shots of the same machine).
+  const slides = p.image ? [p.image, ...(productGallery[p.slug] ?? [])].map((src) => ({ src, alt: p.name })) : [];
   const related = catalog.products.filter((x) => x.category === p.category && x.slug !== p.slug).slice(0, 5);
   const waText = encodeURIComponent(`আসসালামু আলাইকুম, আমি "${p.name}" (${unitPriceText(p)}) সম্পর্কে জানতে চাই।`);
 
