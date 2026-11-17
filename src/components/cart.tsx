@@ -9,7 +9,7 @@ type CartCtx = {
   count: number;
   add: (slug: string, qty?: number) => void;
   setQty: (slug: string, qty: number) => void;
-  setKg: (slug: string, kg: number) => void;
+  setKg: (slug: string, kg: number | undefined) => void; // undefined = the machine as listed
   remove: (slug: string) => void;
   clear: () => void;
   has: (slug: string) => boolean;
@@ -40,7 +40,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const value: CartCtx = {
     items,
-    count: items.reduce((s, i) => s + i.qty, 0),
+    count: items.length, // products in the cart (100 bolts count as one line)
     add: (slug, qty = 1) => {
       const found = items.find((i) => i.slug === slug);
       save(found ? items.map((i) => (i.slug === slug ? { ...i, qty: i.qty + qty } : i)) : [...items, { slug, qty }]);

@@ -9,7 +9,6 @@ import { Breadcrumb } from "@/components/breadcrumb";
 import { PageHero } from "@/components/page-hero";
 import { useCart } from "@/components/cart";
 import { useCatalog } from "@/components/catalog-provider";
-import { ConditionBadge } from "@/components/condition-badge";
 import { KgInput, OrderForm, OrderSuccess, QtyStepper, type OrderLine } from "@/components/order-form";
 import { ProductImage } from "@/components/product-image";
 
@@ -49,32 +48,62 @@ export default function CheckoutPage() {
         <div className="grid gap-6 lg:grid-cols-5">
           {/* Cart lines */}
           <section className="space-y-3 lg:col-span-2">
-            {lines.map(({ product: p, qty, kg }) => (
-              <article key={p.slug} className="flex gap-3 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm">
-                <Link href={`/product/${p.slug}`} className="group relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-white">
-                  <ProductImage product={p} sizes="96px" />
-                </Link>
-                <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                  <div className="flex items-start justify-between gap-2">
-                    <Link href={`/product/${p.slug}`} className="line-clamp-2 text-sm font-semibold text-gray-800 hover:text-brand-700">{p.name}</Link>
-                    <button onClick={() => cart.remove(p.slug)} aria-label={`Remove ${p.name}`} className="shrink-0 rounded-lg p-1.5 text-gray-400 hover:bg-accent-50 hover:text-accent-600">
-                      <Trash2 className="h-4 w-4" />
-                    </button>
+            {lines.map(({ product: p, qty, kg }) => {
+              const rate = rateOf(p);
+              const listed = defaultKg(p);
+              const raw = cart.items.find((i) => i.slug === p.slug)?.kg;
+              const mode = rate && (raw !== undefined || !listed) ? "kg" : "unit";
+              const line = rate && !kg ? null : unitPrice(p, kg) * qty;
+              return (
+                <article key={p.slug} className="rounded-2xl border border-gray-100 bg-white p-3 shadow-sm">
+                  <div className="flex gap-3">
+                    <Link href={`/product/${p.slug}`} className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-studio">
+                      <ProductImage product={p} sizes="80px" />
+                    </Link>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <Link href={`/product/${p.slug}`} className="line-clamp-2 text-sm font-semibold leading-snug text-gray-800 hover:text-brand-700">{p.name}</Link>
+                        <button onClick={() => cart.remove(p.slug)} aria-label={`Remove ${p.name}`} className="-mr-1 -mt-1 shrink-0 rounded-lg p-1.5 text-gray-400 hover:bg-accent-50 hover:text-accent-600">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                      <p className="mt-1 text-xs font-semibold text-gray-500">{rate ? `${formatBDT(rate)} / কেজি` : `${priceText(p.price)} / ${saleUnit(p)}`}</p>
+                    </div>
                   </div>
-                  <ConditionBadge condition={p.condition} className="w-fit" />
-                  {rateOf(p) > 0 && (
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
-                      <KgInput value={kg ?? 0} onChange={(n) => cart.setKg(p.slug, n)} label={`${p.name} weight`} />
-                      <span>× {formatBDT(rateOf(p))}/কেজি</span>
+
+                  {rate > 0 && (
+                    <div className="mt-3 space-y-2">
+                      {listed > 0 && (
+                        <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label={`${p.name}: order by`}>
+                          {([["unit", "মেশিন হিসেবে", `${listed.toLocaleString("en-IN")} কেজি`], ["kg", "ওজন অনুযায়ী", "যত কেজি চান"]] as const).map(([m, title, sub]) => (
+                            <button
+                              key={m}
+                              type="button"
+                              role="radio"
+                              aria-checked={mode === m}
+                              onClick={() => cart.setKg(p.slug, m === "unit" ? undefined : (raw ?? listed))}
+                              className={`rounded-xl border-2 px-2.5 py-2 text-left ${mode === m ? "border-brand-600 bg-brand-50" : "border-gray-200 bg-white"}`}
+                            >
+                              <span className="block text-[13px] font-bold text-gray-900">{title}</span>
+                              <span className="block text-[11px] text-gray-500">{sub}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                      {mode === "kg" && <KgInput value={kg ?? 0} onChange={(n) => cart.setKg(p.slug, n)} label={`${p.name} weight`} />}
                     </div>
                   )}
-                  <div className="mt-auto flex items-center justify-between gap-2">
+
+                  <div className="mt-3 flex items-end justify-between gap-2 border-t border-gray-100 pt-3">
                     <QtyStepper value={qty} onChange={(n) => cart.setQty(p.slug, n)} label={`${p.name} quantity`} unit={saleUnit(p)} />
-                    <span className="text-sm font-bold text-brand-700">{rateOf(p) && !kg ? "ওজন লিখুন" : priceText(unitPrice(p, kg) * qty)}</span>
+                    <div className="text-right leading-tight">
+                      <span className="block text-[11px] text-gray-500">{rate && kg ? `${kg.toLocaleString("en-IN")} কেজি × ${formatBDT(rate)}${qty > 1 ? ` × ${qty}` : ""}` : "মোট"}</span>
+                      <strong className="text-base text-brand-700">{line === null ? "ওজন লিখুন" : formatBDT(line)}</strong>
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
             <div className="rounded-2xl border border-gray-100 bg-white p-4 text-sm shadow-sm">
               <p className="flex justify-between"><span className="text-gray-600">মোট মূল্য</span><strong className="text-lg">{formatBDT(total)}</strong></p>
               <p className="mt-1 flex justify-between text-gray-500"><span>{site.advancePercent}% অগ্রিম বুকিং</span><span>{formatBDT(Math.round((total * site.advancePercent) / 100))}</span></p>
