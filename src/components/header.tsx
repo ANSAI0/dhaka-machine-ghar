@@ -144,8 +144,8 @@ export function Header({ categories }: { categories: Category[] }) {
     </header>
     {/* Phones: under the white header the page sits like a raised sheet with rounded top corners
         (a soft shadow lifts it off the header); the search bar is the top of that sheet and scrolls away with the page. */}
-    <div className="md:hidden phone:bg-white">
-      <div className="relative rounded-t-[1.75rem] bg-gradient-to-b from-white via-white to-[#f4f6f5] px-3 pb-1 pt-4 shadow-[0_-7px_12px_-9px_rgba(16,37,27,0.45),inset_0_1.5px_0_rgba(255,255,255,1)] lux:rounded-none lux:bg-none lux:pb-0 lux:pt-2.5 lux:shadow-none">
+    <div className="md:hidden phone:bg-gradient-to-b phone:from-white phone:to-[#f4f6f5] phone:px-2.5">
+      <div className="relative rounded-t-[1.75rem] bg-gradient-to-b from-white via-white to-[#f4f6f5] px-1 pb-1 pt-4 shadow-[0_-10px_22px_-8px_rgba(16,37,27,0.3),0_-1px_0_rgba(16,37,27,0.07),inset_0_1.5px_0_rgba(255,255,255,1)] lux:rounded-none lux:bg-none lux:pb-0 lux:pt-2.5 lux:shadow-none">
         <SearchBox />
       </div>
     </div>
