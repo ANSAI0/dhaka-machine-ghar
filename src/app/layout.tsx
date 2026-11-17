@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 // Fixed scale on phones (owner's request): no pinch / double-tap zoom.
 export async function generateViewport(): Promise<Viewport> {
   const { mobile } = await getTheme();
-  return { width: "device-width", initialScale: 1, maximumScale: 1, userScalable: false, themeColor: mobile === "light" ? "#10251b" : "#070a09" };
+  return { width: "device-width", initialScale: 1, maximumScale: 1, userScalable: false, themeColor: mobile === "light" ? "#ffffff" : "#070a09" };
 }
 
 // Shell only. The storefront chrome lives in (site)/layout; ad landing pages in (landing) stay distraction-free.
