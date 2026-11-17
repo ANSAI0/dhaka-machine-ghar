@@ -77,7 +77,7 @@ export default async function Home() {
             {categories.map((c) => {
               const img = coverOf(c.slug);
               return (
-                <Link key={c.slug} href={`/category/${c.slug}`} className="group flex w-[27%] shrink-0 snap-start flex-col items-center gap-2 text-center sm:w-auto">
+                <Link prefetch={false} key={c.slug} href={`/category/${c.slug}`} className="group flex w-[27%] shrink-0 snap-start flex-col items-center gap-2 text-center sm:w-auto">
                   <span className="relative block aspect-square w-full overflow-hidden rounded-2xl border border-gray-100 bg-studio shadow-sm transition-shadow group-hover:shadow-md lux:border-white/10 lux:bg-lux-700 lux:bg-none">
                     {img ? (
                       <Image src={img} alt="" fill sizes="(min-width: 640px) 160px, 30vw" className="object-contain p-1 drop-shadow-[0_8px_8px_rgba(15,23,42,0.16)] transition-transform duration-300 group-hover:scale-105" />
@@ -130,7 +130,7 @@ export default async function Home() {
               <p className="mt-2 text-sm text-white/75 sm:text-base">Tell us the tonnage, size and job — we&apos;ll send a quotation, and you can follow every build step online.</p>
             </div>
             <div className="flex flex-wrap gap-2 sm:flex-col">
-              <Link href="/quotation" className="flex items-center justify-center gap-2 rounded-xl bg-accent-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-accent-600/30 hover:bg-accent-500 lux:bg-gold-gradient lux:text-lux-950 lux:shadow-gold-500/30">
+              <Link prefetch={false} href="/quotation" className="flex items-center justify-center gap-2 rounded-xl bg-accent-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-accent-600/30 hover:bg-accent-500 lux:bg-gold-gradient lux:text-lux-950 lux:shadow-gold-500/30">
                 Get a Quote <ArrowRight className="h-4 w-4" />
               </Link>
               <a href={`tel:${site.phoneIntl}`} className="flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 py-3 text-sm font-bold text-white md:backdrop-blur hover:bg-white/20">

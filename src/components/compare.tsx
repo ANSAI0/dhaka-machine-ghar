@@ -79,7 +79,7 @@ export function CompareBar() {
         <button onClick={clear} className="shrink-0 text-xs font-semibold text-gray-500 hover:text-accent-600">
           Clear
         </button>
-        <Link href="/compare" className="shrink-0 rounded-xl bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700">
+        <Link prefetch={false} href="/compare" className="shrink-0 rounded-xl bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700">
           Compare ({slugs.length})
         </Link>
       </div>

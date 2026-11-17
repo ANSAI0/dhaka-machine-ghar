@@ -66,7 +66,7 @@ export default async function LandingPage({ params }: Params) {
       {/* Minimal header */}
       <header className="sticky top-0 z-40 border-b border-gray-100 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-2">
-          <Link href="/" className="flex items-center gap-2">
+          <Link prefetch={false} href="/" className="flex items-center gap-2">
             <Image src="/brand/dmg-logo-transparent.png" alt="DMG logo" width={1057} height={400} className="h-9 w-auto" />
             <span className="text-sm font-bold text-brand-700 sm:text-base">{site.nameBn}</span>
           </Link>
@@ -233,7 +233,7 @@ export default async function LandingPage({ params }: Params) {
       </div>
 
       <footer className="border-t border-gray-200 bg-white py-5 text-center text-xs text-gray-500">
-        © {new Date().getFullYear()} {site.name} · <Link href={`/product/${p.slug}`} className="underline">পূর্ণ প্রোডাক্ট পেজ</Link> · <Link href="/" className="underline">ওয়েবসাইট</Link>
+        © {new Date().getFullYear()} {site.name} · <Link prefetch={false} href={`/product/${p.slug}`} className="underline">পূর্ণ প্রোডাক্ট পেজ</Link> · <Link prefetch={false} href="/" className="underline">ওয়েবসাইট</Link>
       </footer>
 
       {/* Mobile sticky CTA */}

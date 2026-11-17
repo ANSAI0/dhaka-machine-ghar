@@ -25,7 +25,7 @@ export function MobileNav() {
         {items.map(({ href, label, Icon }) => {
           const active = isActive(href);
           return (
-            <Link key={href} href={href} aria-current={active ? "page" : undefined} className={`relative flex flex-1 flex-col items-center gap-1 pb-2 pt-2.5 text-[10.5px] font-semibold ${active ? "text-white" : "text-white/60"}`}>
+            <Link prefetch={false} key={href} href={href} aria-current={active ? "page" : undefined} className={`relative flex flex-1 flex-col items-center gap-1 pb-2 pt-2.5 text-[10.5px] font-semibold ${active ? "text-white" : "text-white/60"}`}>
               <span
                 className={`relative flex items-center justify-center rounded-full transition-all duration-200 ${
                   active ? "-mt-6 h-11 w-11 bg-white text-brand-700 shadow-[0_6px_16px_-4px_rgba(0,0,0,0.45)] ring-4 ring-brand-900 lux:bg-gold-gradient lux:text-lux-950 lux:ring-lux-900" : "h-6 w-6"

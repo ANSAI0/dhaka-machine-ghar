@@ -189,7 +189,7 @@ export function OrderSuccess({ order }: { order: Placed }) {
           আমাদের প্রতিনিধি শীঘ্রই <strong>{site.phone}</strong> থেকে কল করে পেমেন্ট ও ডেলিভারি নিশ্চিত করবেন।
         </p>
       )}
-      <Link href={`/track?q=${order.id}`} className="mt-4 inline-block rounded-xl border border-brand-600 px-5 py-2.5 text-sm font-bold text-brand-700 hover:bg-brand-600 hover:text-white">
+      <Link prefetch={false} href={`/track?q=${order.id}`} className="mt-4 inline-block rounded-xl border border-brand-600 px-5 py-2.5 text-sm font-bold text-brand-700 hover:bg-brand-600 hover:text-white">
         অর্ডার ট্র্যাক করুন
       </Link>
     </div>

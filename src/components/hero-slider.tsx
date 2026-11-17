@@ -18,10 +18,23 @@ export function HeroSlider() {
     const el = box.current;
     const v = video.current;
     if (!el || !v) return;
-    v.src = window.matchMedia("(min-width: 768px)").matches ? SRC_HD : SRC_SD;
-    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()));
-    io.observe(el);
-    return () => io.disconnect();
+    // The poster shows first; the video starts loading only once the page has finished loading
+    // (so it doesn't compete with images and scripts), and is skipped on data-saver connections.
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    if (conn?.saveData || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let io: IntersectionObserver | undefined;
+    const start = () => {
+      v.src = window.matchMedia("(min-width: 768px)").matches ? SRC_HD : SRC_SD;
+      io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()));
+      io.observe(el);
+    };
+    const later = () => window.setTimeout(start, 1200);
+    if (document.readyState === "complete") later();
+    else window.addEventListener("load", later, { once: true });
+    return () => {
+      window.removeEventListener("load", later);
+      io?.disconnect();
+    };
   }, []);
 
   return (
@@ -33,7 +46,7 @@ export function HeroSlider() {
         muted
         loop
         playsInline
-        preload="auto"
+        preload="none"
         disablePictureInPicture
         aria-hidden
         className="absolute inset-0 -z-10 h-full w-full object-cover opacity-70"
@@ -49,7 +62,7 @@ export function HeroSlider() {
           নিজস্ব কারখানায় তৈরি <span className="text-brand-200">শক্তিশালী মেশিন</span>
         </h2>
         <p className="mt-3 text-sm font-medium tracking-wide text-white/75 sm:text-base">Power Press · AC Stand · Workshop Machines</p>
-        <Link
+        <Link prefetch={false}
           href="/shop"
           className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-brand-800 shadow-lg transition hover:bg-brand-50 sm:px-6 sm:py-3"
         >

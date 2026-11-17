@@ -29,12 +29,12 @@ export function LoginForm({ next }: { next: string }) {
         <PasswordInput name="password" autoComplete="current-password" />
       </Field>
       <div className="flex justify-end">
-        <Link href="/account/forgot" className="text-sm font-semibold text-brand-700 hover:underline">পাসওয়ার্ড ভুলে গেছেন?</Link>
+        <Link prefetch={false} href="/account/forgot" className="text-sm font-semibold text-brand-700 hover:underline">পাসওয়ার্ড ভুলে গেছেন?</Link>
       </div>
       <Notice error={state.error} />
       <SubmitButton pending={pending}>লগইন করুন</SubmitButton>
       <p className="text-center text-sm text-gray-500">
-        নতুন? <Link href={`/account/register${next !== "/account" ? `?next=${encodeURIComponent(next)}` : ""}`} className="font-bold text-accent-600 hover:underline">অ্যাকাউন্ট খুলুন</Link>
+        নতুন? <Link prefetch={false} href={`/account/register${next !== "/account" ? `?next=${encodeURIComponent(next)}` : ""}`} className="font-bold text-accent-600 hover:underline">অ্যাকাউন্ট খুলুন</Link>
       </p>
     </form>
   );
@@ -72,7 +72,7 @@ export function RegisterForm({ next }: { next: string }) {
       <Notice error={state.error} />
       <SubmitButton pending={pending}>অ্যাকাউন্ট খুলুন</SubmitButton>
       <p className="text-center text-sm text-gray-500">
-        আগেই অ্যাকাউন্ট আছে? <Link href="/account/login" className="font-bold text-accent-600 hover:underline">লগইন করুন</Link>
+        আগেই অ্যাকাউন্ট আছে? <Link prefetch={false} href="/account/login" className="font-bold text-accent-600 hover:underline">লগইন করুন</Link>
       </p>
     </form>
   );
@@ -95,7 +95,7 @@ export function VerifyForm({ next }: { next: string }) {
         <button disabled={resend.pending} className="text-sm font-semibold text-brand-700 hover:underline disabled:opacity-50">কোড পাননি? আবার পাঠান</button>
         <div className="mt-2"><Notice error={resend.state.error} ok={resend.state.ok} /></div>
       </form>
-      <p className="text-center text-xs text-gray-400"><Link href={next} className="underline">পরে করব</Link> — যাচাই না করলে শুধু এই অ্যাকাউন্ট থেকে দেওয়া অর্ডার দেখা যাবে।</p>
+      <p className="text-center text-xs text-gray-400"><Link prefetch={false} href={next} className="underline">পরে করব</Link> — যাচাই না করলে শুধু এই অ্যাকাউন্ট থেকে দেওয়া অর্ডার দেখা যাবে।</p>
     </div>
   );
 }
@@ -120,7 +120,7 @@ export function ForgotForm() {
       )}
       <Notice error={state.error} ok={state.ok} />
       <SubmitButton pending={pending}>{codeStep ? "পাসওয়ার্ড পরিবর্তন করুন" : "কোড পাঠান"}</SubmitButton>
-      <p className="text-center text-sm text-gray-500"><Link href="/account/login" className="font-semibold text-brand-700 hover:underline">← লগইনে ফিরে যান</Link></p>
+      <p className="text-center text-sm text-gray-500"><Link prefetch={false} href="/account/login" className="font-semibold text-brand-700 hover:underline">← লগইনে ফিরে যান</Link></p>
     </form>
   );
 }

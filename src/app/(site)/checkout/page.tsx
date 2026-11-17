@@ -40,8 +40,8 @@ export default function CheckoutPage() {
           <p className="mt-3 font-semibold text-gray-700">আপনার কার্ট খালি</p>
           <p className="mt-1 text-sm text-gray-500">মেশিন বাছাই করুন, অথবা আপনার মাপে মেশিন বানাতে কাস্টম কোটেশন দিন।</p>
           <div className="mt-4 flex justify-center gap-2">
-            <Link href="/shop" className="rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white">Browse machines</Link>
-            <Link href="/quotation" className="rounded-xl border-2 border-brand-600 px-5 py-2.5 text-sm font-bold text-brand-700">Custom Quotation</Link>
+            <Link prefetch={false} href="/shop" className="rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white">Browse machines</Link>
+            <Link prefetch={false} href="/quotation" className="rounded-xl border-2 border-brand-600 px-5 py-2.5 text-sm font-bold text-brand-700">Custom Quotation</Link>
           </div>
         </div>
       ) : (
@@ -57,12 +57,12 @@ export default function CheckoutPage() {
               return (
                 <article key={p.slug} className="rounded-2xl border border-gray-100 bg-white p-3 shadow-sm">
                   <div className="flex gap-3">
-                    <Link href={`/product/${p.slug}`} className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-studio">
+                    <Link prefetch={false} href={`/product/${p.slug}`} className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-studio">
                       <ProductImage product={p} sizes="80px" />
                     </Link>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-start justify-between gap-2">
-                        <Link href={`/product/${p.slug}`} className="line-clamp-2 text-sm font-semibold leading-snug text-gray-800 hover:text-brand-700">{p.name}</Link>
+                        <Link prefetch={false} href={`/product/${p.slug}`} className="line-clamp-2 text-sm font-semibold leading-snug text-gray-800 hover:text-brand-700">{p.name}</Link>
                         <button onClick={() => cart.remove(p.slug)} aria-label={`Remove ${p.name}`} className="-mr-1 -mt-1 shrink-0 rounded-lg p-1.5 text-gray-400 hover:bg-accent-50 hover:text-accent-600">
                           <Trash2 className="h-4 w-4" />
                         </button>

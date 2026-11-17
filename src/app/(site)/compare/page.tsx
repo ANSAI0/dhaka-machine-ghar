@@ -38,7 +38,7 @@ export default function ComparePage() {
         <div className="rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
           <p className="font-semibold text-gray-700">তুলনা করার জন্য কোনো মেশিন বাছাই করা হয়নি</p>
           <p className="mt-1 text-sm text-gray-500">Product card-এর compare বাটনে চাপ দিয়ে সর্বোচ্চ ৪টি মেশিন যোগ করুন।</p>
-          <Link href="/shop" className="mt-4 inline-block rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white">
+          <Link prefetch={false} href="/shop" className="mt-4 inline-block rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white">
             Browse machines
           </Link>
         </div>
@@ -53,7 +53,7 @@ export default function ComparePage() {
                     <button onClick={() => remove(p.slug)} aria-label={`Remove ${p.name}`} className="absolute right-2 top-2 z-10 rounded-full bg-white p-1 shadow hover:bg-gray-100">
                       <X className="h-4 w-4" />
                     </button>
-                    <Link href={`/product/${p.slug}`} className="group block">
+                    <Link prefetch={false} href={`/product/${p.slug}`} className="group block">
                       <div className="relative mx-auto aspect-square w-full max-w-[160px] overflow-hidden rounded-xl bg-white">
                         <ProductImage product={p} sizes="160px" />
                       </div>

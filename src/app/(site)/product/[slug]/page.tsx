@@ -138,7 +138,7 @@ export default async function ProductPage({ params }: Params) {
           </div>
 
           <ProductActions product={p} />
-          <Link href={`/quotation?product=${p.slug}`} className="block text-center text-xs font-semibold text-steel-700 underline-offset-2 hover:underline">
+          <Link prefetch={false} href={`/quotation?product=${p.slug}`} className="block text-center text-xs font-semibold text-steel-700 underline-offset-2 hover:underline">
             ভিন্ন টনেজ / সাইজ লাগবে? কাস্টম কোটেশন নিন →
           </Link>
 

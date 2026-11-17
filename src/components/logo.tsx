@@ -7,7 +7,7 @@ import { brand as site } from "@/lib/site";
 export function Logo({ dark = false, variant = "full", className = "h-11 sm:h-14" }: { dark?: boolean; variant?: "full" | "mark"; className?: string }) {
   if (variant === "mark") {
     return (
-      <Link href="/" aria-label={`${site.name} — home`} className="flex shrink-0 flex-col items-center">
+      <Link prefetch={false} href="/" aria-label={`${site.name} — home`} className="flex shrink-0 flex-col items-center">
         {/* The phone header is dark (green, or the dark-luxury style): it gets the light-on-dark logo. */}
         <Image src="/brand/dmg-logo-transparent.png" alt={`${site.name} (DMG) logo`} width={1057} height={400} priority className={`w-auto transition-all duration-300 max-md:hidden ${className}`} />
         <Image src="/brand/dmg-logo-on-dark.png" alt={`${site.name} (DMG) logo`} width={1057} height={400} priority className={`w-auto transition-all duration-300 md:hidden ${className}`} />
@@ -16,7 +16,7 @@ export function Logo({ dark = false, variant = "full", className = "h-11 sm:h-14
     );
   }
   return (
-    <Link href="/" className="flex items-center gap-2" aria-label={site.name}>
+    <Link prefetch={false} href="/" className="flex items-center gap-2" aria-label={site.name}>
       <Image src={dark ? "/brand/dmg-logo-on-dark.png" : "/brand/dmg-logo-transparent.png"} alt="DMG logo" width={1057} height={400} className="h-8 w-auto shrink-0 sm:h-10" />
       <span className="leading-tight">
         <span className={`block text-[15px] font-bold tracking-tight sm:text-base ${dark ? "text-white" : "text-brand-700"}`}>

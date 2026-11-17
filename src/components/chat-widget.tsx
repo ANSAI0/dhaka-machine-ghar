@@ -22,7 +22,7 @@ function Rich({ text }: { text: string }) {
         i % 2 === 0 ? (
           <span key={i}>{p}</span>
         ) : p.startsWith("/") ? (
-          <Link key={i} href={p} className="break-all font-semibold text-brand-700 underline">{p.startsWith("/product/") ? "মেশিনটি দেখুন →" : p}</Link>
+          <Link prefetch={false} key={i} href={p} className="break-all font-semibold text-brand-700 underline">{p.startsWith("/product/") ? "মেশিনটি দেখুন →" : p}</Link>
         ) : (
           <a key={i} href={`tel:${p.replace(/-/g, "")}`} className="font-semibold text-brand-700 underline">{p}</a>
         ),

@@ -101,7 +101,7 @@ function OrderProgress({ order: o }: { order: PublicOrder }) {
         <ul className="mb-5 space-y-1 text-sm text-gray-700">
           {o.items.map((i) => (
             <li key={i.slug}>
-              <Link href={`/product/${i.slug}`} className="font-semibold hover:text-brand-700">{i.name}</Link> × {i.qty}
+              <Link prefetch={false} href={`/product/${i.slug}`} className="font-semibold hover:text-brand-700">{i.name}</Link> × {i.qty}
             </li>
           ))}
         </ul>

@@ -34,13 +34,13 @@ export function MainNav({ categories }: { categories: Category[] }) {
             <div className="grid grid-cols-3 gap-6 lg:grid-cols-5">
               {categories.map((c) => (
                 <div key={c.slug}>
-                  <Link href={`/category/${c.slug}`} className="mb-2 flex items-center gap-2 text-sm font-bold text-brand-700 hover:text-accent-600">
+                  <Link prefetch={false} href={`/category/${c.slug}`} className="mb-2 flex items-center gap-2 text-sm font-bold text-brand-700 hover:text-accent-600">
                     <CategoryIcon name={c.icon} className="h-4 w-4 shrink-0" /> {c.name}
                   </Link>
                   <ul className="space-y-1.5 border-l-2 border-brand-100 pl-3">
                     {c.subcategories.map((s) => (
                       <li key={s.slug}>
-                        <Link href={`/category/${c.slug}?sub=${s.slug}`} className="text-[13px] text-gray-600 hover:text-accent-600">
+                        <Link prefetch={false} href={`/category/${c.slug}?sub=${s.slug}`} className="text-[13px] text-gray-600 hover:text-accent-600">
                           {s.name}
                         </Link>
                       </li>
@@ -53,7 +53,7 @@ export function MainNav({ categories }: { categories: Category[] }) {
         </div>
         <div className="flex items-center gap-1">
           {navLinks.map((l) => (
-            <Link
+            <Link prefetch={false}
               key={l.href}
               href={l.href}
               aria-current={isActive(l.href) ? "page" : undefined}

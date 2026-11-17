@@ -73,7 +73,7 @@ export function MobileDrawer({ open, onClose, categories, me }: { open: boolean;
 
         <div className="flex-1 overflow-y-auto overscroll-contain">
           {/* Account */}
-          <Link href={me ? "/account" : "/account/login"} className="mx-4 mt-4 flex items-center gap-3 rounded-2xl bg-gradient-to-br from-brand-700 to-brand-900 p-3.5 text-white shadow-lg shadow-brand-900/20 lux:border lux:border-gold-400/25 lux:from-lux-700 lux:to-lux-800 lux:shadow-black/40">
+          <Link prefetch={false} href={me ? "/account" : "/account/login"} className="mx-4 mt-4 flex items-center gap-3 rounded-2xl bg-gradient-to-br from-brand-700 to-brand-900 p-3.5 text-white shadow-lg shadow-brand-900/20 lux:border lux:border-gold-400/25 lux:from-lux-700 lux:to-lux-800 lux:shadow-black/40">
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/15 text-lg font-bold lux:bg-gold-gradient lux:text-lux-950">
               {me ? me.name.trim()[0]?.toUpperCase() : <UserRound className="h-5 w-5" />}
             </span>
@@ -87,7 +87,7 @@ export function MobileDrawer({ open, onClose, categories, me }: { open: boolean;
           {/* Main links */}
           <nav className="mt-3 px-2" aria-label="Main">
             {links.map(({ href, label, Icon }) => (
-              <Link
+              <Link prefetch={false}
                 key={href}
                 href={href}
                 aria-current={isActive(href) ? "page" : undefined}
@@ -109,7 +109,7 @@ export function MobileDrawer({ open, onClose, categories, me }: { open: boolean;
               return (
                 <div key={c.slug} className="border-b border-gray-50 last:border-0 lux:border-white/[0.05]">
                   <div className="flex items-center">
-                    <Link href={`/category/${c.slug}`} className="flex min-w-0 flex-1 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 active:bg-gray-50 lux:text-white/80 lux:active:bg-white/5">
+                    <Link prefetch={false} href={`/category/${c.slug}`} className="flex min-w-0 flex-1 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 active:bg-gray-50 lux:text-white/80 lux:active:bg-white/5">
                       <CategoryIcon name={c.icon} className="h-5 w-5 shrink-0 text-brand-600 lux:text-gold-400" />
                       <span className="truncate">{c.nameBn}</span>
                     </Link>
@@ -126,7 +126,7 @@ export function MobileDrawer({ open, onClose, categories, me }: { open: boolean;
                     <ul className="overflow-hidden pl-11 pr-3">
                       {c.subcategories.map((s) => (
                         <li key={s.slug}>
-                          <Link href={`/category/${c.slug}?sub=${s.slug}`} className="block py-2 text-[13px] text-gray-600 active:text-brand-700 lux:text-white/55 lux:active:text-gold-300">
+                          <Link prefetch={false} href={`/category/${c.slug}?sub=${s.slug}`} className="block py-2 text-[13px] text-gray-600 active:text-brand-700 lux:text-white/55 lux:active:text-gold-300">
                             {s.name}
                           </Link>
                         </li>

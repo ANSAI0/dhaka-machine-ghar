@@ -28,7 +28,7 @@ export default async function UnsubscribePage({ searchParams }: { searchParams: 
           <>
             <h1 className="mt-3 text-xl font-bold text-gray-900">আনসাবস্ক্রাইব হয়েছে</h1>
             <p className="mt-2 text-sm text-gray-600">আর সাপ্তাহিক আপডেট ইমেইল যাবে না। চাইলে অ্যাকাউন্ট থেকে আবার চালু করতে পারবেন।</p>
-            <Link href="/" className="mt-5 inline-block rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white">হোমে ফিরে যান</Link>
+            <Link prefetch={false} href="/" className="mt-5 inline-block rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white">হোমে ফিরে যান</Link>
           </>
         ) : valid ? (
           <>

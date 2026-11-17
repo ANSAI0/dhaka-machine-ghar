@@ -4,14 +4,14 @@ import { ChevronRight } from "lucide-react";
 export function Breadcrumb({ items }: { items: { label: string; href?: string }[] }) {
   return (
     <nav aria-label="Breadcrumb" className="mb-3 flex flex-wrap items-center gap-1 text-xs text-gray-500 sm:text-sm lux:text-white/45">
-      <Link href="/" className="hover:text-brand-700">
+      <Link prefetch={false} href="/" className="hover:text-brand-700">
         Home
       </Link>
       {items.map((it) => (
         <span key={it.label} className="flex items-center gap-1">
           <ChevronRight className="h-3.5 w-3.5" />
           {it.href ? (
-            <Link href={it.href} className="hover:text-brand-700">
+            <Link prefetch={false} href={it.href} className="hover:text-brand-700">
               {it.label}
             </Link>
           ) : (

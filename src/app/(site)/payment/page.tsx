@@ -38,12 +38,12 @@ export default async function PaymentResultPage({ searchParams }: { searchParams
                 <PayOnlineButton orderId={order.id} amount={due} />
               </div>
             )}
-            <Link href={`/track?q=${order.id}`} className="mt-4 inline-block rounded-xl border border-brand-600 px-5 py-2.5 text-sm font-bold text-brand-700 hover:bg-brand-600 hover:text-white">
+            <Link prefetch={false} href={`/track?q=${order.id}`} className="mt-4 inline-block rounded-xl border border-brand-600 px-5 py-2.5 text-sm font-bold text-brand-700 hover:bg-brand-600 hover:text-white">
               অর্ডার ট্র্যাক করুন
             </Link>
           </>
         ) : (
-          <Link href="/" className="mt-4 inline-block text-sm font-bold text-brand-700 underline">হোম পেজে ফিরে যান</Link>
+          <Link prefetch={false} href="/" className="mt-4 inline-block text-sm font-bold text-brand-700 underline">হোম পেজে ফিরে যান</Link>
         )}
       </div>
     </div>

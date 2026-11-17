@@ -119,7 +119,7 @@ export function ShopView({ items, category }: Props) {
               <button onClick={() => router.replace(pathname)} className="rounded-xl border-2 border-brand-600 px-4 py-2 text-sm font-bold text-brand-700">
                 Reset
               </button>
-              <Link href="/quotation" className="rounded-xl bg-accent-600 px-4 py-2 text-sm font-bold text-white">
+              <Link prefetch={false} href="/quotation" className="rounded-xl bg-accent-600 px-4 py-2 text-sm font-bold text-white">
                 Custom Quotation
               </Link>
             </div>

@@ -35,7 +35,7 @@ export async function Footer({ categories }: { categories: Category[] }) {
             <ul className="space-y-2 text-sm text-gray-300">
               {categories.map((c) => (
                 <li key={c.slug}>
-                  <Link href={`/category/${c.slug}`} className="hover:text-white">
+                  <Link prefetch={false} href={`/category/${c.slug}`} className="hover:text-white">
                     {c.name}
                   </Link>
                 </li>
@@ -46,11 +46,11 @@ export async function Footer({ categories }: { categories: Category[] }) {
           <div>
             <h3 className="mb-4 text-lg font-bold">Quick Links</h3>
             <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link href="/track" className="hover:text-white">Live Factory Order Tracking</Link></li>
-              <li><Link href="/quotation" className="hover:text-white">Custom Machine Quotation</Link></li>
-              <li><Link href="/warranty" className="hover:text-white">Warranty &amp; Service</Link></li>
-              <li><Link href="/shop" className="hover:text-white">All Machines</Link></li>
-              <li><Link href="/contact" className="hover:text-white">Contact Us</Link></li>
+              <li><Link prefetch={false} href="/track" className="hover:text-white">Live Factory Order Tracking</Link></li>
+              <li><Link prefetch={false} href="/quotation" className="hover:text-white">Custom Machine Quotation</Link></li>
+              <li><Link prefetch={false} href="/warranty" className="hover:text-white">Warranty &amp; Service</Link></li>
+              <li><Link prefetch={false} href="/shop" className="hover:text-white">All Machines</Link></li>
+              <li><Link prefetch={false} href="/contact" className="hover:text-white">Contact Us</Link></li>
             </ul>
           </div>
 
@@ -71,9 +71,9 @@ export async function Footer({ categories }: { categories: Category[] }) {
               © {new Date().getFullYear()} <strong className="font-semibold text-white">{site.name}</strong>. All rights reserved.
             </p>
             <nav aria-label="Legal" className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-              <Link href="/terms" className="hover:text-white">Terms &amp; Conditions</Link>
-              <Link href="/privacy" className="hover:text-white">Privacy Policy</Link>
-              <Link href="/refund" className="hover:text-white">Return &amp; Refund</Link>
+              <Link prefetch={false} href="/terms" className="hover:text-white">Terms &amp; Conditions</Link>
+              <Link prefetch={false} href="/privacy" className="hover:text-white">Privacy Policy</Link>
+              <Link prefetch={false} href="/refund" className="hover:text-white">Return &amp; Refund</Link>
             </nav>
           </div>
           <p className="flex flex-wrap items-center justify-center gap-1.5 text-[11px] text-gray-400">

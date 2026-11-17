@@ -96,11 +96,11 @@ export function ProductMarquee({ title, items, href }: { title: string; items: P
   return (
     <section className="py-2">
       <div className="mb-2 flex items-end justify-between gap-3">
-        <Link href={href} className="group">
+        <Link prefetch={false} href={href} className="group">
           <h2 className="text-lg font-bold text-gray-900 group-hover:text-brand-700 sm:text-xl lux:text-white">{title}</h2>
           <span className="mt-1.5 block h-1 w-14 rounded-full bg-gradient-to-r from-brand-600 to-brand-400 lux:bg-gold-gradient" />
         </Link>
-        <Link href={href} className="shrink-0 rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 hover:bg-brand-600 hover:text-white lux:bg-white/[0.06] lux:text-gold-300">
+        <Link prefetch={false} href={href} className="shrink-0 rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 hover:bg-brand-600 hover:text-white lux:bg-white/[0.06] lux:text-gold-300">
           View all
         </Link>
       </div>
@@ -112,7 +112,7 @@ export function ProductMarquee({ title, items, href }: { title: string; items: P
           {[0, 1].map((copy) =>
             items.map((p) => (
               <li key={`${copy}-${p.slug}`} aria-hidden={copy === 1} className="w-40 shrink-0">
-                <Link href={`/product/${p.slug}`} tabIndex={copy === 1 ? -1 : undefined} className="relative block overflow-hidden rounded-lg bg-white shadow-[0_12px_28px_-14px_rgba(16,24,40,0.35)] ring-1 ring-black/5 lux:bg-lux-800 lux:shadow-[0_16px_30px_-14px_rgba(0,0,0,0.9)] lux:ring-white/[0.08]">
+                <Link prefetch={false} href={`/product/${p.slug}`} tabIndex={copy === 1 ? -1 : undefined} className="relative block overflow-hidden rounded-lg bg-white shadow-[0_12px_28px_-14px_rgba(16,24,40,0.35)] ring-1 ring-black/5 lux:bg-lux-800 lux:shadow-[0_16px_30px_-14px_rgba(0,0,0,0.9)] lux:ring-white/[0.08]">
                   <span aria-hidden className="pointer-events-none absolute inset-x-4 top-0 z-20 hidden h-px bg-gradient-to-r from-transparent via-gold-300/70 to-transparent lux:block" />
                   <div className="relative aspect-[4/5] overflow-hidden bg-studio lux:bg-lux-700 lux:bg-none">
                     {p.image ? <Image src={p.image} alt={p.name} fill sizes="160px" className="object-contain p-1 drop-shadow-[0_10px_10px_rgba(15,23,42,0.18)]" /> : <ProductImage product={p} sizes="160px" />}
@@ -140,7 +140,7 @@ export function ProductMarquee({ title, items, href }: { title: string; items: P
         <div className="pointer-events-none absolute bottom-10 left-1/2 h-6 w-1/3 -translate-x-1/2 rounded-[50%] bg-black/15 blur-xl" />
         <div className="absolute inset-0 [transform-style:preserve-3d]">
           {base.map((p, i) => (
-            <Link
+            <Link prefetch={false}
               key={`${i}-${p.slug}`}
               ref={(el) => {
                 cards.current[i] = el;

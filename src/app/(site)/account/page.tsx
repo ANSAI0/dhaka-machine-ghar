@@ -73,7 +73,7 @@ export default async function AccountPage() {
           <ShieldAlert className="h-5 w-5 shrink-0" />
           <p className="flex-1">মোবাইল নম্বর যাচাই করলে এই নম্বরে আগে দেওয়া অর্ডার ও ওয়ারেন্টিও এখানে দেখা যাবে।</p>
           {canVerify ? (
-            <Link href="/account/verify" className="rounded-lg bg-amber-500 px-3 py-1.5 font-bold text-white hover:bg-amber-600">এখন যাচাই করুন</Link>
+            <Link prefetch={false} href="/account/verify" className="rounded-lg bg-amber-500 px-3 py-1.5 font-bold text-white hover:bg-amber-600">এখন যাচাই করুন</Link>
           ) : (
             <span className="text-xs">যাচাইয়ের জন্য আমাদের হটলাইনে কল করুন।</span>
           )}
@@ -87,7 +87,7 @@ export default async function AccountPage() {
           {orders.length === 0 && (
             <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center">
               <p className="font-semibold text-gray-700">এখনো কোনো অর্ডার নেই</p>
-              <Link href="/shop" className="mt-3 inline-block rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white">মেশিন দেখুন</Link>
+              <Link prefetch={false} href="/shop" className="mt-3 inline-block rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white">মেশিন দেখুন</Link>
             </div>
           )}
           {orders.map((o) => {
@@ -107,7 +107,7 @@ export default async function AccountPage() {
                   <div className="h-full rounded-full bg-gradient-to-r from-brand-600 to-steel-600" style={{ width: `${pct}%` }} />
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2 text-sm">
-                  <Link href={`/track?q=${o.id}`} className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 font-semibold hover:bg-gray-50"><Truck className="h-4 w-4" /> ট্র্যাক</Link>
+                  <Link prefetch={false} href={`/track?q=${o.id}`} className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 font-semibold hover:bg-gray-50"><Truck className="h-4 w-4" /> ট্র্যাক</Link>
                   <a href={customerDocUrl(o.id, "invoice")} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 font-semibold hover:bg-gray-50"><FileDown className="h-4 w-4" /> ইনভয়েস</a>
                   {o.status === "handover" && (
                     <a href={customerDocUrl(o.id, "challan")} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 font-semibold hover:bg-gray-50"><FileDown className="h-4 w-4" /> চালান</a>
@@ -129,7 +129,7 @@ export default async function AccountPage() {
                     <p className="font-mono text-sm font-bold">{w.serial}</p>
                     <p className="text-sm text-gray-700">{w.productName}</p>
                     <p className={`mt-1 text-xs font-semibold ${on ? "text-brand-700" : "text-gray-400"}`}>{on ? "চালু" : "মেয়াদ শেষ"} · {day(expires)} পর্যন্ত</p>
-                    <Link href="/warranty" className="mt-2 inline-block text-xs font-semibold text-brand-700 hover:underline">সার্ভিস চাই →</Link>
+                    <Link prefetch={false} href="/warranty" className="mt-2 inline-block text-xs font-semibold text-brand-700 hover:underline">সার্ভিস চাই →</Link>
                   </div>
                 );
               })}

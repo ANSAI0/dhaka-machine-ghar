@@ -94,7 +94,7 @@ export function Header({ categories }: { categories: Category[] }) {
           </div>
 
           <div className="flex items-center gap-1 justify-self-end md:gap-1.5">
-            <Link
+            <Link prefetch={false}
               href="/track"
               aria-current={isActive("/track") ? "page" : undefined}
               className="group hidden items-center gap-2 px-1 py-1 md:flex lg:px-2"
@@ -108,7 +108,7 @@ export function Header({ categories }: { categories: Category[] }) {
               </span>
             </Link>
             <span className="hidden h-7 w-px bg-gray-200 lg:block" />
-            <Link href={me ? "/account" : "/account/login"} aria-label={me ? "My account" : "Sign in or register"} className="group flex items-center gap-2 px-1 py-1 lg:px-2">
+            <Link prefetch={false} href={me ? "/account" : "/account/login"} aria-label={me ? "My account" : "Sign in or register"} className="group flex items-center gap-2 px-1 py-1 lg:px-2">
               <span className={`relative ${iconBox} ${me ? iconBoxOn : ""}`}>
                 <UserRound className="h-6 w-6" strokeWidth={1.6} />
                 {me && <span className="absolute right-1 top-1 h-2 w-2 rounded-full border-2 border-white bg-emerald-500 phone:border-brand-900 lux:border-lux-950" />}
@@ -119,7 +119,7 @@ export function Header({ categories }: { categories: Category[] }) {
               </span>
             </Link>
             <span className="hidden h-7 w-px bg-gray-200 lg:block" />
-            <Link href="/checkout" aria-label={`Cart, ${count} item${count === 1 ? "" : "s"}`} className="group flex items-center gap-2 px-1 py-1 lg:pl-2">
+            <Link prefetch={false} href="/checkout" aria-label={`Cart, ${count} item${count === 1 ? "" : "s"}`} className="group flex items-center gap-2 px-1 py-1 lg:pl-2">
               {/* data-cart-target: where "add to cart" items fly to */}
               <span className={`relative ${iconBox} `} data-cart-target>
                 <ShoppingBag className="h-6 w-6" strokeWidth={1.6} />
@@ -145,7 +145,7 @@ export function Header({ categories }: { categories: Category[] }) {
     {/* Phones: the green runs on below the header and the page sits on it like a floating sheet with
         rounded top corners; the search bar is the top of that sheet and scrolls away with the page. */}
     <div className="md:hidden phone:bg-brand-900">
-      <div className="rounded-t-[1.75rem] bg-[#f4f6f5] px-3 pt-4 shadow-[0_-10px_24px_-14px_rgba(0,0,0,0.6)] lux:rounded-none lux:bg-transparent lux:pt-2.5 lux:shadow-none">
+      <div className="relative rounded-t-[1.75rem] bg-gradient-to-b from-white via-white to-[#f4f6f5] px-3 pb-1 pt-4 shadow-[0_-14px_30px_-12px_rgba(0,0,0,0.75),inset_0_1.5px_0_rgba(255,255,255,1),0_-1px_0_rgba(255,255,255,0.35)] lux:rounded-none lux:bg-none lux:pb-0 lux:pt-2.5 lux:shadow-none">
         <SearchBox />
       </div>
     </div>

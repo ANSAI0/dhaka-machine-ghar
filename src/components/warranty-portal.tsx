@@ -78,7 +78,7 @@ export function WarrantyPortal() {
               </div>
             </div>
             <dl className="grid grid-cols-2 gap-4 p-5 text-sm">
-              <div className="col-span-2"><dt className="text-gray-500">মেশিন</dt><dd className="font-bold text-gray-900"><Link href={`/product/${result.slug}`} className="hover:text-brand-700">{result.productName}</Link></dd></div>
+              <div className="col-span-2"><dt className="text-gray-500">মেশিন</dt><dd className="font-bold text-gray-900"><Link prefetch={false} href={`/product/${result.slug}`} className="hover:text-brand-700">{result.productName}</Link></dd></div>
               <div><dt className="text-gray-500">মালিক</dt><dd className="font-semibold text-gray-800">{result.owner} · {result.phone}</dd></div>
               <div><dt className="text-gray-500">ওয়ারেন্টি</dt><dd className="font-semibold text-gray-800">{result.months} মাস</dd></div>
               <div><dt className="text-gray-500">ক্রয়ের তারিখ</dt><dd className="font-semibold text-gray-800">{bnDay(result.purchasedAt)}</dd></div>

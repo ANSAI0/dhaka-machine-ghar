@@ -20,7 +20,7 @@ export default async function VerifyEmailPage({ searchParams }: { searchParams: 
         {ok ? <MailCheck className="mx-auto h-12 w-12 text-brand-600" /> : <MailWarning className="mx-auto h-12 w-12 text-accent-600" />}
         <h1 className="mt-3 text-xl font-bold text-gray-900">{ok ? "ইমেইল নিশ্চিত হয়েছে" : "লিংকটি সঠিক নয় বা মেয়াদ শেষ"}</h1>
         <p className="mt-2 text-sm text-gray-600">{ok ? "এখন থেকে প্রতি সপ্তাহে নতুন মেশিন ও অফারের আপডেট পাবেন।" : "অ্যাকাউন্টে লগইন করে নতুন লিংক পাঠান।"}</p>
-        <Link href="/account" className="mt-5 inline-block rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white">আমার অ্যাকাউন্ট</Link>
+        <Link prefetch={false} href="/account" className="mt-5 inline-block rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white">আমার অ্যাকাউন্ট</Link>
       </div>
     </div>
   );

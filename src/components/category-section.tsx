@@ -16,7 +16,7 @@ export function CategorySection({ title, href, items }: { title: string; href: s
   return (
     <section>
       <div className="mb-4 flex items-end justify-between gap-3">
-        <Link href={href} className="group">
+        <Link prefetch={false} href={href} className="group">
           <h2 className="text-lg font-bold text-gray-900 group-hover:text-brand-700 sm:text-xl lux:text-white">{title}</h2>
           <span className="mt-1.5 block h-1 w-14 rounded-full bg-gradient-to-r from-brand-600 to-brand-400 lux:bg-gold-gradient" />
         </Link>
